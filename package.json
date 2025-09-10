@@ -1,0 +1,44 @@
+{
+  "name": "petpal_react_deployable",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "aos": "^2.3.4",
+    "bootstrap": "^5.2.3",
+    "jquery": "^3.6.0",
+    "react": "^18.3.1",
+    "react-countdown": "^2.3.6",
+    "react-countup": "^6.5.3",
+    "react-dom": "^18.3.1",
+    "react-iframe": "^1.8.5",
+    "react-intersection-observer": "^9.13.1",
+    "react-router-dom": "^6.27.0",
+    "react-select": "^5.8.2",
+    "react-slick": "^0.30.2",
+    "reactjs-popup": "^2.0.6",
+    "select2": "^4.1.0-rc.0",
+    "slick-carousel": "^1.8.1",
+    "swiper": "^11.0.2",
+    "wow.js": "^1.2.2",
+    "yet-another-react-lightbox": "^3.21.6"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.13.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.3",
+    "eslint": "^9.13.0",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.14",
+    "globals": "^15.11.0",
+    "vite": "^5.4.10"
+  }
+}
