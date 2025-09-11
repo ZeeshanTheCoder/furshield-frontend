@@ -84,7 +84,6 @@ export const Contact = () => {
             <div className="col-lg-7">
               <div className="contact__form-wrap">
                 <form
-                  action="assets/mail.php"
                   method="POST"
                   id="contact-form"
                   className="contact__form"

@@ -23,6 +23,13 @@ import { BlogDetails } from "./pages/blog/BlogDetails";
 import { Contact } from "./pages/contact/Contact";
 import { Login } from "./pages/login/Login";
 import { Signup } from "./pages/signup/Signup";
+import { Profile } from "./pages/profile/Profile";
+import { OwnerDashboard } from "./pages/owner-dashboard/OwnerDashboard";
+import { VetDashboard } from "./pages/vet-dashboard/VetDashboard";
+import { ShelterDashboard } from "./pages/shelter-dashboard/ShelterDashboard";
+import ManagePets from "./pages/pet-profiles/ManagePets";
+import PetProfiles from "./pages/pet-profiles/PetProfiles";
+import { HealthRecords } from "./pages/health-records/HealthRecords";
 
 function App() {
   useWow();
@@ -55,6 +62,13 @@ function App() {
       <Route path="/contact" element={<Contact />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/profile" element={<Profile />} />
+      <Route path="/owner-profile" element={<OwnerDashboard />} />
+      <Route path="/vet-profile" element={<VetDashboard />} />
+      <Route path="/shelter-profile" element={<ShelterDashboard />} />
+      <Route path="/petmanagement" element={<ManagePets />} />
+      <Route path="/pet-profiles" element={<PetProfiles />} />
+      <Route path="/health-records/:petId" element={<HealthRecords />} />
       <Route path="*" element={<Error />} />
     </Routes>
   );

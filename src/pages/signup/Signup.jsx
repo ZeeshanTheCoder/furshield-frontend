@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Layout } from "../../layouts/Layout";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import rightArrow from "../../assets/img/icon/right_arrow.svg";
-import { BASE_URL } from "../../services/BaseUrl";
+import { axiosInstance } from "../../services/BaseUrl"; // ✅ Import axiosInstance
 
 export const Signup = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     contactNumber: "",
@@ -33,20 +35,19 @@ export const Signup = () => {
     setIsSuccess(false);
 
     try {
-      const response = await fetch(`${BASE_URL}/user/signup`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      // ✅ Using axiosInstance — cleaner and pre-configured
+      const result = await axiosInstance.post("/user/signup", formData);
 
-      const result = await response.json();
-
-      if (response.ok && result.isSave) {
+      if (result.data.isSave) {
         setIsSuccess(true);
-        setMessage(result.message); // "User Registered Successfully"
-        // Optionally reset form
+        setMessage(result.data.message); // "User Registered Successfully"
+
+        // ✅ Navigate to /login after 1.5 seconds
+        setTimeout(() => {
+          navigate("/login");
+        }, 1500);
+
+        // Reset form
         setFormData({
           name: "",
           contactNumber: "",
@@ -57,12 +58,16 @@ export const Signup = () => {
         });
       } else {
         setIsSuccess(false);
-        setMessage(result.message || "Registration failed. Please try again.");
+        setMessage(
+          result.data.message || "Registration failed. Please try again."
+        );
       }
     } catch (error) {
       setIsSuccess(false);
-      setMessage("Network error. Please check your connection.");
-      console.error("Error:", error);
+      setMessage(
+        error.response?.data?.message || "Network error. Please try again."
+      );
+      console.error("Signup Error:", error);
     } finally {
       setLoading(false);
     }

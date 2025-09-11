@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { HeaderTop } from "./HeaderTop";
 import LOGO from "../../assets/img/logo/logo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { HeaderNav } from "./HeaderNav";
 import { HeaderSearch } from "./HeaderSearch";
 import { HeaderOffcanvas } from "./HeaderOffcanvas";
@@ -11,11 +11,47 @@ import {
   useOffCanvas,
   useSearch,
 } from "../../lib/hooks/useHeader";
+import { AppContext } from "../../Context/MainContext";
+import { axiosInstance } from "../../services/BaseUrl";
 
 export const HeaderOne = () => {
   const { showSearch, toggleSearch } = useSearch();
   const { showCanvas, toggleCanvas } = useOffCanvas();
+  const { setuserdata } = useContext(AppContext);
+  const [userdatastate, setuserdatastate] = useState("");
+  const [showLogout, setShowLogout] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      const response = await axiosInstance.get("/auth/logout");
+      if (response.data.isLogout) {
+        localStorage.removeItem("user"); // or clear context/state
+        navigate("/login", { replace: true });
+      } else {
+        alert("Logout failed: " + response.data.message);
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+      alert("Something went wrong during logout.");
+    }
+  };
   useMobileMenu();
+
+  useEffect(() => {
+    const userget = async () => {
+      try {
+        const res = await axiosInstance.get("/user/getuser");
+        if (res.status === 200) {
+          setuserdatastate(res.data.user);
+          setuserdata(res.data.user);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    userget();
+  }, []);
 
   return (
     <>
@@ -119,10 +155,186 @@ export const HeaderOne = () => {
                           </a>
                         </li>
 
-                        <li className="header-btn">
-                          <Link to="/contact" className="btn">
-                            <i className="flaticon-calendar-1"></i>Appointment
-                          </Link>
+                        <li
+                          className="header-btn"
+                          style={{ position: "relative" }}
+                        >
+                          {userdatastate?.name ? (
+                            <div
+                              className="d-inline-block"
+                              onMouseEnter={() => setShowLogout(true)}
+                              onMouseLeave={() => setShowLogout(false)}
+                              style={{ position: "relative" }}
+                            >
+                              {/* Original Profile Button */}
+                              <div className="btn d-flex align-items-center">
+                                <i className="flaticon-user me-2"></i>
+                                {userdatastate.name}
+                              </div>
+
+                              {/* Floating Logout & Menu Items (appears on hover) */}
+                              {showLogout && (
+                                <div
+                                  style={{
+                                    position: "absolute",
+                                    top: "100%",
+                                    left: 0,
+                                    right: 0,
+                                    marginTop: "1px",
+                                    zIndex: 1000,
+                                  }}
+                                >
+                                  {/* Role-based menu options */}
+                                  {userdatastate.role === "owner" && (
+                                    <>
+                                      <Link
+                                        to="/profile"
+                                        className="btn btn-outline-danger btn-sm w-100"
+                                        style={{ whiteSpace: "nowrap" }}
+                                      >
+                                        <i className="flaticon-user me-1"></i>{" "}
+                                        Profile
+                                      </Link>
+                                      <Link
+                                        to="/pet-profiles"
+                                        className="btn btn-outline-danger btn-sm w-100"
+                                        style={{ whiteSpace: "nowrap" }}
+                                      >
+                                        <i className="icon-pet"></i> Pet
+                                        Profiles
+                                      </Link>
+                                      <Link
+                                        to="/health-records"
+                                        className="btn btn-outline-danger btn-sm w-100"
+                                        style={{ whiteSpace: "nowrap" }}
+                                      >
+                                        <i className="icon-health"></i> Health
+                                        Records
+                                      </Link>
+                                      <Link
+                                        to="/view-products"
+                                        className="btn btn-outline-danger btn-sm w-100"
+                                        style={{ whiteSpace: "nowrap" }}
+                                      >
+                                        <i className="icon-products"></i> View
+                                        Products
+                                      </Link>
+                                      <Link
+                                        to="/care-options"
+                                        className="btn btn-outline-danger btn-sm w-100"
+                                        style={{ whiteSpace: "nowrap" }}
+                                      >
+                                        <i className="icon-care"></i> Care
+                                        Options
+                                      </Link>
+                                      <Link
+                                        to="/appointment-booking"
+                                        className="btn btn-outline-danger btn-sm w-100"
+                                        style={{ whiteSpace: "nowrap" }}
+                                      >
+                                        <i className="icon-appointment"></i>{" "}
+                                        Appointment Booking
+                                      </Link>
+                                    </>
+                                  )}
+                                  {userdatastate.role === "vet" && (
+                                    <>
+                                      <Link
+                                        to="/profile"
+                                        className="btn btn-outline-danger btn-sm w-100"
+                                        style={{ whiteSpace: "nowrap" }}
+                                      >
+                                        <i className="flaticon-user me-1"></i>{" "}
+                                        Profile
+                                      </Link>
+                                      <Link
+                                        to="/pet-medical-history"
+                                        className="btn btn-outline-danger btn-sm w-100"
+                                        style={{ whiteSpace: "nowrap" }}
+                                      >
+                                        <i className="icon-medical"></i> Pet
+                                        Medical History
+                                      </Link>
+                                      <Link
+                                        to="/log-treatments"
+                                        className="btn btn-outline-danger btn-sm w-100"
+                                        style={{ whiteSpace: "nowrap" }}
+                                      >
+                                        <i className="icon-treatment"></i> Log
+                                        Treatments
+                                      </Link>
+                                      <Link
+                                        to="/manage-appointments"
+                                        className="btn btn-outline-danger btn-sm w-100"
+                                        style={{ whiteSpace: "nowrap" }}
+                                      >
+                                        <i className="icon-appointments"></i>{" "}
+                                        Manage Appointments
+                                      </Link>
+                                    </>
+                                  )}
+                                  {userdatastate.role === "shelter" && (
+                                    <>
+                                      <Link
+                                        to="/profile"
+                                        className="btn btn-outline-danger btn-sm w-100"
+                                        style={{ whiteSpace: "nowrap" }}
+                                      >
+                                        <i className="flaticon-user me-1"></i>{" "}
+                                        Profile
+                                      </Link>
+                                      <Link
+                                        to="/list-adoptable"
+                                        className="btn btn-outline-danger btn-sm w-100"
+                                        style={{ whiteSpace: "nowrap" }}
+                                      >
+                                        <i className="icon-adopt"></i> List
+                                        Adoptable
+                                      </Link>
+                                      <Link
+                                        to="/pet-care-status"
+                                        className="btn btn-outline-danger btn-sm w-100"
+                                        style={{ whiteSpace: "nowrap" }}
+                                      >
+                                        <i className="icon-care"></i> Pet Care
+                                        Status
+                                      </Link>
+                                      <Link
+                                        to="/notifications"
+                                        className="btn btn-outline-danger btn-sm w-100"
+                                        style={{ whiteSpace: "nowrap" }}
+                                      >
+                                        <i className="icon-notification"></i>{" "}
+                                        Notification
+                                      </Link>
+                                    </>
+                                  )}
+
+                                  {/* Common options */}
+                                  <Link
+                                    to="/profile"
+                                    className="btn btn-outline-danger btn-sm w-100"
+                                    style={{ whiteSpace: "nowrap" }}
+                                  >
+                                    <i className="flaticon-user me-1"></i>{" "}
+                                    Profile
+                                  </Link>
+                                  <button
+                                    className="btn btn-outline-danger btn-sm w-100"
+                                    onClick={handleLogout}
+                                    style={{ whiteSpace: "nowrap" }}
+                                  >
+                                    <i className="fas fa-sign-out-alt me-1"></i>{" "}
+                                    Logout
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                          ) : (
+                            <Link to="/login" className="btn">
+                              <i className="flaticon-user"></i> Sign In
+                            </Link>
+                          )}
                         </li>
                       </ul>
                     </div>

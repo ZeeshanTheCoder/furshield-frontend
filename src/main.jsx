@@ -17,9 +17,12 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "./assets/js/jquery-ui.min.js";
 import "./assets/js/jquery.appear.js";
 import "./assets/js/svg-inject.min.js";
+import { AppProvider } from "./Context/MainContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
+  <AppProvider>
     <App />
+  </AppProvider>
   </BrowserRouter>
 );

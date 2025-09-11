@@ -92,7 +92,6 @@ export const TeamDetails = () => {
                 </div>
                 <div className="contact__form-wrap team__details-form">
                   <form
-                    action="assets/mail.php"
                     method="POST"
                     id="contact-form"
                     className="contact__form"
