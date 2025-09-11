@@ -60,7 +60,7 @@ export const HeaderThree = () => {
                             </a>
                           </li>
                           <li className="header-btn login-btn">
-                            <Link to="/contact" className="btn">
+                            <Link to="/login" className="btn">
                               <i className="flaticon-locked"></i>Login
                             </Link>
                           </li>

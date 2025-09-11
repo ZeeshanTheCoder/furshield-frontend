@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 
 export const HeaderNav = () => {
   const { pathname } = useLocation();
@@ -10,26 +10,8 @@ export const HeaderNav = () => {
 
   return (
     <ul className="navigation">
-      <li
-        className={`menu-item-has-children ${
-          isActiveMenu(["/", "/home2", "/home3", "/home4"]) ? "active" : ""
-        }`}
-      >
-        <a href="#">Home</a>
-        <ul className="sub-menu">
-          <li className={pathname === "/" ? "active" : ""}>
-            <Link to="/">Pet Care & Veterinary</Link>
-          </li>
-          <li className={pathname === "/home2" ? "active" : ""}>
-            <Link to="/home2">Pet Breed</Link>
-          </li>
-          <li className={pathname === "/home3" ? "active" : ""}>
-            <Link to="/home3">Pet Adopt</Link>
-          </li>
-          <li className={pathname === "/home4" ? "active" : ""}>
-            <Link to="/home4">pet Woocommerce</Link>
-          </li>
-        </ul>
+       <li className={pathname === "/" ? "active" : ""}>
+        <Link to="/">Home</Link>
       </li>
       <li className={pathname === "/about" ? "active" : ""}>
         <Link to="/about">About</Link>

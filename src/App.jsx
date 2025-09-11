@@ -6,9 +6,6 @@ import { useWow } from "./lib/hooks/useWow";
 import { useAos } from "./lib/hooks/useAos";
 import { useCircle } from "./lib/hooks/useCircles";
 import { useSvgInject } from "./lib/hooks/useSvgInject";
-import { HomeTwo } from "./pages/home/HomeTwo";
-import { HomeThree } from "./pages/home/HomeThree";
-import { HomeFour } from "./pages/home/HomeFour";
 import { About } from "./pages/about/About";
 import { Product } from "./pages/product/Product";
 import { ProductDetails } from "./pages/product/ProductDetails";
@@ -24,6 +21,8 @@ import { Team } from "./pages/team/Team";
 import { Blog } from "./pages/blog/Blog";
 import { BlogDetails } from "./pages/blog/BlogDetails";
 import { Contact } from "./pages/contact/Contact";
+import { Login } from "./pages/login/Login";
+import { Signup } from "./pages/signup/Signup";
 
 function App() {
   useWow();
@@ -40,10 +39,6 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<HomeOne />} />
-      <Route path="/home2" element={<HomeTwo />} />
-      <Route path="/home3" element={<HomeThree />} />
-      <Route path="/home4" element={<HomeFour />} />
-      {/* <Route path="/home4" element={<>THIS IS HOME 4</>} /> */}
       <Route path="/about" element={<About />} />
       <Route path="/product" element={<Product />} />
       <Route path="/product-details" element={<ProductDetails />} />
@@ -58,6 +53,8 @@ function App() {
       <Route path="/blog" element={<Blog />} />
       <Route path="/blog-details" element={<BlogDetails />} />
       <Route path="/contact" element={<Contact />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
       <Route path="*" element={<Error />} />
     </Routes>
   );
