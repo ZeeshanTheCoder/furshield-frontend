@@ -24,14 +24,16 @@ import { Contact } from "./pages/contact/Contact";
 import { Login } from "./pages/login/Login";
 import { Signup } from "./pages/signup/Signup";
 import { Profile } from "./pages/profile/Profile";
-import { OwnerDashboard } from "./pages/owner-dashboard/OwnerDashboard";
-import { VetDashboard } from "./pages/vet-dashboard/VetDashboard";
-import { ShelterDashboard } from "./pages/shelter-dashboard/ShelterDashboard";
 import ManagePets from "./pages/pet-profiles/ManagePets";
 import PetProfiles from "./pages/pet-profiles/PetProfiles";
 import { HealthRecords } from "./pages/health-records/HealthRecords";
 import PetCareStatus from "./pages/pet-care-status/PetCareStatus";
 import ViewPetCare from "./pages/view-pet-care/ViewPetCare";
+import PetCare from "./pages/pet-care/PetCare";
+import { AppointmentBooking } from "./pages/appointments/AppointmentBooking";
+import Appointments from "./pages/appointments/Appointments";
+import PetCareChatbot from "./pages/petchatbot/PetCareChatbot";
+import CreateAdoptablePet from "./pages/adoptablepages/CreateAdoptablePet";
 
 function App() {
   useWow();
@@ -62,20 +64,27 @@ function App() {
       <Route path="/blog" element={<Blog />} />
       <Route path="/blog-details" element={<BlogDetails />} />
       <Route path="/contact" element={<Contact />} />
+
+      {/* auth */}
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/profile" element={<Profile />} />
-      <Route path="/owner-profile" element={<OwnerDashboard />} />
-      <Route path="/vet-profile" element={<VetDashboard />} />
-      <Route path="/shelter-profile" element={<ShelterDashboard />} />
+      {/* users */}
       <Route path="/petmanagement" element={<ManagePets />} />
       <Route path="/pet-profiles" element={<PetProfiles />} />
       <Route path="/health-records/:petId" element={<HealthRecords />} />
+      <Route path="/pet-care" element={<PetCare />} />
+      <Route path="/appointment-booking" element={<AppointmentBooking />} />
+      <Route path="/appointments" element={<Appointments />} />
 
       {/* Shelter */}
       <Route path="/pet-care-status" element={<PetCareStatus />} />
       <Route path="/view-pet-care" element={<ViewPetCare />} />
       <Route path="/pet-care-status/:id" element={<PetCareStatus />} />
+      <Route path="/adoptable" element={<CreateAdoptablePet />} />
+
+      {/* Chat Bot */}
+      <Route path="/petchat" element={<PetCareChatbot />} />
 
       <Route path="*" element={<Error />} />
     </Routes>

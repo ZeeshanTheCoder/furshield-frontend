@@ -1,9 +1,22 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 
 export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
-  const [userdata, setuserdata] = useState(null);
+  // Initialize userdata from localStorage if it exists
+  const [userdata, setuserdata] = useState(() => {
+    const storedData = localStorage.getItem('userdata');
+    return storedData ? JSON.parse(storedData) : null;
+  });
+
+  // Update localStorage whenever userdata changes
+  useEffect(() => {
+    if (userdata) {
+      localStorage.setItem('userdata', JSON.stringify(userdata));
+    } else {
+      localStorage.removeItem('userdata');
+    }
+  }, [userdata]);
 
   return (
     <AppContext.Provider
@@ -16,4 +29,3 @@ export const AppProvider = ({ children }) => {
     </AppContext.Provider>
   );
 };
-

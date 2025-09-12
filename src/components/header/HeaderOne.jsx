@@ -24,18 +24,23 @@ export const HeaderOne = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await axiosInstance.get("/auth/logout");
+      const response = await axiosInstance.delete("/auth/logout");
       if (response.data.isLogout) {
-        localStorage.removeItem("user"); // or clear context/state
+        localStorage.removeItem("userdata"); // or clear context/state
         navigate("/login", { replace: true });
       } else {
         alert("Logout failed: " + response.data.message);
       }
     } catch (error) {
-      console.error("Logout error:", error);
+      console.error(
+        "Logout error:",
+        error.response ? error.response.data : error.message
+      );
       alert("Something went wrong during logout.");
     }
   };
+  handleLogout();
+
   useMobileMenu();
 
   useEffect(() => {
@@ -212,7 +217,7 @@ export const HeaderOne = () => {
                                         Products
                                       </Link>
                                       <Link
-                                        to="/care-options"
+                                        to="/pet-care"
                                         className="btn btn-outline-danger btn-sm w-100"
                                         style={{ whiteSpace: "nowrap" }}
                                       >
@@ -303,14 +308,7 @@ export const HeaderOne = () => {
                                   )}
 
                                   {/* Common options */}
-                                  <Link
-                                    to="/profile"
-                                    className="btn btn-outline-danger btn-sm w-100"
-                                    style={{ whiteSpace: "nowrap" }}
-                                  >
-                                    <i className="flaticon-user me-1"></i>{" "}
-                                    Profile
-                                  </Link>
+
                                   <button
                                     className="btn btn-outline-danger btn-sm w-100"
                                     onClick={handleLogout}

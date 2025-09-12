@@ -9,6 +9,7 @@ export const Login = () => {
   const { setuserdata } = useContext(AppContext); // 👈 Get setter from context
   const navigate = useNavigate(); // 👈 Better than window.location for React Router
 
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -40,6 +41,10 @@ export const Login = () => {
         setuserdata({
           user: result.data.user, // 👈 Save full user object
         });
+
+        
+
+        console.log(result.data.user,"user context")
 
         setIsSuccess(true);
         setMessage("Login successful! Redirecting...");

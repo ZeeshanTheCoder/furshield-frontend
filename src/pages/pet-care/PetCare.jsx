@@ -3,7 +3,7 @@ import { Layout } from "../../layouts/Layout";
 import { axiosInstance } from "../../services/BaseUrl";
 import { useNavigate } from "react-router-dom";
 
-const ViewPetCare = () => {
+const PetCare = () => {
   const navigate = useNavigate();
 
   const [logs, setLogs] = useState([]);
@@ -41,21 +41,6 @@ const ViewPetCare = () => {
     .filter((log) => (typeFilter === "all" ? true : log.type === typeFilter))
     .filter((log) => log.title.toLowerCase().includes(nameFilter.toLowerCase()))
     .sort((a, b) => (sortOrder === "asc" ? a.title.localeCompare(b.title) : b.title.localeCompare(a.title)));
-
-  const handleDelete = async (contentId) => {
-    if (!window.confirm("Are you sure you want to delete this log?")) return;
-    try {
-      await axiosInstance.delete(`/care-content/${contentId}`);
-      fetchLogs();
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleEdit = (log) => {
-    // Pass log data via state to PetCareStatus
-    navigate("/pet-care-status", { state: { log } });
-  };
 
   return (
     <Layout breadcrumbTitle="All Pet Care Logs" breadcrumbSubtitle="View, filter & sort logs">
@@ -139,21 +124,7 @@ const ViewPetCare = () => {
                           <i className="icon-video"></i> Watch Video
                         </a>
                       )}
-                      {/* Buttons for update & delete */}
-                      <div className="mt-3 d-flex gap-2">
-                        <button
-                          className="btn btn-sm btn-outline-primary"
-                          onClick={() => handleEdit(log)}
-                        >
-                          <i className="icon-edit"></i> Update
-                        </button>
-                        <button
-                          className="btn btn-sm btn-outline-danger"
-                          onClick={() => handleDelete(log._id)}
-                        >
-                          <i className="icon-trash"></i> Delete
-                        </button>
-                      </div>
+                    
                     </div>
                   </div>
                 </div>
@@ -166,4 +137,4 @@ const ViewPetCare = () => {
   );
 };
 
-export default ViewPetCare;
+export default PetCare;

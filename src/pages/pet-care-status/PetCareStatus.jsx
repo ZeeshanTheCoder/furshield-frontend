@@ -1,48 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { Layout } from "../../layouts/Layout";
 import { axiosInstance } from "../../services/BaseUrl";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import rightArrow from "../../assets/img/icon/right_arrow.svg";
 
 const PetCareStatus = () => {
-  const { id } = useParams(); // get log id from URL
+  const location = useLocation();
   const navigate = useNavigate();
+
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
-  const [isEditMode, setIsEditMode] = useState(false);
 
+  // Determine if editing or creating
+  const existingLog = location.state?.log;
+  const [formMode, setFormMode] = useState(existingLog ? "edit" : "create");
+
+  // Initialize form state based on existing log if editing
   const [currentLog, setCurrentLog] = useState({
-    _id: "",
-    title: "",
-    type: "article",
-    category: "feeding",
-    content: "",
-    videoUrl: "",
+    _id: existingLog?._id || "",
+    title: existingLog?.title || "",
+    type: existingLog?.type || "article",
+    category: existingLog?.category || "feeding",
+    content: existingLog?.content || "",
+    videoUrl: existingLog?.videoUrl || "",
   });
 
-  // Fetch existing log if ID present
-  useEffect(() => {
-    if (id) {
-      fetchLogById(id);
-    }
-  }, [id]);
-
-  const fetchLogById = async (logId) => {
-    setLoading(true);
-    try {
-      const res = await axiosInstance.get(`/care-content/${logId}`); // <-- Ensure this route exists in your backend
-      if (res.data) {
-        setCurrentLog(res.data);
-        setIsEditMode(true);
-      }
-    } catch (error) {
-      console.error(error);
-      setMessage("Failed to load the log");
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Fetch logs or other data if needed
+  // (Optional, since data is passed via state for edit)
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
@@ -53,53 +38,89 @@ const PetCareStatus = () => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
+    setIsSuccess(false);
     try {
-      if (isEditMode) {
-        // Ensure _id is available
-        await axiosInstance.put(`/care-content/${currentLog._id}`, currentLog);
-        setMessage("Log updated successfully");
+      let result;
+      if (formMode === "create") {
+        result = await axiosInstance.post("/care-content/", currentLog);
       } else {
-        await axiosInstance.post("/care-content/", currentLog);
-        setMessage("Log created successfully");
+        result = await axiosInstance.put(
+          `/care-content/${currentLog._id}`,
+          currentLog
+        );
       }
-      // Redirect after success
-      setTimeout(() => {
-        navigate("/view-pet-care");
-      }, 1000);
+      if (
+        result.status === 200 ||
+        result.data.message?.includes("successfully")
+      ) {
+        setIsSuccess(true);
+        setMessage(
+          `Log ${formMode === "create" ? "created" : "updated"} successfully!`
+        );
+        // Redirect after update
+        setTimeout(() => {
+          navigate("/view-pet-care");
+        }, 1500);
+        // Reset form if create
+        if (formMode === "create") {
+          setCurrentLog({
+            _id: "",
+            title: "",
+            type: "article",
+            category: "feeding",
+            content: "",
+            videoUrl: "",
+          });
+        }
+      } else {
+        setMessage(result.data.message || "Operation failed.");
+      }
     } catch (error) {
       console.error(error);
-      setMessage("Error saving log");
+      setMessage(error.response?.data?.message || "Network error.");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleCancel = () => {
-    navigate("/view-pet-care");
+  const handleCancelEdit = () => {
+    // Reset to create mode
+    setCurrentLog({
+      _id: "",
+      title: "",
+      type: "article",
+      category: "feeding",
+      content: "",
+      videoUrl: "",
+    });
+    setFormMode("create");
   };
 
   return (
-    <Layout breadcrumbTitle="Pet Care Status" breadcrumbSubtitle="Feeding, Hygiene & Health Logs">
+    <Layout
+      breadcrumbTitle="Pet Care Status"
+      breadcrumbSubtitle="Feeding, Hygiene & Health Logs"
+    >
       <section className="contact__area py-4">
         <div className="container">
-          {/* Log Form */}
+          {/* Care Log Form */}
           <div className="mb-5 p-4 border rounded bg-light shadow-sm">
-            <h2 className="mb-4">{isEditMode ? "Edit Care Log" : "Add New Care Log"}</h2>
+            <h2 className="mb-4">
+              {formMode === "create" ? "Add New Care Log" : "Edit Care Log"}
+            </h2>
             <form onSubmit={handleSubmit} className="row g-3">
-              {/* Title */}
               <div className="col-md-6">
                 <label className="form-label">Title</label>
                 <input
                   type="text"
                   className="form-control"
                   name="title"
-                  placeholder="e.g., Morning Meal, Bath Time"
                   required
+                  placeholder="e.g., Morning Meal, Bath Time"
                   value={currentLog.title}
                   onChange={handleFormChange}
                 />
               </div>
-              {/* Category */}
               <div className="col-md-6">
                 <label className="form-label">Category</label>
                 <select
@@ -116,7 +137,6 @@ const PetCareStatus = () => {
                   <option value="exercise">Exercise</option>
                 </select>
               </div>
-              {/* Type */}
               <div className="col-md-6">
                 <label className="form-label">Type</label>
                 <select
@@ -131,7 +151,6 @@ const PetCareStatus = () => {
                   <option value="faq">FAQ/Instruction</option>
                 </select>
               </div>
-              {/* Video URL */}
               <div className="col-md-6">
                 <label className="form-label">Video URL (Optional)</label>
                 <input
@@ -143,7 +162,6 @@ const PetCareStatus = () => {
                   onChange={handleFormChange}
                 />
               </div>
-              {/* Content */}
               <div className="col-12">
                 <label className="form-label">Details / Notes</label>
                 <textarea
@@ -157,29 +175,50 @@ const PetCareStatus = () => {
                   required
                 ></textarea>
               </div>
-              {/* Buttons */}
               <div className="d-flex gap-3 mt-3">
-                <button type="submit" className="btn btn-primary" disabled={loading}>
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={loading}
+                >
                   {loading ? (
                     <>
-                      <div className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></div>
-                      Saving...
+                      <div
+                        className="spinner-border spinner-border-sm me-2"
+                        role="status"
+                        aria-hidden="true"
+                      ></div>
+                      {formMode === "create" ? "Adding..." : "Updating..."}
                     </>
                   ) : (
                     <>
-                      {isEditMode ? "Update Log" : "Add Log"}
-                      <img src={rightArrow} alt="" className="ms-1" style={{ height: "14px" }} />
+                      {formMode === "create" ? "Add Log" : "Update Log"}
+                      <img
+                        src={rightArrow}
+                        alt=""
+                        className="ms-1"
+                        style={{ height: "14px" }}
+                      />
                     </>
                   )}
                 </button>
-                {isEditMode && (
-                  <button type="button" className="btn btn-outline-secondary" onClick={handleCancel} disabled={loading}>
+                {formMode === "edit" && (
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary"
+                    onClick={handleCancelEdit}
+                    disabled={loading}
+                  >
                     Cancel
                   </button>
                 )}
               </div>
               {message && (
-                <p className={`mt-3 mb-0 fw-semibold ${isSuccess ? "text-success" : "text-danger"}`}>
+                <p
+                  className={`mt-3 mb-0 fw-semibold ${
+                    isSuccess ? "text-success" : "text-danger"
+                  }`}
+                >
                   {message}
                 </p>
               )}

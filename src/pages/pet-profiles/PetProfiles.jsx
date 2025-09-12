@@ -32,7 +32,8 @@ const PetProfiles = () => {
 
     try {
       const res = await axiosInstance.get("/pets/fetchpetsbyowner");
-      setPets(res.data.pets || []);
+      setPets(res.data.pets);
+      console.log(res.data.pets)
     } catch (error) {
       console.error("Error fetching pets:", error.message);
       alert("Failed to load pets. Please login again.");

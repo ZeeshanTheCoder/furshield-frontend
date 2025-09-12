@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useMobileMenu, useSearch } from "../../lib/hooks/useHeader";
 import { HeaderSearch } from "./HeaderSearch";
@@ -7,18 +7,26 @@ import { HeaderNav } from "./HeaderNav";
 
 import wLogo from "../../assets/img/logo/w_logo.png";
 import { axiosInstance } from "../../services/BaseUrl";
+import { AppContext } from "../../Context/MainContext";
 
 export const HeaderThree = () => {
   const { showSearch, toggleSearch } = useSearch();
   const [userdatastate, setuserdatastate] = useState("");
   const [showLogout, setShowLogout] = useState(false);
+  const {setuserdata} = useContext(AppContext)
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
-      const response = await axiosInstance.get("/auth/logout");
+      const response = await axiosInstance.delete("/auth/logout");
       if (response.data.isLogout) {
-        localStorage.removeItem("user"); // or clear context/state
+        // Remove token and user info from localStorage
+        localStorage.removeItem("userdata"); // if token stored under 'token'
+
+        // Also clear context state if needed
+        setuserdata(null);
+
+        // Redirect to login
         navigate("/login", { replace: true });
       } else {
         alert("Logout failed: " + response.data.message);
@@ -34,6 +42,7 @@ export const HeaderThree = () => {
       try {
         const res = await axiosInstance.get("/user/getuser");
         if (res.status === 200) {
+          console.log(res.data.user)
           setuserdatastate(res.data.user);
         }
       } catch (error) {
@@ -150,7 +159,7 @@ export const HeaderThree = () => {
                                           Products
                                         </Link>
                                         <Link
-                                          to="/care-options"
+                                          to="/pet-care"
                                           className="btn btn-outline-danger btn-sm w-100"
                                           style={{ whiteSpace: "nowrap" }}
                                         >
@@ -241,14 +250,6 @@ export const HeaderThree = () => {
                                     )}
 
                                     {/* Common options */}
-                                    <Link
-                                      to="/profile"
-                                      className="btn btn-outline-danger btn-sm w-100"
-                                      style={{ whiteSpace: "nowrap" }}
-                                    >
-                                      <i className="flaticon-user me-1"></i>{" "}
-                                      Profile
-                                    </Link>
                                     <button
                                       className="btn btn-outline-danger btn-sm w-100"
                                       onClick={handleLogout}
