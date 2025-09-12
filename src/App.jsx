@@ -30,6 +30,8 @@ import { ShelterDashboard } from "./pages/shelter-dashboard/ShelterDashboard";
 import ManagePets from "./pages/pet-profiles/ManagePets";
 import PetProfiles from "./pages/pet-profiles/PetProfiles";
 import { HealthRecords } from "./pages/health-records/HealthRecords";
+import PetCareStatus from "./pages/pet-care-status/PetCareStatus";
+import ViewPetCare from "./pages/view-pet-care/ViewPetCare";
 
 function App() {
   useWow();
@@ -69,6 +71,12 @@ function App() {
       <Route path="/petmanagement" element={<ManagePets />} />
       <Route path="/pet-profiles" element={<PetProfiles />} />
       <Route path="/health-records/:petId" element={<HealthRecords />} />
+
+      {/* Shelter */}
+      <Route path="/pet-care-status" element={<PetCareStatus />} />
+      <Route path="/view-pet-care" element={<ViewPetCare />} />
+      <Route path="/pet-care-status/:id" element={<PetCareStatus />} />
+
       <Route path="*" element={<Error />} />
     </Routes>
   );

@@ -142,14 +142,6 @@ export const HeaderThree = () => {
                                           Profiles
                                         </Link>
                                         <Link
-                                          to="/health-records"
-                                          className="btn btn-outline-danger btn-sm w-100"
-                                          style={{ whiteSpace: "nowrap" }}
-                                        >
-                                          <i className="icon-health"></i> Health
-                                          Records
-                                        </Link>
-                                        <Link
                                           to="/view-products"
                                           className="btn btn-outline-danger btn-sm w-100"
                                           style={{ whiteSpace: "nowrap" }}

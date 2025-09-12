@@ -5,7 +5,7 @@ import rightArrow from "../../assets/img/icon/right_arrow.svg";
 import { useParams, useNavigate } from "react-router-dom";
 
 export const HealthRecords = () => {
-  const { petId } = useParams(); // Get petId from URL: /health-records/:petId
+  const { petId } = useParams();
   const navigate = useNavigate();
 
   const [records, setRecords] = useState([]);
@@ -14,10 +14,9 @@ export const HealthRecords = () => {
   const [isSuccess, setIsSuccess] = useState(false);
 
   // Form state for Create/Edit
-  const [formMode, setFormMode] = useState("create"); // "create" or "edit"
+  const [formMode, setFormMode] = useState("create");
   const [currentRecord, setCurrentRecord] = useState({
-    pet: petId,
-    visitDate: "",
+    petId: petId,
     diagnosis: "",
     treatment: "",
     notes: "",
@@ -25,9 +24,9 @@ export const HealthRecords = () => {
     allergies: "",
     illnesses: "",
     insurance: "",
-    documents: [], // For file uploads
+    gallery: [],
   });
-  const [fileUploads, setFileUploads] = useState([]); // To handle file input preview/upload
+  const [fileUploads, setFileUploads] = useState([]);
 
   // Fetch records on load
   useEffect(() => {
@@ -43,9 +42,13 @@ export const HealthRecords = () => {
     try {
       const res = await axiosInstance.get(`/health/gethealthrecord/${petId}`);
       setRecords(res.data.records || []);
+      setMessage("");
     } catch (error) {
-      setMessage("Failed to load health records.");
-      console.error(error);
+      console.error("Fetch error:", error);
+      setRecords([]);
+      if (error.response?.status !== 404) {
+        setMessage("Failed to load health records.");
+      }
     } finally {
       setLoading(false);
     }
@@ -57,7 +60,7 @@ export const HealthRecords = () => {
       setFileUploads(Array.from(files));
       setCurrentRecord((prev) => ({
         ...prev,
-        documents: Array.from(files),
+        gallery: Array.from(files),
       }));
     } else {
       setCurrentRecord((prev) => ({
@@ -74,33 +77,71 @@ export const HealthRecords = () => {
     setIsSuccess(false);
 
     try {
-      // Use FormData to send files
       const formData = new FormData();
-      for (const key in currentRecord) {
-        if (key === "documents") {
-          currentRecord.documents.forEach((file, idx) => {
-            formData.append(`documents`, file);
-          });
-        } else {
-          formData.append(key, currentRecord[key]);
+
+      // Append text fields
+      Object.keys(currentRecord).forEach((key) => {
+        if (key !== "gallery" && currentRecord[key] != null) {
+          if (
+            key === "vaccinations" &&
+            typeof currentRecord[key] === "string"
+          ) {
+            const names = currentRecord[key]
+              .split(",")
+              .map((item) => item.trim())
+              .filter((item) => item);
+            const vacArray = names.map((name) => ({
+              name,
+              date: new Date(), // No visitDate anymore
+            }));
+            formData.append(key, JSON.stringify(vacArray));
+          } else if (
+            ["allergies", "illnesses", "treatments"].includes(key) &&
+            typeof currentRecord[key] === "string"
+          ) {
+            const items = currentRecord[key]
+              .split(",")
+              .map((item) => item.trim())
+              .filter((item) => item);
+            formData.append(key, JSON.stringify(items));
+          } else if (key === "insurance") {
+            formData.append(key, currentRecord[key]);
+          } else {
+            formData.append(key, currentRecord[key]);
+          }
         }
-      }
+      });
+
+      // Append files
+      currentRecord.gallery.forEach((file) => {
+        formData.append("gallery", file);
+      });
 
       let result;
       if (formMode === "create") {
-        result = await axiosInstance.post("/health/createhealthrecord", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+        result = await axiosInstance.post(
+          "/health/createhealthrecord",
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
       } else {
-        result = await axiosInstance.put(`/health/updatehealthrecord/${currentRecord._id}`, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+        result = await axiosInstance.put(
+          `/health/updatehealthrecord/${currentRecord._id}`,
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
       }
 
-      if (result.data.success || result.data.message === "Health record created successfully" || result.data.message === "Health record updated successfully") {
+      if (result.data.record) {
         setIsSuccess(true);
-        setMessage(formMode === "create" ? "Record created!" : "Record updated!");
-        fetchHealthRecords(); // Refresh list
+        setMessage(
+          formMode === "create" ? "Record created!" : "Record updated!"
+        );
+        fetchHealthRecords();
         resetForm();
       } else {
         setMessage(result.data.message || "Operation failed.");
@@ -114,11 +155,33 @@ export const HealthRecords = () => {
   };
 
   const handleEdit = (record) => {
+    // Format record for form
+    const formattedVaccinations = Array.isArray(record.vaccinations)
+      ? record.vaccinations.map((v) => v.name).join(", ")
+      : record.vaccinations || "";
+
+    const formattedAllergies = Array.isArray(record.allergies)
+      ? record.allergies.join(", ")
+      : record.allergies || "";
+
+    const formattedIllnesses = Array.isArray(record.illnesses)
+      ? record.illnesses.join(", ")
+      : record.illnesses || "";
+
+    const formattedTreatments = Array.isArray(record.treatments)
+      ? record.treatments.join(", ")
+      : record.treatments || "";
+
     setCurrentRecord({
       ...record,
-      pet: petId,
-      visitDate: record.visitDate ? new Date(record.visitDate).toISOString().split("T")[0] : "",
-      documents: [], // Reset file uploads
+      petId: petId,
+      // visitDate removed
+      vaccinations: formattedVaccinations,
+      allergies: formattedAllergies,
+      illnesses: formattedIllnesses,
+      treatment: formattedTreatments,
+      insurance: record.insurance?.provider || record.insurance || "",
+      gallery: [],
     });
     setFileUploads([]);
     setFormMode("edit");
@@ -127,8 +190,7 @@ export const HealthRecords = () => {
 
   const resetForm = () => {
     setCurrentRecord({
-      pet: petId,
-      visitDate: "",
+      petId: petId,
       diagnosis: "",
       treatment: "",
       notes: "",
@@ -136,7 +198,7 @@ export const HealthRecords = () => {
       allergies: "",
       illnesses: "",
       insurance: "",
-      documents: [],
+      gallery: [],
     });
     setFileUploads([]);
     setFormMode("create");
@@ -144,7 +206,9 @@ export const HealthRecords = () => {
 
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
-    return new Date(dateString).toLocaleDateString("en-US", {
+    const dateObj = new Date(dateString);
+    if (isNaN(dateObj.getTime())) return "N/A";
+    return dateObj.toLocaleDateString("en-US", {
       year: "numeric",
       month: "short",
       day: "numeric",
@@ -152,72 +216,36 @@ export const HealthRecords = () => {
   };
 
   return (
-    <Layout breadcrumbTitle="Health Records" breadcrumbSubtitle="Manage Pet Health">
+    <Layout
+      breadcrumbTitle="Health Records"
+      breadcrumbSubtitle="Manage Pet Health"
+    >
       <section className="contact__area">
         <div className="container">
           <div className="row justify-content-center">
             <div className="col-lg-10">
               <div className="contact__form-wrap">
-
                 {/* Form Section */}
                 <div className="mb-5">
                   <h2 className="title">
-                    {formMode === "create" ? "Add New Health Record" : "Edit Health Record"}
+                    {formMode === "create"
+                      ? "Add New Health Record"
+                      : "Edit Health Record"}
                   </h2>
-                  <form onSubmit={handleCreateOrUpdate} className="contact__form mt-4" encType="multipart/form-data">
+                  <form
+                    onSubmit={handleCreateOrUpdate}
+                    className="contact__form mt-4"
+                    encType="multipart/form-data"
+                  >
                     <div className="row gutter-20">
-                      <div className="col-md-6">
-                        <div className="form-grp">
-                          <label>Visit Date</label>
-                          <input
-                            type="date"
-                            name="visitDate"
-                            required
-                            value={currentRecord.visitDate}
-                            onChange={handleFormChange}
-                            className="form-control"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="col-md-6">
-                        <div className="form-grp">
-                          <label>Diagnosis</label>
-                          <input
-                            type="text"
-                            name="diagnosis"
-                            placeholder="e.g., Flea Infestation"
-                            required
-                            value={currentRecord.diagnosis}
-                            onChange={handleFormChange}
-                            className="form-control"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="col-md-12">
-                        <div className="form-grp">
-                          <label>Treatment</label>
-                          <input
-                            type="text"
-                            name="treatment"
-                            placeholder="e.g., Medication, Diet Change"
-                            required
-                            value={currentRecord.treatment}
-                            onChange={handleFormChange}
-                            className="form-control"
-                          />
-                        </div>
-                      </div>
-
-                      {/* Additional fields */}
+                      {/* Vaccinations */}
                       <div className="col-md-6">
                         <div className="form-grp">
                           <label>Vaccinations</label>
                           <input
                             type="text"
                             name="vaccinations"
-                            placeholder="List vaccinations"
+                            placeholder="Rabies, Distemper"
                             value={currentRecord.vaccinations}
                             onChange={handleFormChange}
                             className="form-control"
@@ -225,13 +253,14 @@ export const HealthRecords = () => {
                         </div>
                       </div>
 
+                      {/* Allergies */}
                       <div className="col-md-6">
                         <div className="form-grp">
                           <label>Allergies</label>
                           <input
                             type="text"
                             name="allergies"
-                            placeholder="Allergies"
+                            placeholder="Beef, Pollen"
                             value={currentRecord.allergies}
                             onChange={handleFormChange}
                             className="form-control"
@@ -239,13 +268,14 @@ export const HealthRecords = () => {
                         </div>
                       </div>
 
+                      {/* Illnesses */}
                       <div className="col-md-12">
                         <div className="form-grp">
                           <label>Illnesses</label>
                           <input
                             type="text"
                             name="illnesses"
-                            placeholder="Illnesses"
+                            placeholder="Kennel Cough"
                             value={currentRecord.illnesses}
                             onChange={handleFormChange}
                             className="form-control"
@@ -253,13 +283,14 @@ export const HealthRecords = () => {
                         </div>
                       </div>
 
+                      {/* Insurance */}
                       <div className="col-md-12">
                         <div className="form-grp">
                           <label>Insurance</label>
                           <input
                             type="text"
                             name="insurance"
-                            placeholder="Insurance info"
+                            placeholder="Policy number or provider"
                             value={currentRecord.insurance}
                             onChange={handleFormChange}
                             className="form-control"
@@ -267,15 +298,15 @@ export const HealthRecords = () => {
                         </div>
                       </div>
 
-                      {/* Document Upload */}
+                      {/* File Upload */}
                       <div className="col-md-12">
                         <div className="form-grp">
-                          <label>Documents (Upload files)</label>
+                          <label>Upload Documents (Images/PDFs)</label>
                           <input
                             type="file"
                             multiple
                             accept="image/*,application/pdf"
-                            name="documents"
+                            name="gallery"
                             onChange={handleFormChange}
                             className="form-control"
                           />
@@ -299,8 +330,8 @@ export const HealthRecords = () => {
                           <textarea
                             name="notes"
                             rows="3"
-                            placeholder="Additional observations or instructions..."
-                            value={currentRecord.notes}
+                            placeholder="Additional observations..."
+                            value={currentRecord.notes || ""}
                             onChange={handleFormChange}
                             className="form-control"
                             style={{ borderRadius: "12px" }}
@@ -312,11 +343,24 @@ export const HealthRecords = () => {
                     {/* Buttons */}
                     <div className="d-flex gap-3 mt-4">
                       <button type="submit" className="btn" disabled={loading}>
-                        {loading ? "Saving..." : formMode === "create" ? "Add Record" : "Update Record"}
-                        <img src={rightArrow} alt="" className="injectable ms-1" style={{ height: "14px" }} />
+                        {loading
+                          ? "Saving..."
+                          : formMode === "create"
+                          ? "Add Record"
+                          : "Update Record"}
+                        <img
+                          src={rightArrow}
+                          alt=""
+                          className="injectable ms-1"
+                          style={{ height: "14px" }}
+                        />
                       </button>
                       {formMode === "edit" && (
-                        <button type="button" className="btn btn-outline-secondary" onClick={resetForm}>
+                        <button
+                          type="button"
+                          className="btn btn-outline-secondary"
+                          onClick={resetForm}
+                        >
                           Cancel
                         </button>
                       )}
@@ -335,13 +379,16 @@ export const HealthRecords = () => {
                   )}
                 </div>
 
-                {/* Records List Section */}
+                {/* Records List */}
                 <div>
                   <h3 className="title mb-4">📋 Health Timeline</h3>
 
                   {loading && records.length === 0 ? (
                     <div className="text-center py-5">
-                      <div className="spinner-border text-primary" role="status">
+                      <div
+                        className="spinner-border text-primary"
+                        role="status"
+                      >
                         <span className="visually-hidden">Loading...</span>
                       </div>
                     </div>
@@ -352,10 +399,15 @@ export const HealthRecords = () => {
                   ) : (
                     <div className="row">
                       {records.map((record) => (
-                        <div key={record._id} className="col-md-6 col-lg-4 mb-4">
+                        <div
+                          key={record._id}
+                          className="col-md-6 col-lg-4 mb-4"
+                        >
                           <div className="border rounded p-3 bg-white shadow-sm h-100">
                             <div className="d-flex justify-content-between align-items-start mb-2">
-                              <h6 className="mb-1">{formatDate(record.visitDate)}</h6>
+                              <h6 className="mb-1">
+                                {formatDate(record.updatedAt)}
+                              </h6>
                               <button
                                 className="btn btn-sm btn-outline-primary"
                                 onClick={() => handleEdit(record)}
@@ -363,43 +415,106 @@ export const HealthRecords = () => {
                                 Edit
                               </button>
                             </div>
-                            <p className="mb-1">
-                              <strong>Diagnosis:</strong> {record.diagnosis}
-                            </p>
-                            <p className="mb-1">
-                              <strong>Treatment:</strong> {record.treatment}
-                            </p>
+
+                            {record.vaccinations &&
+                              record.vaccinations.length > 0 && (
+                                <p className="mb-1">
+                                  <strong>Vaccinations:</strong>{" "}
+                                  {record.vaccinations
+                                    .map((v) => v.name)
+                                    .join(", ")}
+                                </p>
+                              )}
+                            {record.allergies &&
+                              record.allergies.length > 0 && (
+                                <p className="mb-1">
+                                  <strong>Allergies:</strong>{" "}
+                                  {record.allergies.join(", ")}
+                                </p>
+                              )}
+                            {record.illnesses &&
+                              record.illnesses.length > 0 && (
+                                <p className="mb-1">
+                                  <strong>Illnesses:</strong>{" "}
+                                  {record.illnesses.join(", ")}
+                                </p>
+                              )}
+                            {record.treatments &&
+                              record.treatments.length > 0 && (
+                                <p className="mb-1">
+                                  <strong>Treatments:</strong>{" "}
+                                  {record.treatments.join(", ")}
+                                </p>
+                              )}
+                            {record.insurance && (
+                              <div className="mb-1">
+                                <strong>Insurance:</strong>
+                                <div>
+                                  {record.insurance.policyNo && (
+                                    <div>
+                                      Policy No: {record.insurance.policyNo}
+                                    </div>
+                                  )}
+                                  {record.insurance.provider && (
+                                    <div>
+                                      Provider: {record.insurance.provider}
+                                    </div>
+                                  )}
+                                  {record.insurance.docs &&
+                                    record.insurance.docs.length > 0 && (
+                                      <div>
+                                        <strong>Docs:</strong>
+                                        <div>
+                                          {record.insurance.docs.map(
+                                            (docUrl, idx) => (
+                                              <button
+                                                key={idx}
+                                                className="btn btn-sm btn-outline-secondary me-1 mb-1"
+                                                onClick={() =>
+                                                  window.open(docUrl, "_blank")
+                                                }
+                                              >
+                                                Doc {idx + 1}
+                                              </button>
+                                            )
+                                          )}
+                                        </div>
+                                      </div>
+                                    )}
+                                </div>
+                              </div>
+                            )}
                             {record.notes && (
                               <p className="mb-0 text-muted">
                                 <strong>Notes:</strong> {record.notes}
                               </p>
                             )}
-                            {/* Display uploaded documents if available */}
-                            {record.documents && record.documents.length > 0 && (
-                              <div className="mt-2">
-                                <strong>Documents:</strong>
-                                <ul>
-                                  {record.documents.map((doc, idx) => (
-                                    <li key={idx}>
-                                      <a
-                                        href={doc.url || "#"}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
+
+                            {record.documents &&
+                              record.documents.length > 0 && (
+                                <div className="mt-2">
+                                  <strong>📎 Files:</strong>
+                                  <div className="mt-1">
+                                    {record.documents.map((doc, idx) => (
+                                      <button
+                                        key={idx}
+                                        className="btn btn-sm btn-outline-secondary me-1 mb-1"
+                                        onClick={() =>
+                                          window.open(doc, "_blank")
+                                        }
                                       >
-                                        {doc.name || `Document ${idx + 1}`}
-                                      </a>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            )}
+                                        File {idx + 1}
+                                      </button>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
                           </div>
                         </div>
                       ))}
                     </div>
                   )}
                 </div>
-
               </div>
             </div>
           </div>
