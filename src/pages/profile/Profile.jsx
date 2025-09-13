@@ -257,34 +257,45 @@ export const Profile = () => {
                                 marginBottom: "10px",
                               }}
                             >
-                              <input
-                                type="text"
-                                placeholder="Day (e.g., Monday)"
-                                value={slot.day}
-                                onChange={(e) =>
-                                  handleSlotChange(index, "day", e.target.value)
-                                }
-                              />
-                              <input
-                                type="text"
-                                placeholder="Time (e.g., 9:00AM - 5:00PM)"
-                                value={slot.time}
-                                onChange={(e) =>
-                                  handleSlotChange(
-                                    index,
-                                    "time",
-                                    e.target.value
-                                  )
-                                }
-                              />
+                              {/* Day input with styling */}
+                              <div className="form-grp" style={{ flex: 1 }}>
+                                <input
+                                  type="text"
+                                  placeholder="Day (e.g., Monday)"
+                                  value={slot.day}
+                                  onChange={(e) =>
+                                    handleSlotChange(
+                                      index,
+                                      "day",
+                                      e.target.value
+                                    )
+                                  }
+                                />
+                              </div>
+                              {/* Time input with styling */}
+                              <div className="form-grp" style={{ flex: 1 }}>
+                                <input
+                                  type="text"
+                                  placeholder="Time (e.g., 9:00AM - 5:00PM)"
+                                  value={slot.time}
+                                  onChange={(e) =>
+                                    handleSlotChange(
+                                      index,
+                                      "time",
+                                      e.target.value
+                                    )
+                                  }
+                                />
+                              </div>
                             </div>
                           ))}
+
                           <button
                             type="button"
                             onClick={addSlot}
                             className="btn btn-sm"
                           >
-                            + Add Slot
+                            + New Slot
                           </button>
                         </div>
                       </>

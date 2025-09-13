@@ -18,11 +18,17 @@ import "./assets/js/jquery-ui.min.js";
 import "./assets/js/jquery.appear.js";
 import "./assets/js/svg-inject.min.js";
 import { AppProvider } from "./Context/MainContext.jsx";
+import { ProductProvider } from "./Context/ProductProvider.jsx";
+import { CartProvider } from "./Context/CartContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
-  <AppProvider>
-    <App />
-  </AppProvider>
+    <ProductProvider>
+      <CartProvider>
+        <AppProvider>
+          <App />
+        </AppProvider>
+      </CartProvider>
+    </ProductProvider>
   </BrowserRouter>
 );

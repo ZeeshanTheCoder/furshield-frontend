@@ -41,6 +41,7 @@ import TreatmentLogsByPet from "./pages/log-treatments/TreatmentLogsByPet";
 import UpdateTreatmentLog from "./pages/log-treatments/UpdateTreatmentLog";
 import ManageAppointments from "./pages/appointments/ManageAppointments";
 import UpdateAppointment from "./pages/appointments/UpdateAppointment";
+import { CartPage } from "./pages/cart/CartPage";
 
 function App() {
   useWow();
@@ -59,7 +60,7 @@ function App() {
       <Route path="/" element={<HomeOne />} />
       <Route path="/about" element={<About />} />
       <Route path="/product" element={<Product />} />
-      <Route path="/product-details" element={<ProductDetails />} />
+      <Route path="/product-details/:id" element={<ProductDetails />} />
       <Route path="/animal" element={<Animal />} />
       <Route path="/animal-details" element={<AnimalDetails />} />
       <Route path="/gallery" element={<Gallery />} />
@@ -83,6 +84,7 @@ function App() {
       <Route path="/pet-care" element={<PetCare />} />
       <Route path="/appointment-booking" element={<AppointmentBooking />} />
       <Route path="/appointments" element={<Appointments />} />
+      <Route path="/cart/:id" element={<CartPage />} />
 
       {/* Vets */}
       <Route path="/pet-medical-history" element={<PetMedicalHistory />} />
@@ -104,8 +106,10 @@ function App() {
 
       {/* Appointment */}
       <Route path="/manage-appointments" element={<ManageAppointments />} />
-      <Route path="/appointment/:appointmentId/update" element={<UpdateAppointment />} />
-      
+      <Route
+        path="/appointment/:appointmentId/update"
+        element={<UpdateAppointment />}
+      />
 
       {/* Shelter */}
       <Route path="/pet-care-status" element={<PetCareStatus />} />

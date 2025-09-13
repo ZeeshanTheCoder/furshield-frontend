@@ -1,6 +1,6 @@
 import React from "react";
 
-export const ProductDetailsReview = () => {
+export const ProductDetailsReview = ({product}) => {
   return (
     <div className="row">
       <div className="col-12">
@@ -44,22 +44,9 @@ export const ProductDetailsReview = () => {
               tabIndex="0"
             >
               <p>
-                Pellentesque habitant morbi tristique senectus et netus et
-                malesuada fames ac turpis egestas. Vestibulum tortor quam,
-                feugiat vitae, ultricies eget, tempor sit amet ante. ibero sit
-                amet quam egestas semper. Aenean ultricies mi vitae est. Mauris
-                placerat eleifend leo.ea commodo consat. Duis aute irure dolor
-                in reprehenderit volup tate velitesse cillum dolore euy elit ale
-                ruin irure dolor.uis aute irure dolor in reprehenderit n volup
-                tate velit esse cillum,
+             {product.description || "No description available."}
               </p>
-              <p>
-                habitant morbi tristique senectus et netus et malesuada fames ac
-                turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies
-                eget, tempor sit amet bero sit amet uam egestas semper. Aenean
-                ultricies mi vitae est. Mauris placerat eleifend leo.ea commodo
-                consat.
-              </p>
+             
             </div>
             <div
               className="tab-pane fade"

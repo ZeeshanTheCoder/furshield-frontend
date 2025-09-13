@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 export const ProductOneItem = ({
+  _id,
   image,
   badge,
   reviews,
@@ -36,8 +37,8 @@ export const ProductOneItem = ({
           </div>
         )}
         <div className="product__add-cart">
-          <Link to="/product-details" className="btn">
-            <i className="flaticon-shopping-bag"></i>Add To Cart
+          <Link to={`/product-details/${_id}`} className="btn">
+            <i className="flaticon-shopping-bag"></i>Details
           </Link>
         </div>
       </div>
@@ -51,7 +52,7 @@ export const ProductOneItem = ({
           <span>({reviews} Reviews)</span>
         </div>
         <h4 className="title">
-          <Link to="/product-details">{title}</Link>
+          <Link to={`/product-details/${_id}`}>{title}</Link>
         </h4>
         <h3 className="price">
           ${price?.toFixed(2)} <del>${oldPrice?.toFixed(2)}</del>

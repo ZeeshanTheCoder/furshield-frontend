@@ -14,7 +14,7 @@ const PetMedicalHistory = () => {
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
-        const res = await axiosInstance.get("/appointment/vet");
+        const res = await axiosInstance.get("/appointment/user_vet");
         setAppointments(res.data);
         console.log("appointment data", res.data);
       } catch (err) {

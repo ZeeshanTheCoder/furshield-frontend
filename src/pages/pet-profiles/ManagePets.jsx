@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { Layout } from "../../layouts/Layout";
 import { axiosInstance } from "../../services/BaseUrl";
-import { useNavigate, useLocation } from "react-router-dom"; // 👈 Add useLocation
+import { useNavigate, useLocation } from "react-router-dom";
 
 const ManagePets = () => {
   const navigate = useNavigate();
-  const location = useLocation(); // 👈 Get URL params
+  const location = useLocation();
   const [ownerId, setOwnerId] = useState("");
-  const [petId, setPetId] = useState(null); // 👈 Store pet ID if editing
-  const [isEditMode, setIsEditMode] = useState(false); // 👈 Track mode
+  const [petId, setPetId] = useState(null);
+  const [isEditMode, setIsEditMode] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     species: "",
@@ -19,7 +19,6 @@ const ManagePets = () => {
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // 🔹 Get pet ID from URL on mount
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const id = params.get("id");
@@ -29,7 +28,6 @@ const ManagePets = () => {
     }
   }, [location.search]);
 
-  // 🔹 Get logged in user ID
   useEffect(() => {
     const getUser = async () => {
       try {
@@ -44,7 +42,6 @@ const ManagePets = () => {
     getUser();
   }, []);
 
-  // 🔹 If editing, fetch pet data and pre-fill form
   useEffect(() => {
     if (isEditMode && petId) {
       const fetchPet = async () => {
@@ -61,7 +58,7 @@ const ManagePets = () => {
         } catch (error) {
           console.error("Fetch Pet Error:", error);
           alert("Failed to load pet data.");
-          navigate("/pet-profiles"); // Redirect back if not found
+          navigate("/pet-profiles");
         }
       };
       fetchPet();
@@ -83,7 +80,6 @@ const ManagePets = () => {
     const data = new FormData();
     Object.keys(formData).forEach((key) => {
       if (key === "medicalHistory" && formData[key]) {
-        // Convert to array then stringify
         const arr = formData[key]
           .split(",")
           .map((item) => item.trim())
@@ -119,10 +115,12 @@ const ManagePets = () => {
       }
 
       console.log(res.data);
-      navigate("/pet-profiles"); // Redirect to pet profiles after success
+      navigate("/pet-profiles");
     } catch (error) {
       console.error(error.response?.data || error.message);
-      alert("Operation failed: " + (error.response?.data?.message || error.message));
+      alert(
+        "Operation failed: " + (error.response?.data?.message || error.message)
+      );
     } finally {
       setLoading(false);
     }
@@ -159,6 +157,8 @@ const ManagePets = () => {
               required
             />
           </div>
+
+
 
           <div className="mb-3">
             <label className="form-label">Breed</label>

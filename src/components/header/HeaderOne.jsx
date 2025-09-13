@@ -3,7 +3,6 @@ import { HeaderTop } from "./HeaderTop";
 import LOGO from "../../assets/img/logo/logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { HeaderNav } from "./HeaderNav";
-import { HeaderSearch } from "./HeaderSearch";
 import { HeaderOffcanvas } from "./HeaderOffcanvas";
 import { HeaderMobileMenu } from "./HeaderMobileMenu";
 import {
@@ -39,7 +38,6 @@ export const HeaderOne = () => {
       alert("Something went wrong during logout.");
     }
   };
-  handleLogout();
 
   useMobileMenu();
 
@@ -99,10 +97,10 @@ export const HeaderOne = () => {
                           </a>
                         </li>
                         <li className="header-cart">
-                          <a href="#">
+                          <Link to={`/cart/${userdatastate._id}`}>
                             <i className="flaticon-shopping-bag"></i>
                             <span>0</span>
-                          </a>
+                          </Link>
                         </li>
 
                         <li className="offCanvas-menu">
@@ -334,8 +332,6 @@ export const HeaderOne = () => {
           </div>
         </div>
 
-        {/*  header-search */}
-        <HeaderSearch active={showSearch} toggleSearch={toggleSearch} />
 
         {/* off canvas */}
         <HeaderOffcanvas active={showCanvas} toggleCanvas={toggleCanvas} />

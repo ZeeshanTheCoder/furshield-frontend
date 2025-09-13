@@ -10,9 +10,6 @@ export const Product = () => {
         <div className="container">
           {/* list */}
           <ProductAll />
-
-          {/* pagination */}
-          <ProductPagination />
         </div>
       </section>
     </Layout>
