@@ -142,7 +142,9 @@ export const Profile = () => {
       }
     } catch (error) {
       setIsSuccess(false);
-      setMessage(error.response?.data?.message || "Network error. Please try again.");
+      setMessage(
+        error.response?.data?.message || "Network error. Please try again."
+      );
       console.error("Profile Update Error:", error);
     } finally {
       setLoading(false);
@@ -182,7 +184,10 @@ export const Profile = () => {
                           placeholder="Email Address"
                           value={formData.email || ""}
                           disabled
-                          style={{ backgroundColor: "#f8f9fa", color: "#6c757d" }}
+                          style={{
+                            backgroundColor: "#f8f9fa",
+                            color: "#6c757d",
+                          }}
                         />
                       </div>
                     </div>
@@ -246,7 +251,11 @@ export const Profile = () => {
                           {formData.availableSlots.map((slot, index) => (
                             <div
                               key={index}
-                              style={{ display: "flex", gap: "10px", marginBottom: "10px" }}
+                              style={{
+                                display: "flex",
+                                gap: "10px",
+                                marginBottom: "10px",
+                              }}
                             >
                               <input
                                 type="text"
@@ -261,12 +270,20 @@ export const Profile = () => {
                                 placeholder="Time (e.g., 9:00AM - 5:00PM)"
                                 value={slot.time}
                                 onChange={(e) =>
-                                  handleSlotChange(index, "time", e.target.value)
+                                  handleSlotChange(
+                                    index,
+                                    "time",
+                                    e.target.value
+                                  )
                                 }
                               />
                             </div>
                           ))}
-                          <button type="button" onClick={addSlot} className="btn btn-sm">
+                          <button
+                            type="button"
+                            onClick={addSlot}
+                            className="btn btn-sm"
+                          >
                             + Add Slot
                           </button>
                         </div>
@@ -320,7 +337,10 @@ export const Profile = () => {
                               : "Unknown Role"
                           }
                           disabled
-                          style={{ backgroundColor: "#f8f9fa", color: "#6c757d" }}
+                          style={{
+                            backgroundColor: "#f8f9fa",
+                            color: "#6c757d",
+                          }}
                         />
                       </div>
                     </div>

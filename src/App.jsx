@@ -34,6 +34,13 @@ import { AppointmentBooking } from "./pages/appointments/AppointmentBooking";
 import Appointments from "./pages/appointments/Appointments";
 import PetCareChatbot from "./pages/petchatbot/PetCareChatbot";
 import CreateAdoptablePet from "./pages/adoptablepages/CreateAdoptablePet";
+import PetMedicalHistory from "./pages/pet-medical-history/PetMedicalHistory";
+import TreatmentLogForm from "./pages/log-treatments/TreatmentLogForm";
+import TreatmentLogsByAppointment from "./pages/log-treatments/TreatmentLogsByAppointment";
+import TreatmentLogsByPet from "./pages/log-treatments/TreatmentLogsByPet";
+import UpdateTreatmentLog from "./pages/log-treatments/UpdateTreatmentLog";
+import ManageAppointments from "./pages/appointments/ManageAppointments";
+import UpdateAppointment from "./pages/appointments/UpdateAppointment";
 
 function App() {
   useWow();
@@ -76,6 +83,29 @@ function App() {
       <Route path="/pet-care" element={<PetCare />} />
       <Route path="/appointment-booking" element={<AppointmentBooking />} />
       <Route path="/appointments" element={<Appointments />} />
+
+      {/* Vets */}
+      <Route path="/pet-medical-history" element={<PetMedicalHistory />} />
+      <Route
+        path="/treatment/create/:appointmentId"
+        element={<TreatmentLogForm />}
+      />
+      <Route
+        path="/treatment/edit/:treatmentId"
+        element={<UpdateTreatmentLog />}
+      />
+      {/* Edit existing treatment log */}
+      <Route
+        path="/treatment/appointment/:treatmentId"
+        element={<TreatmentLogsByAppointment />}
+      />
+      {/* View treatment history by pet */}
+      <Route path="/treatment/pet/:petId" element={<TreatmentLogsByPet />} />
+
+      {/* Appointment */}
+      <Route path="/manage-appointments" element={<ManageAppointments />} />
+      <Route path="/appointment/:appointmentId/update" element={<UpdateAppointment />} />
+      
 
       {/* Shelter */}
       <Route path="/pet-care-status" element={<PetCareStatus />} />

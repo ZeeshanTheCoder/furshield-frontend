@@ -1,24 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { axiosInstance } from "../../services/BaseUrl";
-import { Link, useNavigate } from "react-router-dom";
 import { Layout } from "../../layouts/Layout";
-import rightArrow from "../../assets/img/icon/right_arrow.svg";
+import { useNavigate } from "react-router-dom";
 
-const Appointments = () => {
-  
+const ManageAppointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const navigate = useNavigate();
+  const [updatingId, setUpdatingId] = useState(null);
+  const navigate = useNavigate()
 
-  const userData = JSON.parse(localStorage.getItem("userdata"));
-
+  // Fetch appointments for vet
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
-        const res = await axiosInstance.get("/appointment/owner");
+        const res = await axiosInstance.get("/appointment/vet");
         setAppointments(res.data);
-        console.log(res.data)
+        console.log(res.data);
       } catch (err) {
         console.error(err);
         setError("Failed to load appointments. Please try again.");
@@ -28,7 +26,30 @@ const Appointments = () => {
     };
 
     fetchAppointments();
-  }, [navigate]);
+  }, []);
+
+  // Handle status update
+  const handleStatusChange = async (appointmentId, newStatus) => {
+    try {
+      setUpdatingId(appointmentId);
+      const res = await axiosInstance.patch(
+        `/appointment/${appointmentId}/status`,
+        { status: newStatus }
+      );
+      // Update UI after success
+      setAppointments((prev) =>
+        prev.map((appt) =>
+          appt._id === appointmentId ? { ...appt, status: newStatus } : appt
+        )
+      );
+      console.log(res.data);
+    } catch (err) {
+      console.error("Failed to update status", err);
+      alert("Failed to update status");
+    } finally {
+      setUpdatingId(null);
+    }
+  };
 
   if (loading) {
     return (
@@ -37,14 +58,8 @@ const Appointments = () => {
         breadcrumbSubtitle="View your scheduled appointments"
       >
         <section className="contact__area">
-          <div className="container">
-            <div className="row justify-content-center">
-              <div className="col-lg-8">
-                <div className="contact__form-wrap text-center py-5">
-                  <p className="text-gray-600">Loading appointments...</p>
-                </div>
-              </div>
-            </div>
+          <div className="container text-center py-5">
+            <p className="text-gray-600">Loading appointments...</p>
           </div>
         </section>
       </Layout>
@@ -58,16 +73,8 @@ const Appointments = () => {
         breadcrumbSubtitle="View your scheduled appointments"
       >
         <section className="contact__area">
-          <div className="container">
-            <div className="row justify-content-center">
-              <div className="col-lg-8">
-                <div className="contact__form-wrap text-center py-5">
-                  <p className="text-danger" style={{ fontWeight: "500" }}>
-                    {error}
-                  </p>
-                </div>
-              </div>
-            </div>
+          <div className="container text-center py-5">
+            <p className="text-danger fw-bold">{error}</p>
           </div>
         </section>
       </Layout>
@@ -81,7 +88,6 @@ const Appointments = () => {
     >
       <section className="contact__area py-8">
         <div className="container mx-auto px-4">
-          {/* Header styled like your Booking form */}
           <div className="mb-6 text-center">
             <h2 className="text-3xl font-bold mb-2">My Appointments</h2>
             <p className="text-gray-600">
@@ -92,12 +98,12 @@ const Appointments = () => {
           {appointments.length === 0 ? (
             <p className="text-center text-gray-500">No appointments found.</p>
           ) : (
-            <div className="overflow-x-auto d-flex justify-content-center bg-white rounded-lg shadow-md border border-gray-200">
+            <div className="overflow-x-auto bg-white rounded-lg shadow-md border border-gray-200">
               <table className="w-full min-w-[600px] text-sm text-left">
                 <thead className="bg-indigo-600 text-black">
                   <tr>
                     <th className="px-4 py-3 text-center">Pet</th>
-                    <th className="px-4 py-3 text-center">Vet</th>
+                    <th className="px-4 py-3 text-center">Owner</th>
                     <th className="px-4 py-3 text-center">Date</th>
                     <th className="px-4 py-3 text-center">Time</th>
                     <th className="px-4 py-3 text-center">Status</th>
@@ -119,55 +125,61 @@ const Appointments = () => {
                           </p>
                         </div>
                       </td>
+
                       <td className="px-4 py-3 text-center">
                         <div className="flex flex-col items-center">
-                          <p className="font-semibold">
-                            {appt.vetId?.userId?.name || "Unknown"}
-                          </p>
+                          <p className="font-semibold">{appt.ownerId?.name}</p>
                           <p className="text-xs text-gray-500">
-                            {appt.vetId?.specialization}
+                            {appt.ownerId?.email}
                           </p>
                         </div>
                       </td>
+
                       <td className="px-4 py-3 text-center">
                         {new Date(appt.date).toLocaleDateString()}
                       </td>
                       <td className="px-4 py-3 text-center">{appt.time}</td>
+
+                      {/* Status with dropdown */}
                       <td className="px-4 py-3 text-center">
-                        <span
-                          className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            appt.status === "pending"
-                              ? "bg-yellow-100 text-yellow-700"
-                              : appt.status === "approved"
-                              ? "bg-green-100 text-green-700"
-                              : "bg-red-100 text-red-700"
-                          }`}
+                        <select
+                          value={appt.status}
+                          onChange={(e) =>
+                            handleStatusChange(appt._id, e.target.value)
+                          }
+                          disabled={updatingId === appt._id}
+                          className="form-select px-2 py-1 rounded-md border"
                         >
-                          {appt.status}
-                        </span>
+                          <option value="pending">Pending</option>
+                          <option value="approved">Approved</option>
+                          <option value="rescheduled">Rescheduled</option>
+                          <option value="completed">Completed</option>
+                          <option value="cancelled">Cancelled</option>
+                        </select>
                       </td>
+
                       <td className="px-4 py-3 text-center">{appt.reason}</td>
                       <td className="px-4 py-3 text-center">{appt.notes}</td>
+                      <td className="px-4 py-3 text-center">
+                        <button
+                          onClick={() =>
+                            navigate(`/appointment/${appt._id}/update`)
+                          }
+                          className="bg-indigo-600 text-white px-3 py-1 rounded-md hover:bg-indigo-700"
+                        >
+                          Update
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
           )}
-          <div className="d-flex justify-content-center">
-            <Link
-              to="/appointment-booking"
-              type="submit"
-              className="btn mt-4"
-              disabled={loading}
-            >
-              Book New Appointment
-            </Link>
-          </div>
         </div>
       </section>
     </Layout>
   );
 };
 
-export default Appointments;
+export default ManageAppointments;

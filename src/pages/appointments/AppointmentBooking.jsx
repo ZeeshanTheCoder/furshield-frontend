@@ -57,7 +57,7 @@ export const AppointmentBooking = () => {
     const fetchVets = async () => {
       setLoadingVets(true);
       try {
-        const res = await axiosInstance.get("/vet/"); // Replace with your route
+        const res = await axiosInstance.get("/vet"); // Replace with your route
         console.log(res);
         setVets(res.data || []);
       } catch (err) {

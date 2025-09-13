@@ -13,7 +13,7 @@ export const HeaderThree = () => {
   const { showSearch, toggleSearch } = useSearch();
   const [userdatastate, setuserdatastate] = useState("");
   const [showLogout, setShowLogout] = useState(false);
-  const {setuserdata} = useContext(AppContext)
+  const { setuserdata } = useContext(AppContext);
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -42,7 +42,7 @@ export const HeaderThree = () => {
       try {
         const res = await axiosInstance.get("/user/getuser");
         if (res.status === 200) {
-          console.log(res.data.user)
+          console.log(res.data.user);
           setuserdatastate(res.data.user);
         }
       } catch (error) {
@@ -193,14 +193,6 @@ export const HeaderThree = () => {
                                         >
                                           <i className="icon-medical"></i> Pet
                                           Medical History
-                                        </Link>
-                                        <Link
-                                          to="/log-treatments"
-                                          className="btn btn-outline-danger btn-sm w-100"
-                                          style={{ whiteSpace: "nowrap" }}
-                                        >
-                                          <i className="icon-treatment"></i> Log
-                                          Treatments
                                         </Link>
                                         <Link
                                           to="/manage-appointments"

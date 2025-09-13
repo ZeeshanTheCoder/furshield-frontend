@@ -253,14 +253,6 @@ export const HeaderOne = () => {
                                         Medical History
                                       </Link>
                                       <Link
-                                        to="/log-treatments"
-                                        className="btn btn-outline-danger btn-sm w-100"
-                                        style={{ whiteSpace: "nowrap" }}
-                                      >
-                                        <i className="icon-treatment"></i> Log
-                                        Treatments
-                                      </Link>
-                                      <Link
                                         to="/manage-appointments"
                                         className="btn btn-outline-danger btn-sm w-100"
                                         style={{ whiteSpace: "nowrap" }}
