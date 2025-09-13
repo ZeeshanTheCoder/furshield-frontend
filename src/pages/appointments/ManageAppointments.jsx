@@ -14,7 +14,7 @@ const ManageAppointments = () => {
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
-        const res = await axiosInstance.get("/appointment/vet");
+        const res = await axiosInstance.get("/appointment/user_vet");
         setAppointments(res.data);
         console.log(res.data);
       } catch (err) {
@@ -29,27 +29,7 @@ const ManageAppointments = () => {
   }, []);
 
   // Handle status update
-  const handleStatusChange = async (appointmentId, newStatus) => {
-    try {
-      setUpdatingId(appointmentId);
-      const res = await axiosInstance.patch(
-        `/appointment/${appointmentId}/status`,
-        { status: newStatus }
-      );
-      // Update UI after success
-      setAppointments((prev) =>
-        prev.map((appt) =>
-          appt._id === appointmentId ? { ...appt, status: newStatus } : appt
-        )
-      );
-      console.log(res.data);
-    } catch (err) {
-      console.error("Failed to update status", err);
-      alert("Failed to update status");
-    } finally {
-      setUpdatingId(null);
-    }
-  };
+ 
 
   if (loading) {
     return (
@@ -120,9 +100,6 @@ const ManageAppointments = () => {
                       <td className="px-4 py-3 text-center">
                         <div className="flex flex-col items-center">
                           <p className="font-semibold">{appt.petId?.name}</p>
-                          <p className="text-xs text-gray-500">
-                            {appt.petId?.species} ({appt.petId?.breed})
-                          </p>
                         </div>
                       </td>
 
@@ -139,33 +116,19 @@ const ManageAppointments = () => {
                         {new Date(appt.date).toLocaleDateString()}
                       </td>
                       <td className="px-4 py-3 text-center">{appt.time}</td>
+                      <td className="px-4 py-3 text-center">{appt.status}</td>
 
                       {/* Status with dropdown */}
-                      <td className="px-4 py-3 text-center">
-                        <select
-                          value={appt.status}
-                          onChange={(e) =>
-                            handleStatusChange(appt._id, e.target.value)
-                          }
-                          disabled={updatingId === appt._id}
-                          className="form-select px-2 py-1 rounded-md border"
-                        >
-                          <option value="pending">Pending</option>
-                          <option value="approved">Approved</option>
-                          <option value="rescheduled">Rescheduled</option>
-                          <option value="completed">Completed</option>
-                          <option value="cancelled">Cancelled</option>
-                        </select>
-                      </td>
+                      
 
                       <td className="px-4 py-3 text-center">{appt.reason}</td>
                       <td className="px-4 py-3 text-center">{appt.notes}</td>
                       <td className="px-4 py-3 text-center">
                         <button
                           onClick={() =>
-                            navigate(`/appointment/${appt._id}/update`)
+                            navigate(`/appointment/${appt._id}`)
                           }
-                          className="bg-indigo-600 text-white px-3 py-1 rounded-md hover:bg-indigo-700"
+                          className="text-white btn rounded-md hover:bg-indigo-700"
                         >
                           Update
                         </button>

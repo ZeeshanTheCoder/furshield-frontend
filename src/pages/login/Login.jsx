@@ -1,14 +1,13 @@
 import React, { useContext, useState } from "react";
 import { Layout } from "../../layouts/Layout";
-import { Link, useNavigate } from "react-router-dom"; // 👈 Added useNavigate
+import { Link, useNavigate } from "react-router-dom";
 import { axiosInstance } from "../../services/BaseUrl";
 import rightArrow from "../../assets/img/icon/right_arrow.svg";
-import { AppContext } from "../../Context/MainContext"; // 👈 Already imported
+import { AppContext } from "../../Context/MainContext";
 
 export const Login = () => {
-  const { setuserdata } = useContext(AppContext); // 👈 Get setter from context
-  const navigate = useNavigate(); // 👈 Better than window.location for React Router
-
+  const { setuserdata } = useContext(AppContext);
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -37,21 +36,24 @@ export const Login = () => {
       const result = await axiosInstance.post("/auth/login", formData);
 
       if (result.data.isLogin && result.data.user) {
-        // ✅ SAVE USER TO CONTEXT — This was missing!
-        setuserdata({
-          user: result.data.user, // 👈 Save full user object
-        });
+        const user = result.data.user;
+        setuserdata({ user });
 
-        
-
-        console.log(result.data.user,"user context")
+        console.log(user, "user context");
 
         setIsSuccess(true);
         setMessage("Login successful! Redirecting...");
 
-        // ✅ Use navigate instead of window.location for smoother UX
         setTimeout(() => {
-          navigate("/profile"); // or "/dashboard", "/pet-profiles", etc.
+          if (user.role === "owner") {
+            navigate("/");
+          } else if (user.role === "vet" || user.role === "shelter") {
+            navigate("/profile");
+          } else if (user.role === "admin") {
+            navigate("/admin");
+          } else {
+            navigate("/"); // fallback
+          }
         }, 1000);
       } else {
         setIsSuccess(false);
@@ -67,6 +69,8 @@ export const Login = () => {
       setLoading(false);
     }
   };
+
+  
 
   return (
     <Layout breadcrumbTitle="Login Page" breadcrumbSubtitle={"Login"}>

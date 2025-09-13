@@ -3,6 +3,7 @@ import { Layout } from "../../layouts/Layout";
 import { axiosInstance } from "../../services/BaseUrl";
 import { AppContext } from "../../Context/MainContext";
 import rightArrow from "../../assets/img/icon/right_arrow.svg";
+import { useNavigate } from "react-router-dom";
 
 export const Profile = () => {
   const { userdata, setuserdata } = useContext(AppContext);
@@ -302,35 +303,7 @@ export const Profile = () => {
                     )}
 
                     {/* ===== SHELTER FIELDS ===== */}
-                    {formData.role === "shelter" && (
-                      <>
-                        <div className="col-md-12">
-                          <div className="form-grp">
-                            <input
-                              name="shelterName"
-                              type="text"
-                              placeholder="Shelter Name"
-                              required
-                              value={formData.shelterName}
-                              onChange={handleChange}
-                            />
-                          </div>
-                        </div>
-
-                        <div className="col-md-12">
-                          <div className="form-grp">
-                            <input
-                              name="contactPerson"
-                              type="text"
-                              placeholder="Primary Contact Person"
-                              required
-                              value={formData.contactPerson}
-                              onChange={handleChange}
-                            />
-                          </div>
-                        </div>
-                      </>
-                    )}
+                    {formData.role === "shelter" && <></>}
 
                     {/* ===== ROLE DISPLAY ===== */}
                     <div className="col-md-12">

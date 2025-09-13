@@ -7,18 +7,21 @@ const UpdateAppointment = () => {
   const { appointmentId } = useParams();
   const navigate = useNavigate();
   const [appointment, setAppointment] = useState(null);
+
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
   const [status, setStatus] = useState("");
-  const [notes, setNotes] = useState("");
-  const [reason, setReason] = useState("");
 
   useEffect(() => {
     const fetchAppointment = async () => {
       try {
-        const res = await axiosInstance.get(`/appointment/${appointmentId}`);
+        const res = await axiosInstance.get(`/appointment/vet/${appointmentId}`);
         setAppointment(res.data);
-        setStatus(res.data.status);
-        setNotes(res.data.notes || "");
-        setReason(res.data.reason || "");
+
+        // pre-fill values
+        setDate(res.data.date ? new Date(res.data.date).toISOString().split("T")[0] : "");
+        setTime(res.data.time || "");
+        setStatus(res.data.status || "pending");
       } catch (err) {
         console.error("Error fetching appointment:", err);
       }
@@ -29,13 +32,13 @@ const UpdateAppointment = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      await axiosInstance.put(`/appointment/${appointmentId}`, {
+      await axiosInstance.put(`/appointment/vet/${appointmentId}`, {
+        date,
+        time,
         status,
-        notes,
-        reason,
       });
       alert("Appointment updated successfully!");
-      navigate("/appointments"); // back to ManageAppointments
+      navigate("/manage-appointments");
     } catch (err) {
       console.error("Update failed:", err);
       alert("Failed to update appointment");
@@ -50,6 +53,29 @@ const UpdateAppointment = () => {
         <div className="container mx-auto px-4 max-w-lg">
           <h2 className="text-2xl font-bold mb-4">Update Appointment</h2>
           <form onSubmit={handleUpdate} className="space-y-4">
+
+            {/* Date Input */}
+            <div>
+              <label className="block mb-1 font-medium">Date</label>
+              <input
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                className="w-full border rounded-md p-2"
+              />
+            </div>
+
+            {/* Time Input */}
+            <div>
+              <label className="block mb-1 font-medium">Time</label>
+              <input
+                type="time"
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+                className="w-full border rounded-md p-2"
+              />
+            </div>
+
             {/* Status Dropdown */}
             <div>
               <label className="block mb-1 font-medium">Status</label>
@@ -64,28 +90,6 @@ const UpdateAppointment = () => {
                 <option value="completed">Completed</option>
                 <option value="cancelled">Cancelled</option>
               </select>
-            </div>
-
-            {/* Reason */}
-            <div>
-              <label className="block mb-1 font-medium">Reason</label>
-              <input
-                type="text"
-                value={reason}
-                onChange={(e) => setReason(e.target.value)}
-                className="w-full border rounded-md p-2"
-              />
-            </div>
-
-            {/* Notes */}
-            <div>
-              <label className="block mb-1 font-medium">Notes</label>
-              <textarea
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                className="w-full border rounded-md p-2"
-                rows="3"
-              ></textarea>
             </div>
 
             <button

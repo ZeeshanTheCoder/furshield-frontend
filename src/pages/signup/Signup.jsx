@@ -20,6 +20,9 @@ export const Signup = () => {
   const [message, setMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
 
+  // ✅ Regex for email
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -28,21 +31,43 @@ export const Signup = () => {
     }));
   };
 
+  const validateForm = () => {
+    if (!formData.name.trim()) return "Name is required.";
+    if (!formData.contactNumber.trim())
+      return "Contact number is required.";
+    if (!/^[0-9]{11}$/.test(formData.contactNumber))
+      return "Contact number must be 11 digits.";
+    if (!formData.email.trim()) return "Email is required.";
+    if (!emailRegex.test(formData.email)) return "Enter a valid email address.";
+    if (!formData.address.trim()) return "Address is required.";
+    if (!formData.role.trim()) return "Please select a role.";
+    if (!formData.password.trim()) return "Password is required.";
+    if (formData.password.length < 8)
+      return "Password must be at least 8 characters long.";
+    return null;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setMessage("");
     setIsSuccess(false);
 
+    // ✅ Client-side validation
+    const validationError = validateForm();
+    if (validationError) {
+      setMessage(validationError);
+      return;
+    }
+
+    setLoading(true);
+
     try {
-      // ✅ Using axiosInstance — cleaner and pre-configured
       const result = await axiosInstance.post("/user/signup", formData);
 
       if (result.data.isSave) {
         setIsSuccess(true);
         setMessage(result.data.message); // "User Registered Successfully"
 
-        // ✅ Navigate to /login after 1.5 seconds
         setTimeout(() => {
           navigate("/login");
         }, 1500);
@@ -80,11 +105,7 @@ export const Signup = () => {
           <div className="row justify-content-center">
             <div className="col-lg-6">
               <div className="contact__form-wrap">
-                <form
-                  onSubmit={handleSubmit}
-                  id="signup-form"
-                  className="contact__form"
-                >
+                <form onSubmit={handleSubmit} id="signup-form" className="contact__form">
                   <h2 className="title">Create Your Account</h2>
                   <div className="row gutter-20">
                     {/* Name */}
@@ -94,7 +115,6 @@ export const Signup = () => {
                           name="name"
                           type="text"
                           placeholder="Full Name"
-                          required
                           value={formData.name}
                           onChange={handleChange}
                         />
@@ -108,7 +128,6 @@ export const Signup = () => {
                           name="contactNumber"
                           type="tel"
                           placeholder="Contact Number"
-                          required
                           value={formData.contactNumber}
                           onChange={handleChange}
                         />
@@ -122,7 +141,6 @@ export const Signup = () => {
                           name="email"
                           type="email"
                           placeholder="Email Address"
-                          required
                           value={formData.email}
                           onChange={handleChange}
                         />
@@ -136,7 +154,6 @@ export const Signup = () => {
                           name="address"
                           type="text"
                           placeholder="Address"
-                          required
                           value={formData.address}
                           onChange={handleChange}
                         />
@@ -149,7 +166,6 @@ export const Signup = () => {
                         <select
                           name="role"
                           className="form-control w-100 p-3 border rounded-pill bg-white"
-                          required
                           value={formData.role}
                           onChange={handleChange}
                           style={{ backgroundImage: "none", color: "#8793AB" }}
@@ -168,9 +184,7 @@ export const Signup = () => {
                         <input
                           name="password"
                           type="password"
-                          placeholder="Password (min 6 characters)"
-                          minLength={6}
-                          required
+                          placeholder="Password (min 8 characters)"
                           value={formData.password}
                           onChange={handleChange}
                         />

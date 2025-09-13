@@ -1,10 +1,75 @@
-import React from "react";
+
+import React, { useState } from "react";
 import { Layout } from "../../layouts/Layout";
 import { Link } from "react-router-dom";
-
 import rightArrow from "../../assets/img/icon/right_arrow.svg";
 
 export const Contact = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    website: "",
+    message: "",
+  });
+
+  const [errors, setErrors] = useState({});
+  const [submitMessage, setSubmitMessage] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  // ✅ Regex patterns
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const urlRegex = /^(https?:\/\/)?([\w\d-]+\.)+\w{2,}(\/.+)?$/;
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!formData.name.trim()) newErrors.name = "Name is required.";
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required.";
+    } else if (!emailRegex.test(formData.email)) {
+      newErrors.email = "Enter a valid email address.";
+    }
+    if (formData.website && !urlRegex.test(formData.website)) {
+      newErrors.website = "Enter a valid website URL (http/https).";
+    }
+    if (!formData.message.trim())
+      newErrors.message = "Message cannot be empty.";
+
+    return newErrors;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setSubmitMessage("");
+    setIsSuccess(false);
+
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    setErrors({});
+    setIsSuccess(true);
+    setSubmitMessage("Message sent successfully ✅");
+
+    // Reset form
+    setFormData({
+      name: "",
+      email: "",
+      website: "",
+      message: "",
+    });
+  };
+
   return (
     <Layout breadcrumbTitle="Contact Page" breadcrumbSubtitle={"Contact"}>
       <section className="contact__area">
@@ -64,7 +129,10 @@ export const Contact = () => {
                           </Link>
                         </li>
                         <li>
-                          <Link to="https://www.instagram.com/" target="_blank">
+                          <Link
+                            to="https://www.instagram.com/"
+                            target="_blank"
+                          >
                             <i className="fab fa-instagram"></i>
                           </Link>
                         </li>
@@ -84,7 +152,7 @@ export const Contact = () => {
             <div className="col-lg-7">
               <div className="contact__form-wrap">
                 <form
-                  method="POST"
+                  onSubmit={handleSubmit}
                   id="contact-form"
                   className="contact__form"
                 >
@@ -96,12 +164,30 @@ export const Contact = () => {
                   <div className="row gutter-20">
                     <div className="col-md-6">
                       <div className="form-grp">
-                        <input name="name" type="text" placeholder="Name" />
+                        <input
+                          name="name"
+                          type="text"
+                          placeholder="Name"
+                          value={formData.name}
+                          onChange={handleChange}
+                        />
+                        {errors.name && (
+                          <small className="text-danger">{errors.name}</small>
+                        )}
                       </div>
                     </div>
                     <div className="col-md-6">
                       <div className="form-grp">
-                        <input name="email" type="email" placeholder="E-mail" />
+                        <input
+                          name="email"
+                          type="email"
+                          placeholder="E-mail"
+                          value={formData.email}
+                          onChange={handleChange}
+                        />
+                        {errors.email && (
+                          <small className="text-danger">{errors.email}</small>
+                        )}
                       </div>
                     </div>
                     <div className="col-md-12">
@@ -110,7 +196,14 @@ export const Contact = () => {
                           name="website"
                           type="url"
                           placeholder="Website"
+                          value={formData.website}
+                          onChange={handleChange}
                         />
+                        {errors.website && (
+                          <small className="text-danger">
+                            {errors.website}
+                          </small>
+                        )}
                       </div>
                     </div>
                     <div className="col-md-12">
@@ -118,7 +211,12 @@ export const Contact = () => {
                         <textarea
                           name="message"
                           placeholder="Message"
+                          value={formData.message}
+                          onChange={handleChange}
                         ></textarea>
+                        {errors.message && (
+                          <small className="text-danger">{errors.message}</small>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -127,7 +225,15 @@ export const Contact = () => {
                     <img src={rightArrow} alt="" className="injectable" />
                   </button>
                 </form>
-                <p className="ajax-response mb-0"></p>
+
+                {/* ✅ Show response message */}
+                <p
+                  className={`ajax-response mb-0 mt-3 ${
+                    isSuccess ? "text-success" : "text-danger"
+                  }`}
+                >
+                  {submitMessage}
+                </p>
               </div>
             </div>
           </div>

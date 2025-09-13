@@ -4,7 +4,7 @@ import { useContext } from 'react';
 import { LuUsersRound } from "react-icons/lu";
 import { MdOutlinePets } from "react-icons/md";
 import { TbBrandProducthunt } from "react-icons/tb";
-import { ProductContext } from '../../Context/productContext';
+import { ProductContext } from '../../Context/ProductProvider';
 
 const URL = import.meta.env.VITE_Node_Api_Url;
 

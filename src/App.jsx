@@ -42,6 +42,13 @@ import UpdateTreatmentLog from "./pages/log-treatments/UpdateTreatmentLog";
 import ManageAppointments from "./pages/appointments/ManageAppointments";
 import UpdateAppointment from "./pages/appointments/UpdateAppointment";
 import { CartPage } from "./pages/cart/CartPage";
+import AdoptionRequestForm from "./pages/adoptablerequestSchema/AdotptableuserSide";
+import AdoptablePets from "./pages/adoptablepages/Alladoptablepets";
+import ShelterDashboard from "./pages/adoptablepages/ShelterDashboard";
+import AdminApp from "./pages/adminPages/AdminApp";
+
+// ProtectedRoute
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   useWow();
@@ -49,7 +56,6 @@ function App() {
   useCircle();
   useSvgInject();
 
-  // on route change to top of the page
   const { pathname } = useLocation();
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
@@ -73,52 +79,137 @@ function App() {
       <Route path="/blog-details" element={<BlogDetails />} />
       <Route path="/contact" element={<Contact />} />
 
-      {/* auth */}
+      {/* Auth */}
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
-      <Route path="/profile" element={<Profile />} />
-      {/* users */}
-      <Route path="/petmanagement" element={<ManagePets />} />
-      <Route path="/pet-profiles" element={<PetProfiles />} />
-      <Route path="/health-records/:petId" element={<HealthRecords />} />
-      <Route path="/pet-care" element={<PetCare />} />
-      <Route path="/appointment-booking" element={<AppointmentBooking />} />
-      <Route path="/appointments" element={<Appointments />} />
-      <Route path="/cart/:id" element={<CartPage />} />
+      <Route path="/profile" element={
+        <ProtectedRoute allowedRoles={["admin","owner","vet","shelter"]}>
+          <Profile />
+        </ProtectedRoute>
+      } />
+
+      {/* Users */}
+      <Route path="/petmanagement" element={
+        <ProtectedRoute allowedRoles={["owner"]}>
+          <ManagePets />
+        </ProtectedRoute>
+      } />
+      <Route path="/pet-profiles" element={
+        <ProtectedRoute allowedRoles={["owner"]}>
+          <PetProfiles />
+        </ProtectedRoute>
+      } />
+      <Route path="/health-records/:petId" element={
+        <ProtectedRoute allowedRoles={["owner"]}>
+          <HealthRecords />
+        </ProtectedRoute>
+      } />
+      <Route path="/pet-care" element={
+        <ProtectedRoute allowedRoles={["owner"]}>
+          <PetCare />
+        </ProtectedRoute>
+      } />
+      <Route path="/appointment-booking" element={
+        <ProtectedRoute allowedRoles={["owner"]}>
+          <AppointmentBooking />
+        </ProtectedRoute>
+      } />
+      <Route path="/appointments" element={
+        <ProtectedRoute allowedRoles={["owner"]}>
+          <Appointments />
+        </ProtectedRoute>
+      } />
+      <Route path="/cart/:id" element={
+        <ProtectedRoute allowedRoles={["owner"]}>
+          <CartPage />
+        </ProtectedRoute>
+      } />
+      <Route path="/adotptionrequest" element={
+        <ProtectedRoute allowedRoles={["owner"]}>
+          <AdoptionRequestForm />
+        </ProtectedRoute>
+      } />
+      <Route path="/alladopPets" element={
+        <ProtectedRoute allowedRoles={["owner"]}>
+          <AdoptablePets />
+        </ProtectedRoute>
+      } />
 
       {/* Vets */}
-      <Route path="/pet-medical-history" element={<PetMedicalHistory />} />
-      <Route
-        path="/treatment/create/:appointmentId"
-        element={<TreatmentLogForm />}
-      />
-      <Route
-        path="/treatment/edit/:treatmentId"
-        element={<UpdateTreatmentLog />}
-      />
-      {/* Edit existing treatment log */}
-      <Route
-        path="/treatment/appointment/:treatmentId"
-        element={<TreatmentLogsByAppointment />}
-      />
-      {/* View treatment history by pet */}
-      <Route path="/treatment/pet/:petId" element={<TreatmentLogsByPet />} />
+      <Route path="/pet-medical-history" element={
+        <ProtectedRoute allowedRoles={["vet"]}>
+          <PetMedicalHistory />
+        </ProtectedRoute>
+      } />
+      <Route path="/treatment/create/:appointmentId" element={
+        <ProtectedRoute allowedRoles={["vet"]}>
+          <TreatmentLogForm />
+        </ProtectedRoute>
+      } />
+      <Route path="/treatment/edit/:treatmentId" element={
+        <ProtectedRoute allowedRoles={["vet"]}>
+          <UpdateTreatmentLog />
+        </ProtectedRoute>
+      } />
+      <Route path="/treatment/appointment/:treatmentId" element={
+        <ProtectedRoute allowedRoles={["vet"]}>
+          <TreatmentLogsByAppointment />
+        </ProtectedRoute>
+      } />
+      <Route path="/treatment/pet/:petId" element={
+        <ProtectedRoute allowedRoles={["vet"]}>
+          <TreatmentLogsByPet />
+        </ProtectedRoute>
+      } />
 
-      {/* Appointment */}
-      <Route path="/manage-appointments" element={<ManageAppointments />} />
-      <Route
-        path="/appointment/:appointmentId/update"
-        element={<UpdateAppointment />}
-      />
+      {/* Appointment for vets */}
+      <Route path="/manage-appointments" element={
+        <ProtectedRoute allowedRoles={["vet"]}>
+          <ManageAppointments />
+        </ProtectedRoute>
+      } />
+      <Route path="/appointment/:appointmentId" element={
+        <ProtectedRoute allowedRoles={["vet"]}>
+          <UpdateAppointment />
+        </ProtectedRoute>
+      } />
 
       {/* Shelter */}
-      <Route path="/pet-care-status" element={<PetCareStatus />} />
-      <Route path="/view-pet-care" element={<ViewPetCare />} />
-      <Route path="/pet-care-status/:id" element={<PetCareStatus />} />
-      <Route path="/adoptable" element={<CreateAdoptablePet />} />
+      <Route path="/pet-care-status" element={
+        <ProtectedRoute allowedRoles={["shelter"]}>
+          <PetCareStatus />
+        </ProtectedRoute>
+      } />
+      <Route path="/view-pet-care" element={
+        <ProtectedRoute allowedRoles={["shelter"]}>
+          <ViewPetCare />
+        </ProtectedRoute>
+      } />
+      <Route path="/pet-care-status/:id" element={
+        <ProtectedRoute allowedRoles={["shelter"]}>
+          <PetCareStatus />
+        </ProtectedRoute>
+      } />
+      <Route path="/adoptable" element={
+        <ProtectedRoute allowedRoles={["shelter"]}>
+          <CreateAdoptablePet />
+        </ProtectedRoute>
+      } />
+      <Route path="/shelterDashboard" element={
+        <ProtectedRoute allowedRoles={["shelter"]}>
+          <ShelterDashboard />
+        </ProtectedRoute>
+      } />
 
-      {/* Chat Bot */}
+      {/* Chat Bot (sab use kar sakte) */}
       <Route path="/petchat" element={<PetCareChatbot />} />
+
+      {/* Admin */}
+      <Route path="/admin/*" element={
+        <ProtectedRoute allowedRoles={["admin"]}>
+          <AdminApp />
+        </ProtectedRoute>
+      } />
 
       <Route path="*" element={<Error />} />
     </Routes>

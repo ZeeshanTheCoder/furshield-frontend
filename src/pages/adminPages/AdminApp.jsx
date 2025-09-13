@@ -11,7 +11,6 @@ const AdminApp = () => {
         <>
             <ToastContainer position="top-right" autoClose={3000} />
             <Routes>
-                {/* redirect base /admin to dashboard */}
                 <Route path="/" element={<AdminSidebar />}>
                     <Route index element={<DashboardPage />} />
                     <Route path="users" element={<UsersManagementPage />} />
@@ -21,8 +20,6 @@ const AdminApp = () => {
                         element={<div className="p-10 text-center">404 - Page Not Found</div>}
                     />
                 </Route>
-
-                {/* redirect wrong direct access */}
                 <Route path="*" element={<Navigate to="/admin" replace />} />
             </Routes>
         </>
