@@ -5,19 +5,19 @@ import marqueeIcon from "../../assets/img/images/marquee_icon.svg";
 export const MarqueeOne = () => {
   const box = (
     <div className="marquee__box">
-      <Link to="/contact">
+      <Link to="/appointment-booking">
         Book For Online Appointment
         <img src={marqueeIcon} alt="Marquee Icon" />
       </Link>
-      <Link to="/contact">
+      <Link to="/appointment-booking">
         Book For Online Appointment
         <img src={marqueeIcon} alt="Marquee Icon" />
       </Link>
-      <Link to="/contact">
+      <Link to="/appointment-booking">
         Book For Online Appointment
         <img src={marqueeIcon} alt="Marquee Icon" />
       </Link>
-      <Link to="/contact">
+      <Link to="/appointment-booking">
         Book For Online Appointment
         <img src={marqueeIcon} alt="Marquee Icon" />
       </Link>

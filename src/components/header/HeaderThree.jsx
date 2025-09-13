@@ -20,13 +20,10 @@ export const HeaderThree = () => {
     try {
       const response = await axiosInstance.delete("/auth/logout");
       if (response.data.isLogout) {
-        // Remove token and user info from localStorage
-        localStorage.removeItem("userdata"); // if token stored under 'token'
+        localStorage.removeItem("userdata"); 
 
-        // Also clear context state if needed
         setuserdata(null);
 
-        // Redirect to login
         navigate("/login", { replace: true });
       } else {
         alert("Logout failed: " + response.data.message);
@@ -149,14 +146,6 @@ export const HeaderThree = () => {
                                         >
                                           <i className="icon-pet"></i> Pet
                                           Profiles
-                                        </Link>
-                                        <Link
-                                          to="/view-products"
-                                          className="btn btn-outline-danger btn-sm w-100"
-                                          style={{ whiteSpace: "nowrap" }}
-                                        >
-                                          <i className="icon-products"></i> View
-                                          Products
                                         </Link>
                                         <Link
                                           to="/pet-care"

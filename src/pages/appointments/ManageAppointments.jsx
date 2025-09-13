@@ -89,6 +89,7 @@ const ManageAppointments = () => {
                     <th className="px-4 py-3 text-center">Status</th>
                     <th className="px-4 py-3 text-center">Reason</th>
                     <th className="px-4 py-3 text-center">Notes</th>
+                    <th className="px-4 py-3 text-center">Update</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -105,9 +106,9 @@ const ManageAppointments = () => {
 
                       <td className="px-4 py-3 text-center">
                         <div className="flex flex-col items-center">
-                          <p className="font-semibold">{appt.ownerId?.name}</p>
+                          <p className="font-semibold items-center">{appt.ownerId?.name}</p>
                           <p className="text-xs text-gray-500">
-                            {appt.ownerId?.email}
+                            {appt.ownerIdemail}
                           </p>
                         </div>
                       </td>

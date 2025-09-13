@@ -33,8 +33,7 @@ export const BannerOne = () => {
                 Point
               </h2>
               <p data-aos="fade-up" data-aos-delay="400">
-                Template Kit uses demo images from Envato Elements Follower will
-                need to license these images from Envato.
+                Loving care and quality products for your furry, feathered, and finned friends.
               </p>
               <Link
                 to="/about"

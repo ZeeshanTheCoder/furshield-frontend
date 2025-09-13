@@ -48,8 +48,7 @@ export const TeamOne = () => {
                 </strong>
               </span>
               <h2 className="title">
-                Meet Our Expertise <br />
-                Pet Doctors
+                Meet Our Team
               </h2>
             </div>
           </div>
@@ -65,14 +64,6 @@ export const TeamOne = () => {
               designation={member.designation}
             />
           ))}
-        </div>
-
-        <div className="team__bottom-content">
-          <p>Our Valuable Expert Doctors Team</p>
-          <Link to="/team" className="btn">
-            See All Doctors
-            <img src={rightArrow} alt="right arrow" className="injectable" />
-          </Link>
         </div>
       </div>
 

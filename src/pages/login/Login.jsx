@@ -46,13 +46,13 @@ export const Login = () => {
 
         setTimeout(() => {
           if (user.role === "owner") {
-            navigate("/");
+            navigate("/", { replace: true });
           } else if (user.role === "vet" || user.role === "shelter") {
-            navigate("/profile");
+            navigate("/profile", { replace: true });
           } else if (user.role === "admin") {
-            navigate("/admin");
+            navigate("/admin", { replace: true });
           } else {
-            navigate("/"); // fallback
+            navigate("/", { replace: true });
           }
         }, 1000);
       } else {
@@ -69,8 +69,6 @@ export const Login = () => {
       setLoading(false);
     }
   };
-
-  
 
   return (
     <Layout breadcrumbTitle="Login Page" breadcrumbSubtitle={"Login"}>

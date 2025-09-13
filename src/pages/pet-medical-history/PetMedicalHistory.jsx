@@ -125,7 +125,7 @@ const PetMedicalHistory = () => {
                       {/* Owner Info */}
                       <td className="px-4 py-3 text-center">
                         <div className="flex flex-col items-center">
-                          <p className="font-semibold">{appt.ownerId?.name}</p>
+                          <p className="font-semibold mb-0">{appt.ownerId?.name}</p>
                         </div>
                       </td>
 

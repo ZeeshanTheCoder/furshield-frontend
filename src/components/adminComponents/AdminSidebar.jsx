@@ -1,19 +1,43 @@
-import React, { useState } from 'react';
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { MdDashboard } from "react-icons/md";
 import { LuUsersRound } from "react-icons/lu";
 import { TbBrandProducthunt } from "react-icons/tb";
+import { axiosInstance } from "../../services/BaseUrl";
 
 const AdminSidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate()
 
   const navigationItems = [
-    { name: 'Dashboard', href: '/admin', icon: <MdDashboard /> },
-    { name: 'Manage Users', href: '/admin/users', icon: <LuUsersRound /> },
-    { name: 'Manage Products', href: '/admin/products', icon: <TbBrandProducthunt /> },
+    { name: "Dashboard", href: "/admin", icon: <MdDashboard /> },
+    { name: "Manage Users", href: "/admin/users", icon: <LuUsersRound /> },
+    {
+      name: "Manage Products",
+      href: "/admin/products",
+      icon: <TbBrandProducthunt />,
+    },
   ];
+
+  const handleLogout = async () => {
+    try {
+      const response = await axiosInstance.delete("/auth/logout");
+      if (response.data.isLogout) {
+        localStorage.removeItem("userdata"); // or clear context/state
+        navigate("/", { replace: true });
+      } else {
+        alert("Logout failed: " + response.data.message);
+      }
+    } catch (error) {
+      console.error(
+        "Logout error:",
+        error.response ? error.response.data : error.message
+      );
+      alert("Something went wrong during logout.");
+    }
+  };
 
   return (
     <div className="d-flex flex-column flex-md-row vh-100 bg-light">
@@ -23,9 +47,9 @@ const AdminSidebar = () => {
         <button
           onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
           className="btn p-2 rounded bg-transparent border-0 text-white fs-4"
-          style={{'--bs-bg-opacity': 0.7}}
+          style={{ "--bs-bg-opacity": 0.7 }}
         >
-          {isMobileSidebarOpen ? '✕' : '☰'}
+          {isMobileSidebarOpen ? "✕" : "☰"}
         </button>
       </div>
 
@@ -36,27 +60,31 @@ const AdminSidebar = () => {
           onClick={() => setIsMobileSidebarOpen(false)}
         />
       )}
-      
+
       {/* Sidebar */}
       <aside
         className={`position-fixed top-0 start-0 h-100 z-50 d-md-block
-          ${isMobileSidebarOpen ? '' : 'translate-x-negative'}
-          ${isSidebarOpen ? 'sidebar-expanded' : 'sidebar-collapsed'}
+          ${isMobileSidebarOpen ? "" : "translate-x-negative"}
+          ${isSidebarOpen ? "sidebar-expanded" : "sidebar-collapsed"}
           bg-gradient`}
         style={{
-          transform: isMobileSidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
-          transition: 'all 0.3s ease-in-out'
+          transform: isMobileSidebarOpen
+            ? "translateX(0)"
+            : "translateX(-100%)",
+          transition: "all 0.3s ease-in-out",
         }}
       >
         {/* Sidebar header */}
         <div className="p-3 d-flex align-items-center justify-content-between border-bottom border-primary-subtle">
-          <h1 className="h5 fw-bold mb-0 text-white">{isSidebarOpen ? 'FurShield' : 'FS'}</h1>
+          <h1 className="h5 fw-bold mb-0 text-white">
+            {isSidebarOpen ? "FurShield" : "FS"}
+          </h1>
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             className="d-none d-md-block btn p-2 rounded bg-transparent border-0 text-white fs-5"
-            style={{'--bs-bg-opacity': 0.7}}
+            style={{ "--bs-bg-opacity": 0.7 }}
           >
-            {isSidebarOpen ? '«' : '»'}
+            {isSidebarOpen ? "«" : "»"}
           </button>
         </div>
 
@@ -68,9 +96,13 @@ const AdminSidebar = () => {
                 <Link
                   to={item.href}
                   className={`d-flex align-items-center px-3 py-2 text-decoration-none text-white
-                    ${location.pathname === item.href ? 'bg-primary bg-opacity-75' : 'hover-bg'}`}
+                    ${
+                      location.pathname === item.href
+                        ? "bg-primary bg-opacity-75"
+                        : "hover-bg"
+                    }`}
                   onClick={() => setIsMobileSidebarOpen(false)}
-                  style={{ transition: 'background-color 0.2s' }}
+                  style={{ transition: "background-color 0.2s" }}
                 >
                   <span className="fs-5 me-3">{item.icon}</span>
                   {isSidebarOpen && <span>{item.name}</span>}
@@ -85,12 +117,14 @@ const AdminSidebar = () => {
       <div className="flex-grow-1 d-flex flex-column overflow-hidden">
         <header className="bg-white shadow-sm border-bottom">
           <div className="d-flex align-items-center justify-content-between px-3 px-md-4 py-2">
-            <h2 className="h5 mb-0 fw-semibold text-dark">
-              Admin
-            </h2>
+            <h2 className="h5 mb-0 fw-semibold text-dark">Admin</h2>
             <div className="d-flex align-items-center gap-2 gap-md-3">
-              <button className="btn btn-danger btn-sm text-white px-4 py-3">
-                Logout
+              <button
+                className="btn btn-outline-danger btn-sm w-100"
+                onClick={handleLogout}
+                style={{ whiteSpace: "nowrap" }}
+              >
+                <i className="fas fa-sign-out-alt me-1"></i> Logout
               </button>
             </div>
           </div>
@@ -101,7 +135,7 @@ const AdminSidebar = () => {
           <Outlet />
         </main>
       </div>
-      
+
       {/* Add custom styles for Bootstrap */}
       <style>{`
         .translate-x-negative {

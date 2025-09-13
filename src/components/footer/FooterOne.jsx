@@ -94,22 +94,22 @@ export const FooterOne = () => {
                     <div className="footer__link">
                       <ul className="list-wrap">
                         <li>
-                          Monday <span>8.00 - 21.00</span>
+                          Monday <span>9:00AM - 5:00PM</span>
                         </li>
                         <li>
-                          Tuesday <span>8.00 - 21.00</span>
+                          Tuesday <span>9:00AM - 5:00PM</span>
                         </li>
                         <li>
-                          Thursday <span>8.00 - 21.00</span>
+                          Thursday <span>9:00AM - 5:00PM</span>
                         </li>
                         <li>
-                          Friday <span>8.00 - 21.00</span>
+                          Friday <span>9:00AM - 5:00PM</span>
                         </li>
                         <li>
-                          Saturday <span>8.00 - 21.00</span>
+                          Saturday <span>9:00AM - 5:00PM</span>
                         </li>
                         <li>
-                          Sunday <span>8.00 - 21.00</span>
+                          Sunday <span>9:00AM - 5:00PM</span>
                         </li>
                       </ul>
                     </div>

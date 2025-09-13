@@ -18,7 +18,6 @@ export const CtaOne = () => {
                 Pets are not just animals, they are a part of your family
               </h2>
               <p>
-                Duis aute irure dolor in reprehenderit in voluptate velit esse
                 We understand that your furry friend is a treasured membee.
               </p>
               <Link to="/about" className="btn">

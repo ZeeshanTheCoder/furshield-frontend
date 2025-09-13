@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom"; // 👈 Add this
 
 const PetProfiles = () => {
   const { userdata } = useContext(AppContext);
-  const navigate = useNavigate(); // 👈 Initialize navigate
+  const navigate = useNavigate();
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [contextReady, setContextReady] = useState(false);
@@ -22,7 +22,8 @@ const PetProfiles = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const isLoggedIn = !!userdata?.user;
+  const isLoggedIn = !!userdata;
+  const isOwner = userdata?.role === "owner";
 
   const fetchPets = async () => {
     if (!isLoggedIn) {
@@ -33,7 +34,7 @@ const PetProfiles = () => {
     try {
       const res = await axiosInstance.get("/pets/fetchpetsbyowner");
       setPets(res.data.pets);
-      console.log(res.data.pets)
+      console.log(res.data.pets);
     } catch (error) {
       console.error("Error fetching pets:", error.message);
       alert("Failed to load pets. Please login again.");
@@ -96,9 +97,26 @@ const PetProfiles = () => {
           <h3>Please login to view your pets.</h3>
           <button
             className="btn btn-primary mt-3"
-            onClick={() => (window.location.href = "/login")}
+            onClick={() => navigate("/login")}
           >
             Go to Login
+          </button>
+        </div>
+      </Layout>
+    );
+  }
+
+  // ✅ Agar login hai but role owner nahi hai
+  if (isLoggedIn && !isOwner) {
+    return (
+      <Layout>
+        <div className="container mt-4 text-center">
+          <h3>Only owners can access Pet Profiles 🚫</h3>
+          <button
+            className="btn btn-secondary mt-3"
+            onClick={() => navigate("/")}
+          >
+            Go to Home
           </button>
         </div>
       </Layout>

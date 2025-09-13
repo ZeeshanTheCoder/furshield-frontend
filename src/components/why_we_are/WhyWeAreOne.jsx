@@ -59,7 +59,6 @@ export const WhyWeAreOne = () => {
                 </h2>
               </div>
               <p>
-                Duis aute irure dolor in reprehenderit in voluptate velit esse
                 We understand that your furry friend is a treasured member of
                 your family and deserves pets are the best care and attention
                 possible.

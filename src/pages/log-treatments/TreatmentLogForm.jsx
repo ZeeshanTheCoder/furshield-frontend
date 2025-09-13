@@ -16,7 +16,7 @@ const TreatmentLogForm = ({ treatmentId = null }) => {
     diagnosis: "",
     prescription: "",
     followUpDate: "",
-    labResults: [], // URLs or File objects
+    labResults: [],
   });
 
   const [loading, setLoading] = useState(!!treatmentId);

@@ -1,3 +1,4 @@
+// App.jsx - Updated
 import { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -49,6 +50,7 @@ import AdminApp from "./pages/adminPages/AdminApp";
 
 // ProtectedRoute
 import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedAuthRoute from "./components/ProtectedAuthRoute"; // Add this import
 
 function App() {
   useWow();
@@ -62,157 +64,243 @@ function App() {
   }, [pathname]);
 
   return (
-    <Routes>
-      <Route path="/" element={<HomeOne />} />
-      <Route path="/about" element={<About />} />
-      <Route path="/product" element={<Product />} />
-      <Route path="/product-details/:id" element={<ProductDetails />} />
-      <Route path="/animal" element={<Animal />} />
-      <Route path="/animal-details" element={<AnimalDetails />} />
-      <Route path="/gallery" element={<Gallery />} />
-      <Route path="/faq" element={<Faq />} />
-      <Route path="/pricing" element={<Pricing />} />
-      <Route path="/reservation" element={<Reservation />} />
-      <Route path="/team" element={<Team />} />
-      <Route path="/team-details" element={<TeamDetails />} />
-      <Route path="/blog" element={<Blog />} />
-      <Route path="/blog-details" element={<BlogDetails />} />
-      <Route path="/contact" element={<Contact />} />
+    <>
+      <Routes>
+        <Route path="/" element={<HomeOne />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/product" element={<Product />} />
+        <Route path="/product-details/:id" element={<ProductDetails />} />
+        <Route path="/animal" element={<Animal />} />
+        <Route path="/animal-details" element={<AnimalDetails />} />
+        <Route path="/gallery" element={<Gallery />} />
+        <Route path="/faq" element={<Faq />} />
+        <Route path="/pricing" element={<Pricing />} />
+        <Route path="/reservation" element={<Reservation />} />
+        <Route path="/team" element={<Team />} />
+        <Route path="/team-details" element={<TeamDetails />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog-details" element={<BlogDetails />} />
+        <Route path="/contact" element={<Contact />} />
 
-      {/* Auth */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/profile" element={
-        <ProtectedRoute allowedRoles={["admin","owner","vet","shelter"]}>
-          <Profile />
-        </ProtectedRoute>
-      } />
+        {/* Auth - Protected from logged-in users */}
+        <Route
+          path="/login"
+          element={
+            <ProtectedAuthRoute>
+              <Login />
+            </ProtectedAuthRoute>
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <ProtectedAuthRoute>
+              <Signup />
+            </ProtectedAuthRoute>
+          }
+        />
 
-      {/* Users */}
-      <Route path="/petmanagement" element={
-        <ProtectedRoute allowedRoles={["owner"]}>
-          <ManagePets />
-        </ProtectedRoute>
-      } />
-      <Route path="/pet-profiles" element={
-        <ProtectedRoute allowedRoles={["owner"]}>
-          <PetProfiles />
-        </ProtectedRoute>
-      } />
-      <Route path="/health-records/:petId" element={
-        <ProtectedRoute allowedRoles={["owner"]}>
-          <HealthRecords />
-        </ProtectedRoute>
-      } />
-      <Route path="/pet-care" element={
-        <ProtectedRoute allowedRoles={["owner"]}>
-          <PetCare />
-        </ProtectedRoute>
-      } />
-      <Route path="/appointment-booking" element={
-        <ProtectedRoute allowedRoles={["owner"]}>
-          <AppointmentBooking />
-        </ProtectedRoute>
-      } />
-      <Route path="/appointments" element={
-        <ProtectedRoute allowedRoles={["owner"]}>
-          <Appointments />
-        </ProtectedRoute>
-      } />
-      <Route path="/cart/:id" element={
-        <ProtectedRoute allowedRoles={["owner"]}>
-          <CartPage />
-        </ProtectedRoute>
-      } />
-      <Route path="/adotptionrequest" element={
-        <ProtectedRoute allowedRoles={["owner"]}>
-          <AdoptionRequestForm />
-        </ProtectedRoute>
-      } />
-      <Route path="/alladopPets" element={
-        <ProtectedRoute allowedRoles={["owner"]}>
-          <AdoptablePets />
-        </ProtectedRoute>
-      } />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "owner", "vet", "shelter"]}>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
 
-      {/* Vets */}
-      <Route path="/pet-medical-history" element={
-        <ProtectedRoute allowedRoles={["vet"]}>
-          <PetMedicalHistory />
-        </ProtectedRoute>
-      } />
-      <Route path="/treatment/create/:appointmentId" element={
-        <ProtectedRoute allowedRoles={["vet"]}>
-          <TreatmentLogForm />
-        </ProtectedRoute>
-      } />
-      <Route path="/treatment/edit/:treatmentId" element={
-        <ProtectedRoute allowedRoles={["vet"]}>
-          <UpdateTreatmentLog />
-        </ProtectedRoute>
-      } />
-      <Route path="/treatment/appointment/:treatmentId" element={
-        <ProtectedRoute allowedRoles={["vet"]}>
-          <TreatmentLogsByAppointment />
-        </ProtectedRoute>
-      } />
-      <Route path="/treatment/pet/:petId" element={
-        <ProtectedRoute allowedRoles={["vet"]}>
-          <TreatmentLogsByPet />
-        </ProtectedRoute>
-      } />
+        {/* Users */}
+        <Route
+          path="/petmanagement"
+          element={
+            <ProtectedRoute allowedRoles={["owner"]}>
+              <ManagePets />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/pet-profiles"
+          element={
+            <ProtectedRoute allowedRoles={["owner"]}>
+              <PetProfiles />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/health-records/:petId"
+          element={
+            <ProtectedRoute allowedRoles={["owner"]}>
+              <HealthRecords />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/pet-care"
+          element={
+            <ProtectedRoute allowedRoles={["owner"]}>
+              <PetCare />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/appointment-booking"
+          element={
+            <ProtectedRoute allowedRoles={["owner"]}>
+              <AppointmentBooking />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/appointments"
+          element={
+            <ProtectedRoute allowedRoles={["owner"]}>
+              <Appointments />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/cart/:id"
+          element={
+            <ProtectedRoute allowedRoles={["owner"]}>
+              <CartPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/adotptionrequest"
+          element={
+            <ProtectedRoute allowedRoles={["owner"]}>
+              <AdoptionRequestForm />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/alladopPets"
+          element={
+            <ProtectedRoute allowedRoles={["owner"]}>
+              <AdoptablePets />
+            </ProtectedRoute>
+          }
+        />
 
-      {/* Appointment for vets */}
-      <Route path="/manage-appointments" element={
-        <ProtectedRoute allowedRoles={["vet"]}>
-          <ManageAppointments />
-        </ProtectedRoute>
-      } />
-      <Route path="/appointment/:appointmentId" element={
-        <ProtectedRoute allowedRoles={["vet"]}>
-          <UpdateAppointment />
-        </ProtectedRoute>
-      } />
+        {/* Vets */}
+        <Route
+          path="/pet-medical-history"
+          element={
+            <ProtectedRoute allowedRoles={["vet"]}>
+              <PetMedicalHistory />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/treatment/create/:appointmentId"
+          element={
+            <ProtectedRoute allowedRoles={["vet"]}>
+              <TreatmentLogForm />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/treatment/edit/:treatmentId"
+          element={
+            <ProtectedRoute allowedRoles={["vet"]}>
+              <UpdateTreatmentLog />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/treatment/appointment/:treatmentId"
+          element={
+            <ProtectedRoute allowedRoles={["vet"]}>
+              <TreatmentLogsByAppointment />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/treatment/pet/:petId"
+          element={
+            <ProtectedRoute allowedRoles={["vet"]}>
+              <TreatmentLogsByPet />
+            </ProtectedRoute>
+          }
+        />
 
-      {/* Shelter */}
-      <Route path="/pet-care-status" element={
-        <ProtectedRoute allowedRoles={["shelter"]}>
-          <PetCareStatus />
-        </ProtectedRoute>
-      } />
-      <Route path="/view-pet-care" element={
-        <ProtectedRoute allowedRoles={["shelter"]}>
-          <ViewPetCare />
-        </ProtectedRoute>
-      } />
-      <Route path="/pet-care-status/:id" element={
-        <ProtectedRoute allowedRoles={["shelter"]}>
-          <PetCareStatus />
-        </ProtectedRoute>
-      } />
-      <Route path="/adoptable" element={
-        <ProtectedRoute allowedRoles={["shelter"]}>
-          <CreateAdoptablePet />
-        </ProtectedRoute>
-      } />
-      <Route path="/shelterDashboard" element={
-        <ProtectedRoute allowedRoles={["shelter"]}>
-          <ShelterDashboard />
-        </ProtectedRoute>
-      } />
+        {/* Appointment for vets */}
+        <Route
+          path="/manage-appointments"
+          element={
+            <ProtectedRoute allowedRoles={["vet"]}>
+              <ManageAppointments />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/appointment/:appointmentId"
+          element={
+            <ProtectedRoute allowedRoles={["vet"]}>
+              <UpdateAppointment />
+            </ProtectedRoute>
+          }
+        />
 
-      {/* Chat Bot (sab use kar sakte) */}
-      <Route path="/petchat" element={<PetCareChatbot />} />
+        {/* Shelter */}
+        <Route
+          path="/pet-care-status"
+          element={
+            <ProtectedRoute allowedRoles={["shelter"]}>
+              <PetCareStatus />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/view-pet-care"
+          element={
+            <ProtectedRoute allowedRoles={["shelter"]}>
+              <ViewPetCare />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/pet-care-status/:id"
+          element={
+            <ProtectedRoute allowedRoles={["shelter"]}>
+              <PetCareStatus />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/adoptable"
+          element={
+            <ProtectedRoute allowedRoles={["shelter"]}>
+              <CreateAdoptablePet />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/shelterDashboard"
+          element={
+            <ProtectedRoute allowedRoles={["shelter"]}>
+              <ShelterDashboard />
+            </ProtectedRoute>
+          }
+        />
 
-      {/* Admin */}
-      <Route path="/admin/*" element={
-        <ProtectedRoute allowedRoles={["admin"]}>
-          <AdminApp />
-        </ProtectedRoute>
-      } />
+        {/* Chat Bot (sab use kar sakte) */}
+        <Route path="/petchat" element={<PetCareChatbot />} />
 
-      <Route path="*" element={<Error />} />
-    </Routes>
+        {/* Admin */}
+        <Route
+          path="/admin/*"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <AdminApp />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path="*" element={<Error />} />
+      </Routes>
+    </>
   );
 }
 

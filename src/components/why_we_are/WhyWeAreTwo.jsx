@@ -22,11 +22,9 @@ export const WhyWeAreTwo = () => {
                   <img src={petIcon} alt="" className="injectable" />
                 </strong>
               </span>
-              <h2 className="title">See How Petpal can Help</h2>
+              <h2 className="title">See How Furshield can Help</h2>
               <p>
-                Duis aute irure dolor in reprehenderit in voluptate velit esse
-                <br />
-                amily and deserves ets are the best care.
+                Pets are family and deserve the best love, care, and attention.{" "}
               </p>
             </div>
           </div>

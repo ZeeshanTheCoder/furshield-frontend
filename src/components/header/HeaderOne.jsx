@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { HeaderTop } from "./HeaderTop";
-import LOGO from "../../assets/img/logo/logo.png";
+import LOGO from "../../assets/img/logo/logo3.png";
 import { Link, useNavigate } from "react-router-dom";
 import { HeaderNav } from "./HeaderNav";
 import { HeaderOffcanvas } from "./HeaderOffcanvas";
@@ -188,6 +188,27 @@ export const HeaderOne = () => {
                                   }}
                                 >
                                   {/* Role-based menu options */}
+                                  {userdatastate.role === "admin" && (
+                                    <>
+                                      <Link
+                                        to="/profile"
+                                        className="btn btn-outline-danger btn-sm w-100"
+                                        style={{ whiteSpace: "nowrap" }}
+                                      >
+                                        <i className="flaticon-user me-1"></i>{" "}
+                                        Profile
+                                      </Link>
+                                      <Link
+                                        to="/admin"
+                                        className="btn btn-outline-danger btn-sm w-100"
+                                        style={{ whiteSpace: "nowrap" }}
+                                      >
+                                        <i className="flaticon-user me-1"></i>{" "}
+                                        Dashboard
+                                      </Link>
+                                      
+                                    </>
+                                  )}
                                   {userdatastate.role === "owner" && (
                                     <>
                                       <Link
@@ -206,14 +227,7 @@ export const HeaderOne = () => {
                                         <i className="icon-pet"></i> Pet
                                         Profiles
                                       </Link>
-                                      <Link
-                                        to="/view-products"
-                                        className="btn btn-outline-danger btn-sm w-100"
-                                        style={{ whiteSpace: "nowrap" }}
-                                      >
-                                        <i className="icon-products"></i> View
-                                        Products
-                                      </Link>
+                                     
                                       <Link
                                         to="/pet-care"
                                         className="btn btn-outline-danger btn-sm w-100"
