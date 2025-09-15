@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { axiosInstance } from "../../services/BaseUrl";
 import { Layout } from "../../layouts/Layout";
+import { toast } from "react-toastify";
 
 const UpdateAppointment = () => {
   const { appointmentId } = useParams();
@@ -43,11 +44,11 @@ const UpdateAppointment = () => {
         time,
         status,
       });
-      alert("Appointment updated successfully!");
+      toast("Appointment updated successfully!");
       navigate("/manage-appointments");
     } catch (err) {
       console.error("Update failed:", err);
-      alert("Failed to update appointment");
+      toast("Failed to update appointment");
     }
   };
 

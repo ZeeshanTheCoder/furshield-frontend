@@ -168,9 +168,9 @@ export const BlogDetailsContent = () => {
 
       <div className="blog-avatar-wrap">
         <div className="blog-avatar-img">
-          <Link to="/team-details">
+          <div>
             <img src={avatar} alt="img" />
-          </Link>
+          </div>
         </div>
         <div className="blog-avatar-info">
           <span className="designation">Author</span>

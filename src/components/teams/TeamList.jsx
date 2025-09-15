@@ -14,7 +14,7 @@ import teamImg08 from "../../assets/img/team/team_img08.jpg";
 const teamMembers = [
   {
     src: teamImg01,
-    name: "Daria Andaloro",
+    name: "Muhammad Zeeshan",
     designation: "Veterinary Technician",
   },
   {

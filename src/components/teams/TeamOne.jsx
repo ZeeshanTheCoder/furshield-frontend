@@ -14,23 +14,23 @@ export const TeamOne = () => {
   const teamMembers = [
     {
       src: teamImg01,
-      name: "Daria Andaloro",
-      designation: "Veterinary Technician",
+      name: "Muhammad Zeeshan",
+      designation: "Full Stack Developer",
     },
     {
       src: teamImg02,
-      name: "Michael Brian",
-      designation: "Medicine Specialist",
+      name: "Faraz Sial",
+      designation: "MERN Stack Developer",
     },
     {
       src: teamImg03,
-      name: "Kenroly Gajon",
-      designation: "Food Technician",
+      name: "Arsalan Ali Khan",
+      designation: "Full Stack Developer",
     },
     {
       src: teamImg04,
-      name: "Lizay Arianya",
-      designation: "Veterinary Technician",
+      name: "Abdullah",
+      designation: "Designer",
     },
   ];
 

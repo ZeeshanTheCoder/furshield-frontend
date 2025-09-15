@@ -67,7 +67,7 @@ const CreateAdoptablePet = () => {
         },
       });
 
-      alert("Adoptable Pet Created Successfully ✅");
+      toast("Adoptable Pet Created Successfully ✅");
       setFormData({
         name: "",
         breed: "",
@@ -78,7 +78,7 @@ const CreateAdoptablePet = () => {
       setImage(null);
     } catch (error) {
       console.error(error);
-      alert("Error creating pet ❌");
+      toast("Error creating pet ❌");
     }
   };
 

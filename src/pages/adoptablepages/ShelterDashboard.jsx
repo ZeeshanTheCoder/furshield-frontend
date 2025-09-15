@@ -27,7 +27,7 @@ const ShelterDashboard = () => {
       fetchRequests();
     } catch (err) {
       console.error(err);
-      alert("Failed to update request");
+      toast("Failed to update request");
     }
   };
 

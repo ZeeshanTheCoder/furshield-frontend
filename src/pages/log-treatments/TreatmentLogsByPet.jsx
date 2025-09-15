@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Layout } from "../../layouts/Layout";
 import { axiosInstance } from "../../services/BaseUrl";
+import { toast } from "react-toastify";
 
 const TreatmentLogsByPet = () => {
   const { petId } = useParams();
@@ -59,7 +60,7 @@ const TreatmentLogsByPet = () => {
                     if (appointmentId) {
                       navigate(`/treatment/create/${appointmentId}`);
                     } else {
-                      alert("No appointment found for this pet.");
+                      toast("No appointment found for this pet.");
                     }
                   }}
                   className="btn btn-primary w-auto rounded-pill py-3"

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { axiosInstance } from "../../services/BaseUrl";
 import { Layout } from "../../layouts/Layout";
+import { toast } from "react-toastify";
 
 const UpdateTreatmentLog = () => {
   const { treatmentId } = useParams();
@@ -103,7 +104,7 @@ const UpdateTreatmentLog = () => {
 
       await axiosInstance.put(`/treatment/${treatmentId}`, payload);
 
-      alert("Treatment log updated successfully!");
+      toast("Treatment log updated successfully!");
       navigate(-1);
     } catch (err) {
       setSubmitError(err.response?.data?.message || "Failed to update treatment log");

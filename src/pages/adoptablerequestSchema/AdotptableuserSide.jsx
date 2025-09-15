@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { axiosInstance } from "../../services/BaseUrl";
 import { Layout } from "../../layouts/Layout";
+import { toast } from "react-toastify";
 
 const AdoptionRequestForm = ({ petId }) => {
   const [message, setMessage] = useState("");
@@ -12,10 +13,10 @@ const AdoptionRequestForm = ({ petId }) => {
         petId,
         message,
       });
-      alert("Adoption request submitted!");
+      toast("Adoption request submitted!");
       setMessage("");
     } catch (err) {
-      alert(" Error: " + err.response?.data?.message);
+      toast(" Error: " + err.response?.data?.message);
     }
   };
 

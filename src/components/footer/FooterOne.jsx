@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import wLogo from "../../assets/img/logo/w_logo.png";
+import wLogo from "../../assets/img/logo/logo.png";
 import newsletterShape from "../../assets/img/images/footer_newsletter_shape.svg";
 import footerShape01 from "../../assets/img/images/footer_shape01.png";
 import footerShape02 from "../../assets/img/images/footer_shape02.png";
@@ -63,26 +63,26 @@ export const FooterOne = () => {
                 </div>
                 <div className="col-xl-2 col-lg-4 col-md-6 col-sm-6">
                   <div className="footer__widget">
-                    <h4 className="footer__widget-title">Quick Links</h4>
+                    <h4 className="footer__widget-title">Support</h4>
                     <div className="footer__link">
                       <ul className="list-wrap">
                         <li>
-                          <Link to="/animal">Animal Rescue</Link>
+                          <Link to="/about">About Us</Link>
                         </li>
                         <li>
-                          <Link to="/contact">Humane Education</Link>
+                          <Link to="/contact">Contact Us</Link>
                         </li>
                         <li>
-                          <Link to="/animal-details">Animal Hospital</Link>
+                          <Link to="/appointment-booking">Book Appointement</Link>
                         </li>
                         <li>
-                          <Link to="/animal">Street Animal Feeding</Link>
+                          <Link to="/faq">FAQ</Link>
                         </li>
                         <li>
-                          <Link to="/">Homepage 01</Link>
+                          <Link to="/contact">Locations</Link>
                         </li>
                         <li>
-                          <Link to="/pricing">Pricing Table</Link>
+                          <Link to="/product">Shop</Link>
                         </li>
                       </ul>
                     </div>

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { HeaderTop } from "./HeaderTop";
-import LOGO from "../../assets/img/logo/logo3.png";
+import LOGO from "../../assets/img/logo/logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { HeaderNav } from "./HeaderNav";
 import { HeaderOffcanvas } from "./HeaderOffcanvas";
@@ -12,6 +12,7 @@ import {
 } from "../../lib/hooks/useHeader";
 import { AppContext } from "../../Context/MainContext";
 import { axiosInstance } from "../../services/BaseUrl";
+import { toast } from "react-toastify";
 
 export const HeaderOne = () => {
   const { showSearch, toggleSearch } = useSearch();
@@ -22,22 +23,27 @@ export const HeaderOne = () => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    try {
-      const response = await axiosInstance.delete("/auth/logout");
-      if (response.data.isLogout) {
-        localStorage.removeItem("userdata"); // or clear context/state
-        navigate("/login", { replace: true });
-      } else {
-        alert("Logout failed: " + response.data.message);
-      }
-    } catch (error) {
-      console.error(
-        "Logout error:",
-        error.response ? error.response.data : error.message
-      );
-      alert("Something went wrong during logout.");
+  try {
+    const response = await axiosInstance.delete("/auth/logout", {
+      withCredentials: true, // Important: ensure cookie delete request works
+    });
+
+    if (response.data.isLogout) {
+      localStorage.removeItem("userdata"); 
+      setuserdata(null); 
+      navigate("/login", { replace: true });
+    } else {
+      toast("Logout failed: " + response.data.message);
     }
-  };
+  } catch (error) {
+    console.error(
+      "Logout error:",
+      error.response ? error.response.data : error.message
+    );
+    toast("Something went wrong during logout.");
+  }
+};
+
 
   useMobileMenu();
 

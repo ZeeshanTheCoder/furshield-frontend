@@ -5,9 +5,10 @@ import { HeaderSearch } from "./HeaderSearch";
 import { HeaderMobileMenu } from "./HeaderMobileMenu";
 import { HeaderNav } from "./HeaderNav";
 
-import wLogo from "../../assets/img/logo/w_logo.png";
+import wLogo from "../../assets/img/logo/logo.png";
 import { axiosInstance } from "../../services/BaseUrl";
 import { AppContext } from "../../Context/MainContext";
+import { toast } from "react-toastify";
 
 export const HeaderThree = () => {
   const { showSearch, toggleSearch } = useSearch();
@@ -20,17 +21,17 @@ export const HeaderThree = () => {
     try {
       const response = await axiosInstance.delete("/auth/logout");
       if (response.data.isLogout) {
-        localStorage.removeItem("userdata"); 
+        localStorage.removeItem("userdata");
 
         setuserdata(null);
 
         navigate("/login", { replace: true });
       } else {
-        alert("Logout failed: " + response.data.message);
+        toast("Logout failed: " + response.data.message);
       }
     } catch (error) {
       console.error("Logout error:", error);
-      alert("Something went wrong during logout.");
+      toast("Something went wrong during logout.");
     }
   };
 
@@ -129,6 +130,26 @@ export const HeaderThree = () => {
                                     }}
                                   >
                                     {/* Role-based menu options */}
+                                    {userdatastate.role === "admin" && (
+                                      <>
+                                        <Link
+                                          to="/profile"
+                                          className="btn btn-outline-danger btn-sm w-100"
+                                          style={{ whiteSpace: "nowrap" }}
+                                        >
+                                          <i className="flaticon-user me-1"></i>{" "}
+                                          Profile
+                                        </Link>
+                                        <Link
+                                          to="/admin"
+                                          className="btn btn-outline-danger btn-sm w-100"
+                                          style={{ whiteSpace: "nowrap" }}
+                                        >
+                                          <i className="flaticon-user me-1"></i>{" "}
+                                          Dashboard
+                                        </Link>
+                                      </>
+                                    )}
                                     {userdatastate.role === "owner" && (
                                       <>
                                         <Link
@@ -147,6 +168,7 @@ export const HeaderThree = () => {
                                           <i className="icon-pet"></i> Pet
                                           Profiles
                                         </Link>
+
                                         <Link
                                           to="/pet-care"
                                           className="btn btn-outline-danger btn-sm w-100"
@@ -231,6 +253,7 @@ export const HeaderThree = () => {
                                     )}
 
                                     {/* Common options */}
+
                                     <button
                                       className="btn btn-outline-danger btn-sm w-100"
                                       onClick={handleLogout}

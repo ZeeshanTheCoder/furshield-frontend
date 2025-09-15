@@ -23,8 +23,8 @@ export const HeaderOffcanvas = ({ active, toggleCanvas }) => {
           <div className="contact-list mb-30">
             <h4>Office Address</h4>
             <p>
-              123/A, Miranda City Likaoli <br />
-              Prikano, Dope
+              Aptech Metro Star Gate Center <br />
+              Karachi, Pakistan
             </p>
           </div>
           <div className="contact-list mb-30">

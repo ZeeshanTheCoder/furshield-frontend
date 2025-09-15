@@ -31,26 +31,25 @@ export const AppointmentBooking = () => {
 
   // Fetch pets when component mounts or userdata changes
   useEffect(() => {
-    const fetchPetsByOwner = async () => {
-      if (!userdata.user?.id || "") return;
-      setLoadingPets(true);
-      try {
-        const res = await axiosInstance.get("/pets/fetchpetsbyowner");
-        setPets(res.data.pets || []);
-        console.log("pets care", res.data);
-      } catch (err) {
-        console.error(
-          "Error fetching pets:",
-          err.response?.data || err.message
-        );
-        setPets([]);
-      } finally {
-        setLoadingPets(false);
-      }
-    };
+  const fetchPetsByOwner = async () => {
+    if (!userdata?._id) return; // ✅ context ka correct key use karo
+    setLoadingPets(true);
+    try {
+      const res = await axiosInstance.get("/pets/fetchpetsbyowner", {
+        withCredentials: true, // ✅ token bhejne ke liye zaroori
+      });
+      setPets(res.data.pets);
+      console.log("Fetched Pets in AppointmentBooking:", res.data.pets);
+    } catch (err) {
+      console.error("Error fetching pets:", err.response?.data || err.message);
+      setPets([]);
+    } finally {
+      setLoadingPets(false);
+    }
+  };
 
-    fetchPetsByOwner();
-  }, [userdata]);
+  fetchPetsByOwner();
+}, [userdata]);
 
   // Fetch all Vets
   useEffect(() => {

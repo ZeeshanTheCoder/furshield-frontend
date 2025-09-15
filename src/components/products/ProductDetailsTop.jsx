@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../Context/CartContext";
 import { AppContext } from "../../Context/MainContext";
+import { toast } from "react-toastify";
 
 export const ProductDetailsTop = ({ product }) => {
   const [quantity, setQuantity] = useState(1);
@@ -11,7 +12,7 @@ export const ProductDetailsTop = ({ product }) => {
   const { addToCart } = useCart();
   const { userdata } = useContext(AppContext);
 
-  const userId = userdata._id;
+  const userId = userdata?._id || null;
 
   const handleQuantityChange = (type) => {
     if (type === "inc") setQuantity((prev) => prev + 1);
@@ -19,7 +20,10 @@ export const ProductDetailsTop = ({ product }) => {
   };
 
   const handleAddToCart = async () => {
-    if (!userId) return alert("Please login to add items to cart");
+    if (!userId) {
+      toast("Please login to add items to cart");
+      return navigate("/login"); // navigate to login page
+    }
 
     try {
       await addToCart({
@@ -27,11 +31,11 @@ export const ProductDetailsTop = ({ product }) => {
         productId: product._id,
         quantity,
       });
-      alert("Item added to cart!");
+      toast("Item added to cart!");
       navigate(`/cart/${userId}`);
     } catch (error) {
       console.error("Error adding to cart:", error);
-      alert("Failed to add item to cart");
+      toast("Failed to add item to cart");
     }
   };
 

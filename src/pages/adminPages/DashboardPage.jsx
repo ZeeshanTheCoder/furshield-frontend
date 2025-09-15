@@ -5,8 +5,9 @@ import { LuUsersRound } from "react-icons/lu";
 import { MdOutlinePets } from "react-icons/md";
 import { TbBrandProducthunt } from "react-icons/tb";
 import { ProductContext } from '../../Context/ProductProvider';
+import { BASE_URL } from '../../services/BaseUrl';
 
-const URL = import.meta.env.VITE_Node_Api_Url;
+const URL = BASE_URL;
 
 const DashboardPage = () => {
   const [totalUsers, setTotalUsers] = useState(0);

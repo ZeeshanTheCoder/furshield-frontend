@@ -86,7 +86,7 @@ export const FooterTwo = () => {
               </div>
               <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6">
                 <div className="footer__widget">
-                  <h4 className="footer__widget-title">Quick Links</h4>
+                  <h4 className="footer__widget-title">Discover</h4>
                   <div className="footer__link">
                     <ul className="list-wrap">
                       <li>

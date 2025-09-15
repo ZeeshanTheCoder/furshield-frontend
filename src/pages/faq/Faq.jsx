@@ -10,11 +10,10 @@ export const Faq = () => {
           <div className="row justify-content-center">
             <div className="col-xl-8">
               <div className="section__title text-center mb-40">
-                <h2 className="title">Find Answer Of Your Questions</h2>
+                <h2 className="title">Find Answers To Your Pet Care Questions</h2>
                 <p>
-                  Maecenas quis viverra metus, et efficitur ligula. Nam
-                  congueaugue congue sed luctus <br />
-                  lectus conIn onvallis condimentum .
+                  Get expert advice on pet food hygiene, proper storage, and overall pet care <br />
+                  to keep your furry friends healthy and happy.
                 </p>
               </div>
             </div>
@@ -35,7 +34,7 @@ export const Faq = () => {
                         aria-expanded="true"
                         aria-controls="collapseOne"
                       >
-                        Is There a Free Version Available?
+                        Why is food hygiene important in pet care?
                       </button>
                     </h2>
                     <div
@@ -45,11 +44,7 @@ export const Faq = () => {
                     >
                       <div className="accordion-body">
                         <p>
-                          when an unknown printer took a galley of type and
-                          scrambled it to make a type specimen awea book It has
-                          survived not only five centuriesbut also the leap into
-                          electronic typesetting good remaining essentiallybut
-                          also the leap into electronic.
+                          Proper food hygiene prevents contamination, reduces the risk of bacterial infections like Salmonella or E. coli, and ensures your pet stays healthy. Clean bowls, fresh food, and correct storage are essential to avoid illness.
                         </p>
                       </div>
                     </div>
@@ -64,7 +59,7 @@ export const Faq = () => {
                         aria-expanded="false"
                         aria-controls="collapseTwo"
                       >
-                        Rediscovering The Joy Of Design
+                        How often should I clean my pet's food and water bowls?
                       </button>
                     </h2>
                     <div
@@ -74,11 +69,7 @@ export const Faq = () => {
                     >
                       <div className="accordion-body">
                         <p>
-                          when an unknown printer took a galley of type and
-                          scrambled it to make a type specimen awea book It has
-                          survived not only five centuriesbut also the leap into
-                          electronic typesetting good remaining essentiallybut
-                          also the leap into electronic.
+                          Pet bowls should be washed with hot, soapy water daily. Stainless steel or ceramic bowls are best, as they don't harbor bacteria as easily as plastic ones.
                         </p>
                       </div>
                     </div>
@@ -93,7 +84,7 @@ export const Faq = () => {
                         aria-expanded="false"
                         aria-controls="collapseThree"
                       >
-                        Better Context Menus With Safe Triangles
+                        What is the best way to store dry and wet pet food?
                       </button>
                     </h2>
                     <div
@@ -103,11 +94,9 @@ export const Faq = () => {
                     >
                       <div className="accordion-body">
                         <p>
-                          when an unknown printer took a galley of type and
-                          scrambled it to make a type specimen awea book It has
-                          survived not only five centuriesbut also the leap into
-                          electronic typesetting good remaining essentiallybut
-                          also the leap into electronic.
+                          <strong>Dry food:</strong> Keep it in an airtight container, away from sunlight and moisture.<br />
+                          <strong>Wet food:</strong> Refrigerate immediately after opening and use within 24–48 hours.<br />
+                          This maintains freshness and prevents bacterial growth.
                         </p>
                       </div>
                     </div>
@@ -122,7 +111,7 @@ export const Faq = () => {
                         aria-expanded="false"
                         aria-controls="collapseFour"
                       >
-                        Running A Page Speed Test: Monitoring vs. Measuring
+                        Can I give my pet leftovers from human food?
                       </button>
                     </h2>
                     <div
@@ -132,11 +121,7 @@ export const Faq = () => {
                     >
                       <div className="accordion-body">
                         <p>
-                          when an unknown printer took a galley of type and
-                          scrambled it to make a type specimen awea book It has
-                          survived not only five centuriesbut also the leap into
-                          electronic typesetting good remaining essentiallybut
-                          also the leap into electronic.
+                          It's not recommended. Many human foods contain harmful ingredients (like onions, garlic, chocolate, or too much salt). Stick to veterinarian-approved pet diets to ensure balanced nutrition and safety.
                         </p>
                       </div>
                     </div>
@@ -151,8 +136,7 @@ export const Faq = () => {
                         aria-expanded="false"
                         aria-controls="collapseFive"
                       >
-                        Using Friction As A Feature In Machine Learning
-                        Algorithms
+                        How can I maintain overall pet hygiene besides food care?
                       </button>
                     </h2>
                     <div
@@ -162,11 +146,11 @@ export const Faq = () => {
                     >
                       <div className="accordion-body">
                         <p>
-                          when an unknown printer took a galley of type and
-                          scrambled it to make a type specimen awea book It has
-                          survived not only five centuriesbut also the leap into
-                          electronic typesetting good remaining essentiallybut
-                          also the leap into electronic.
+                          • Bathe and groom pets regularly.<br />
+                          • Brush their teeth or provide dental chews.<br />
+                          • Keep their living area clean.<br />
+                          • Schedule regular vet check-ups.<br />
+                          These steps help prevent infections, parasites, and long-term health issues.
                         </p>
                       </div>
                     </div>

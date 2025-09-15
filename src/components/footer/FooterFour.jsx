@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import rightArrow from "../../assets/img/icon/right_arrow04.svg";
-import wLogo from "../../assets/img/logo/w_logo.png";
+import wLogo from "../../assets/img/logo/logo.png";
 import footerShape1 from "../../assets/img/images/footer_shape01.png";
 import footerShape2 from "../../assets/img/images/footer_shape02.png";
 
@@ -100,7 +100,7 @@ export const FooterFour = () => {
               </div>
               <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6">
                 <div className="footer__widget">
-                  <h4 className="footer__widget-title">Quick Links</h4>
+                  <h4 className="footer__widget-title">Discover</h4>
                   <div className="footer__link">
                     <ul className="list-wrap">
                       <li>

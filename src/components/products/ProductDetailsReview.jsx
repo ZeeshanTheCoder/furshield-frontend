@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { axiosInstance } from "../../services/BaseUrl";
+import { AppContext } from "../../Context/MainContext";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export const ProductDetailsReview = ({ product }) => {
   const [rating, setRating] = useState(0);
@@ -7,15 +10,18 @@ export const ProductDetailsReview = ({ product }) => {
   const [comment, setComment] = useState("");
   const [message, setMessage] = useState("");
   const [reviews, setReviews] = useState([]);
+  const [editingReviewId, setEditingReviewId] = useState(null);
+
+  const { userdata } = useContext(AppContext);
+  const navigate = useNavigate();
 
   // fetch reviews
   useEffect(() => {
-    const fetchMyReview = async () => {
+    const fetchReviews = async () => {
       try {
         const res = await axiosInstance.get(
-          `/reviews-rating/productreview?productId=${product._id}`
+          `/reviews-rating/allProductReview?productId=${product._id}`
         );
-        console.log("Fetched Review:", res.data);
         setReviews(res.data.reviews || []);
       } catch (err) {
         console.log(err.response?.data?.message || "Error fetching review");
@@ -23,25 +29,67 @@ export const ProductDetailsReview = ({ product }) => {
     };
 
     if (product._id) {
-      fetchMyReview();
+      fetchReviews();
     }
   }, [product._id, message]);
 
-  // submit review
+  // create or update review
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const res = await axiosInstance.post("/reviews-rating/createreview", {
-        rating,
-        comment,
-        productId: product._id,
-      });
 
-      setMessage(res.data.message);
+    if (!userdata || !userdata._id) {
+      toast.error("Please login to write a review");
+      return navigate("/login");
+    }
+
+    try {
+      if (editingReviewId) {
+        // update
+        const res = await axiosInstance.put(
+          `/reviews-rating/${editingReviewId}`,
+          {
+            rating,
+            comment,
+          }
+        );
+        setMessage(res.data.message);
+        setEditingReviewId(null);
+      } else {
+        // create
+        const res = await axiosInstance.post("/reviews-rating/createreview", {
+          rating,
+          comment,
+          productId: product._id,
+        });
+        setMessage(res.data.message);
+      }
+
       setRating(0);
       setComment("");
     } catch (err) {
       setMessage(err.response?.data?.message || "Error submitting review");
+    }
+  };
+
+  // edit review
+  const handleEdit = (rev) => {
+    setEditingReviewId(rev._id);
+    setRating(rev.rating);
+    setComment(rev.comment);
+  };
+
+  // delete review
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this review?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      const res = await axiosInstance.delete(`/reviews-rating/${id}`);
+      setMessage(res.data.message);
+    } catch (err) {
+      setMessage(err.response?.data?.message || "Error deleting review");
     }
   };
 
@@ -89,13 +137,15 @@ export const ProductDetailsReview = ({ product }) => {
             </div>
 
             {/* Reviews */}
-            <div className="tab-pane fade" id="reviews-tab-pane" role="tabpanel">
+            <div
+              className="tab-pane fade"
+              id="reviews-tab-pane"
+              role="tabpanel"
+            >
               <div className="product-desc-review">
                 {/* Reviews List */}
                 <div className="product-desc-review-title mb-15">
-                  <h5 className="title">
-                    Customer Reviews ({reviews.length})
-                  </h5>
+                  <h5 className="title">Customer Reviews ({reviews.length})</h5>
                 </div>
 
                 {reviews.length === 0 ? (
@@ -107,10 +157,26 @@ export const ProductDetailsReview = ({ product }) => {
                         <strong>{rev.userId?.name || "Anonymous"}</strong>{" "}
                         <br />
                         <span style={{ color: "#ffc107" }}>
-                          {"★".repeat(rev.rating)}{" "}
-                          {"☆".repeat(5 - rev.rating)}
+                          {"★".repeat(rev.rating)} {"☆".repeat(5 - rev.rating)}
                         </span>
                         <p>{rev.comment}</p>
+                        {/* Edit/Delete Buttons only for owner */}
+                        {userdata && userdata._id === rev.userId?._id && (
+                          <>
+                            <button
+                              className="btn btn-sm btn-outline-primary me-2"
+                              onClick={() => handleEdit(rev)}
+                            >
+                              Edit
+                            </button>
+                            <button
+                              className="btn btn-sm btn-outline-danger"
+                              onClick={() => handleDelete(rev._id)}
+                            >
+                              Delete
+                            </button>
+                          </>
+                        )}
                       </li>
                     ))}
                   </ul>
@@ -118,7 +184,9 @@ export const ProductDetailsReview = ({ product }) => {
 
                 {/* Review Form */}
                 <div className="mt-4">
-                  <h5 className="title">Write a Review</h5>
+                  <h5 className="title">
+                    {editingReviewId ? "Edit Review" : "Write a Review"}
+                  </h5>
                   {message && <p className="text-success">{message}</p>}
 
                   <form onSubmit={handleSubmit}>
@@ -156,7 +224,7 @@ export const ProductDetailsReview = ({ product }) => {
                     />
 
                     <button type="submit" className="btn btn-primary">
-                      Submit Review
+                      {editingReviewId ? "Update Review" : "Submit Review"}
                     </button>
                   </form>
                 </div>

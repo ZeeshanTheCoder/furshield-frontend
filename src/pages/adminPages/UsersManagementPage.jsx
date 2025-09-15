@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import ConfirmationModal from "../../components/adminComponents/ConfirmationModal";
 
-const URL = import.meta.env.VITE_Node_Api_Url;
+import ConfirmationModal from "../../components/adminComponents/ConfirmationModal";
+import { BASE_URL } from "../../services/BaseUrl";
+
+const URL = BASE_URL;
 
 const UsersManagementPage = () => {
   const [users, setUsers] = useState([]);
@@ -21,6 +23,7 @@ const UsersManagementPage = () => {
       const response = await axios.get(`${URL}/user/`);
       setUsers(Array.isArray(response.data.users) ? response.data.users : []);
       setError("");
+      console.log("user data",response.data)
     } catch (err) {
       console.error("Error fetching users:", err);
       setError("Failed to fetch users");

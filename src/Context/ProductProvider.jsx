@@ -33,16 +33,24 @@ export const ProductProvider = ({ children }) => {
 
     
 
-    const createProduct = async (productData) => {
-        try {
-            const res = await axios.post(`${BASE_URL}/product`, productData);
-            setProducts((prev) => [...prev, res.data.product]);
-            return res.data.product;
-        } catch (err) {
-            console.error("Error creating product:", err);
-            throw err;
-        }
-    };
+const createProduct = async (productData) => {
+  try {
+    const formData = new FormData();
+    for (let key in productData) {
+      formData.append(key, productData[key]);
+    }
+
+    const res = await axios.post(`${BASE_URL}/product/createproduct`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    setProducts((prev) => [...prev, res.data.product]);
+    return res.data.product;
+  } catch (err) {
+    console.error("Error creating product:", err);
+    throw err;
+  }
+};
 
     const updateProduct = async (id, updates) => {
         try {

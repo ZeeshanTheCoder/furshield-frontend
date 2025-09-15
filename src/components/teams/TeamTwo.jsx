@@ -12,27 +12,27 @@ import teamShape from "../../assets/img/team/h2_team_shape.png";
 
 export const TeamTwo = () => {
   const teamMembers = [
-    {
-      src: teamImg01,
-      name: "Daria Andaloro",
-      designation: "Veterinary Technician",
-    },
-    {
-      src: teamImg02,
-      name: "Michael Brian",
-      designation: "Medicine Specialist",
-    },
-    {
-      src: teamImg03,
-      name: "Kenroly Gajon",
-      designation: "Food Technician",
-    },
-    {
-      src: teamImg04,
-      name: "Lizay Arianya",
-      designation: "Veterinary Technician",
-    },
-  ];
+      {
+        src: teamImg01,
+        name: "Muhammad Zeeshan",
+        designation: "Full Stack Developer",
+      },
+      {
+        src: teamImg02,
+        name: "Faraz Sial",
+        designation: "MERN Stack Developer",
+      },
+      {
+        src: teamImg03,
+        name: "Arsalan Ali Khan",
+        designation: "Full Stack Developer",
+      },
+      {
+        src: teamImg04,
+        name: "Abdullah",
+        designation: "Designer",
+      },
+    ]
 
   return (
     <section className="team__area-two">

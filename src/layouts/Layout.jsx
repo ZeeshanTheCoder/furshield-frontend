@@ -9,6 +9,7 @@ import { FooterThree } from "../components/footer/FooterThree";
 import { HeaderFour } from "../components/header/HeaderFour";
 import { FooterFour } from "../components/footer/FooterFour";
 import { Breadcrumb } from "../components/breadcrumb/Breadcrumb";
+import { ChatIcon } from "../components/ai_chat/ChatIcon";
 
 export const Layout = ({
   children,
@@ -22,6 +23,7 @@ export const Layout = ({
   return (
     <>
       {/* scroll to top */}
+      <ChatIcon />
       <ScrollToTop />
 
       {/* header */}

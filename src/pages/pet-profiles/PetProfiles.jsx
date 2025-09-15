@@ -4,6 +4,7 @@ import { axiosInstance } from "../../services/BaseUrl";
 import { Layout } from "../../layouts/Layout";
 import { AppContext } from "../../Context/MainContext";
 import { useNavigate } from "react-router-dom"; // 👈 Add this
+import { toast } from "react-toastify";
 
 const PetProfiles = () => {
   const { userdata } = useContext(AppContext);
@@ -37,7 +38,7 @@ const PetProfiles = () => {
       console.log(res.data.pets);
     } catch (error) {
       console.error("Error fetching pets:", error.message);
-      alert("Failed to load pets. Please login again.");
+      toast("Failed to load pets. Please login again.");
     } finally {
       setLoading(false);
     }
@@ -56,11 +57,11 @@ const PetProfiles = () => {
 
     try {
       await axiosInstance.delete(`/pets/petsdelete/${petId}`);
-      alert("Pet deleted successfully!");
+      toast("Pet deleted successfully!");
       fetchPets();
     } catch (error) {
       console.error("Delete error:", error.response?.data || error.message);
-      alert(
+      toast(
         "Failed to delete pet: " +
           (error.response?.data?.message || error.message)
       );

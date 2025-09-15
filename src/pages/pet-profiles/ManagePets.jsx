@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Layout } from "../../layouts/Layout";
 import { axiosInstance } from "../../services/BaseUrl";
 import { useNavigate, useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const ManagePets = () => {
   const navigate = useNavigate();
@@ -57,7 +58,7 @@ const ManagePets = () => {
           });
         } catch (error) {
           console.error("Fetch Pet Error:", error);
-          alert("Failed to load pet data.");
+          toast("Failed to load pet data.");
           navigate("/pet-profiles");
         }
       };
@@ -105,20 +106,20 @@ const ManagePets = () => {
         res = await axiosInstance.put(`/pets/petsupdate/${petId}`, data, {
           headers: { "Content-Type": "multipart/form-data" },
         });
-        alert("Pet updated successfully!");
+        toast("Pet updated successfully!");
       } else {
         // ✅ Create new pet
         res = await axiosInstance.post("/pets/petscreate", data, {
           headers: { "Content-Type": "multipart/form-data" },
         });
-        alert("Pet created successfully!");
+        toast("Pet created successfully!");
       }
 
       console.log(res.data);
       navigate("/pet-profiles");
     } catch (error) {
       console.error(error.response?.data || error.message);
-      alert(
+      toast(
         "Operation failed: " + (error.response?.data?.message || error.message)
       );
     } finally {

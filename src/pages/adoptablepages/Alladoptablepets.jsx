@@ -3,6 +3,7 @@ import { axiosInstance } from "../../services/BaseUrl";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Layout } from "../../layouts/Layout";
+import { toast } from "react-toastify";
 
 const AdoptablePetsList = () => {
   const [pets, setPets] = useState([]);
@@ -15,7 +16,7 @@ const AdoptablePetsList = () => {
         setPets(res.data.pets || []);
       } catch (err) {
         console.error("Error fetching pets:", err);
-        alert("Failed to fetch pets ❌");
+        toast("Failed to fetch pets ❌");
       }
     };
 
@@ -29,10 +30,10 @@ const AdoptablePetsList = () => {
         petId,
         shelterId,
       });
-      alert(res.data.message || "Adoption request sent!");
+      toast(res.data.message || "Adoption request sent!");
     } catch (err) {
       console.error("Error in adoption request:", err);
-      alert("Failed to send adoption request ❌");
+      toast("Failed to send adoption request ❌");
     }
   };
 

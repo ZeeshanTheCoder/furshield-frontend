@@ -8,8 +8,8 @@ export const HeaderTop = () => {
           <div className="col-xl-6 col-lg-8">
             <ul className="tg-header__top-info left-side list-wrap">
               <li>
-                <i className="flaticon-placeholder"></i>59 Jakc Street Brooklyn,
-                New York
+                <i className="flaticon-placeholder"></i>Aptech Metro Star Gate,
+                Karachi
               </li>
               <li>
                 <i className="flaticon-mail"></i>

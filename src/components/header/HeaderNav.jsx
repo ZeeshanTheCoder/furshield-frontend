@@ -38,41 +38,20 @@ export const HeaderNav = () => {
             : ""
         }`}
       >
-        <a href="#">Pages</a>
+        <a>Resources</a>
         <ul className="sub-menu">
-          <li className={pathname === "/animal" ? "active" : ""}>
-            <Link to="/animal">All Pets</Link>
-          </li>
-          <li className={pathname === "/animal-details" ? "active" : ""}>
-            <Link to="/animal-details">Pet Details</Link>
-          </li>
+        
           <li className={pathname === "/gallery" ? "active" : ""}>
             <Link to="/gallery">Gallery</Link>
           </li>
           <li className={pathname === "/faq" ? "active" : ""}>
             <Link to="/faq">Faq Page</Link>
           </li>
-          <li className={pathname === "/pricing" ? "active" : ""}>
-            <Link to="/pricing">Pricing Page</Link>
-          </li>
-          <li className={pathname === "/reservation" ? "active" : ""}>
-            <Link to="/reservation">Reservation Page</Link>
-          </li>
-          <li className={pathname === "/team" ? "active" : ""}>
-            <Link to="/team">Our Team</Link>
-          </li>
-          <li className={pathname === "/team-details" ? "active" : ""}>
-            <Link to="/team-details">Team Details</Link>
-          </li>
+          
           <li className={pathname === "/blog" ? "active" : ""}>
             <Link to="/blog">Our Blog</Link>
           </li>
-          <li className={pathname === "/blog-details" ? "active" : ""}>
-            <Link to="/blog-details">Blog Details</Link>
-          </li>
-          <li className={pathname === "/error" ? "active" : ""}>
-            <Link to="/error">404 Error Page</Link>
-          </li>
+         
         </ul>
       </li>
       <li className={pathname === "/contact" ? "active" : ""}>

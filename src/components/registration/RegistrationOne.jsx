@@ -2,6 +2,7 @@ import React from "react";
 
 import registrationShape from "../../assets/img/images/registration_shape.svg";
 import rightArrow from "../../assets/img/icon/right_arrow.svg";
+import { Link } from "react-router-dom";
 
 export const RegistrationOne = () => {
   return (
@@ -75,10 +76,10 @@ export const RegistrationOne = () => {
                   </div>
                 </div>
                 <div className="submit__btn text-center mt-25">
-                  <button type="submit" className="btn">
+                  <Link to={'/appointment-booking'} type="submit" className="btn">
                     Start a Reservation
                     <img src={rightArrow} alt="" className="injectable" />
-                  </button>
+                  </Link>
                 </div>
               </form>
             </div>

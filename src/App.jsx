@@ -47,6 +47,8 @@ import AdoptionRequestForm from "./pages/adoptablerequestSchema/AdotptableuserSi
 import AdoptablePets from "./pages/adoptablepages/Alladoptablepets";
 import ShelterDashboard from "./pages/adoptablepages/ShelterDashboard";
 import AdminApp from "./pages/adminPages/AdminApp";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // ProtectedRoute
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -143,7 +145,7 @@ function App() {
           }
         />
         <Route
-          path="/appointment-booking"
+          path="/"
           element={
             <ProtectedRoute allowedRoles={["owner"]}>
               <AppointmentBooking />
@@ -300,6 +302,18 @@ function App() {
 
         <Route path="*" element={<Error />} />
       </Routes>
+
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </>
   );
 }
