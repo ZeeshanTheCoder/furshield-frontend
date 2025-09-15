@@ -33,9 +33,7 @@ export const Login = () => {
     setIsSuccess(false);
 
     try {
-      const result = await axiosInstance.post("/auth/login", formData, {
-        withCredentials: true,
-      });
+      const result = await axiosInstance.post("/auth/login", formData);
 
       if (result.data.isLogin && result.data.user) {
         const user = result.data.user;
