@@ -145,7 +145,7 @@ function App() {
           }
         />
         <Route
-          path="/"
+          path="/appointment-booking"
           element={
             <ProtectedRoute allowedRoles={["owner"]}>
               <AppointmentBooking />
