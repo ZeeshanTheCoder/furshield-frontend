@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Layout } from "../../layouts/Layout";
-import { axiosInstance } from "../../services/BaseUrl";
+import { axiosInstance, BASE_URL } from "../../services/BaseUrl";
 import rightArrow from "../../assets/img/icon/right_arrow.svg";
 import { useParams, useNavigate } from "react-router-dom";
+import { QRCodeCanvas } from "qrcode.react";
 
 export const HealthRecords = () => {
   const { petId } = useParams();
@@ -346,8 +347,8 @@ export const HealthRecords = () => {
                         {loading
                           ? "Saving..."
                           : formMode === "create"
-                          ? "Add Record"
-                          : "Update Record"}
+                            ? "Add Record"
+                            : "Update Record"}
                         <img
                           src={rightArrow}
                           alt=""
@@ -369,9 +370,8 @@ export const HealthRecords = () => {
 
                   {message && (
                     <p
-                      className={`ajax-response mb-0 mt-3 ${
-                        isSuccess ? "text-success" : "text-danger"
-                      }`}
+                      className={`ajax-response mb-0 mt-3 ${isSuccess ? "text-success" : "text-danger"
+                        }`}
                       style={{ fontWeight: "500" }}
                     >
                       {message}
@@ -496,15 +496,29 @@ export const HealthRecords = () => {
                                   <strong>📎 Files:</strong>
                                   <div className="mt-1">
                                     {record.documents.map((doc, idx) => (
-                                      <button
-                                        key={idx}
-                                        className="btn btn-sm btn-outline-secondary me-1 mb-1"
-                                        onClick={() =>
-                                          window.open(doc, "_blank")
-                                        }
-                                      >
-                                        File {idx + 1}
-                                      </button>
+                                      <>
+                                        <button
+                                          key={idx}
+                                          className="btn btn-sm btn-outline-secondary me-1 mb-1"
+                                          onClick={() =>
+                                            window.open(doc, "_blank")
+                                          }
+                                        >
+                                          File {idx + 1}
+                                        </button>
+                                        <div className="mt-3 text-center">
+                                          <strong>📱 Scan to Download:</strong>
+                                          <div className="mt-2">
+                                            <QRCodeCanvas
+                                              value={`${BASE_URL}/health/download/${record._id}`}
+                                              size={120}
+                                              fgColor="#000000"
+                                            />
+                                          </div>
+                                        </div>
+
+                                      </>
+
                                     ))}
                                   </div>
                                 </div>

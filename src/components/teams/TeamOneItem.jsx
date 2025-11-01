@@ -72,7 +72,7 @@ export const TeamOneItem = ({ src, name, designation }) => {
         </div>
         <div className="team__item-content">
           <h4 className="title">
-            <Link to="/team-details">{name}</Link>
+            {name}
           </h4>
           <span>{designation}</span>
         </div>
