@@ -929,7 +929,7 @@ textarea {
   z-index: 1;
 }
 .breadcrumb__content {
-  padding: 76px 0;
+  padding: 50px 0;
 }
 @media (max-width: 1199.98px) {
   .breadcrumb__content {
@@ -11632,7 +11632,7 @@ blockquote p {
     37. Contact
 ===============================*/
 .contact__area {
-  padding: 130px 0;
+  padding: 20px 0;
 }
 @media (max-width: 767.98px) {
   .contact__area {

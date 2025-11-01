@@ -23,27 +23,26 @@ export const HeaderOne = () => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-  try {
-    const response = await axiosInstance.delete("/auth/logout", {
-      withCredentials: true, // Important: ensure cookie delete request works
-    });
+    try {
+      const response = await axiosInstance.delete("/auth/logout", {
+        withCredentials: true, // Important: ensure cookie delete request works
+      });
 
-    if (response.data.isLogout) {
-      localStorage.removeItem("userdata"); 
-      setuserdata(null); 
-      navigate("/login", { replace: true });
-    } else {
-      toast("Logout failed: " + response.data.message);
+      if (response.data.isLogout) {
+        localStorage.removeItem("userdata");
+        setuserdata(null);
+        navigate("/login", { replace: true });
+      } else {
+        toast("Logout failed: " + response.data.message);
+      }
+    } catch (error) {
+      console.error(
+        "Logout error:",
+        error.response ? error.response.data : error.message
+      );
+      toast("Something went wrong during logout.");
     }
-  } catch (error) {
-    console.error(
-      "Logout error:",
-      error.response ? error.response.data : error.message
-    );
-    toast("Something went wrong during logout.");
-  }
-};
-
+  };
 
   useMobileMenu();
 
@@ -176,7 +175,13 @@ export const HeaderOne = () => {
                               style={{ position: "relative" }}
                             >
                               {/* Original Profile Button */}
-                              <div className="btn d-flex align-items-center">
+                              <div
+                                className="btn d-flex align-items-center"
+                                style={{
+                                  backgroundColor: "#0056b3",
+                                  color: "white",
+                                }}
+                              >
                                 <i className="flaticon-user me-2"></i>
                                 {userdatastate.name}
                               </div>
@@ -189,8 +194,15 @@ export const HeaderOne = () => {
                                     top: "100%",
                                     left: 0,
                                     right: 0,
-                                    marginTop: "1px",
+                                    marginLeft: "auto",
+                                    marginTop: "0px",
                                     zIndex: 1000,
+                                    backgroundColor: "white",
+                                    borderRadius: "8px",
+                                    boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                                    border: "1px solid #ddd",
+                                    overflow: "hidden",
+                                    minWidth: "200px",
                                   }}
                                 >
                                   {/* Role-based menu options */}
@@ -198,56 +210,76 @@ export const HeaderOne = () => {
                                     <>
                                       <Link
                                         to="/profile"
-                                        className="btn btn-outline-danger btn-sm w-100"
-                                        style={{ whiteSpace: "nowrap" }}
+                                        className="dropdown-item d-flex align-items-center p-3"
+                                        style={{
+                                          color: "#333",
+                                          textDecoration: "none",
+                                          fontSize: "14px",
+                                        }}
                                       >
-                                        <i className="flaticon-user me-1"></i>{" "}
+                                        <i
+                                          className="flaticon-user me-2"
+                                          style={{ fontSize: "16px" }}
+                                        ></i>{" "}
                                         Profile
                                       </Link>
                                       <Link
                                         to="/admin"
-                                        className="btn btn-outline-danger btn-sm w-100"
-                                        style={{ whiteSpace: "nowrap" }}
+                                        className="dropdown-item d-flex align-items-center p-3"
+                                        style={{
+                                          color: "#333",
+                                          textDecoration: "none",
+                                          fontSize: "14px",
+                                        }}
                                       >
-                                        <i className="flaticon-user me-1"></i>{" "}
                                         Dashboard
                                       </Link>
-                                      
                                     </>
                                   )}
                                   {userdatastate.role === "owner" && (
                                     <>
                                       <Link
                                         to="/profile"
-                                        className="btn btn-outline-danger btn-sm w-100"
-                                        style={{ whiteSpace: "nowrap" }}
+                                        className="dropdown-item d-flex align-items-center p-3"
+                                        style={{
+                                          color: "#333",
+                                          textDecoration: "none",
+                                          fontSize: "14px",
+                                        }}
                                       >
-                                        <i className="flaticon-user me-1"></i>{" "}
                                         Profile
                                       </Link>
                                       <Link
                                         to="/pet-profiles"
-                                        className="btn btn-outline-danger btn-sm w-100"
-                                        style={{ whiteSpace: "nowrap" }}
+                                        className="dropdown-item d-flex align-items-center p-3"
+                                        style={{
+                                          color: "#333",
+                                          textDecoration: "none",
+                                          fontSize: "14px",
+                                        }}
                                       >
-                                        <i className="icon-pet"></i> Pet
-                                        Profiles
+                                        Pet Profiles
                                       </Link>
-                                     
                                       <Link
                                         to="/pet-care"
-                                        className="btn btn-outline-danger btn-sm w-100"
-                                        style={{ whiteSpace: "nowrap" }}
+                                        className="dropdown-item d-flex align-items-center p-3"
+                                        style={{
+                                          color: "#333",
+                                          textDecoration: "none",
+                                          fontSize: "14px",
+                                        }}
                                       >
-                                        <i className="icon-care"></i> Care
-                                        Options
+                                        Care Options
                                       </Link>
                                       <Link
                                         to="/appointment-booking"
-                                        className="btn btn-outline-danger btn-sm w-100"
-                                        style={{ whiteSpace: "nowrap" }}
+                                        className="dropdown-item d-flex align-items-center p-3"
+                                        style={{
+                                          color: "#333",
+                                          textDecoration: "none",
+                                          fontSize: "14px",
+                                        }}
                                       >
-                                        <i className="icon-appointment"></i>{" "}
                                         Appointment Booking
                                       </Link>
                                     </>
@@ -256,26 +288,35 @@ export const HeaderOne = () => {
                                     <>
                                       <Link
                                         to="/profile"
-                                        className="btn btn-outline-danger btn-sm w-100"
-                                        style={{ whiteSpace: "nowrap" }}
+                                        className="dropdown-item d-flex align-items-center p-3"
+                                        style={{
+                                          color: "#333",
+                                          textDecoration: "none",
+                                          fontSize: "14px",
+                                        }}
                                       >
-                                        <i className="flaticon-user me-1"></i>{" "}
                                         Profile
                                       </Link>
                                       <Link
                                         to="/pet-medical-history"
-                                        className="btn btn-outline-danger btn-sm w-100"
-                                        style={{ whiteSpace: "nowrap" }}
+                                        className="dropdown-item d-flex align-items-center p-3"
+                                        style={{
+                                          color: "#333",
+                                          textDecoration: "none",
+                                          fontSize: "14px",
+                                        }}
                                       >
-                                        <i className="icon-medical"></i> Pet
-                                        Medical History
+                                        Pet Medical History
                                       </Link>
                                       <Link
                                         to="/manage-appointments"
-                                        className="btn btn-outline-danger btn-sm w-100"
-                                        style={{ whiteSpace: "nowrap" }}
+                                        className="dropdown-item d-flex align-items-center p-3"
+                                        style={{
+                                          color: "#333",
+                                          textDecoration: "none",
+                                          fontSize: "14px",
+                                        }}
                                       >
-                                        <i className="icon-appointments"></i>{" "}
                                         Manage Appointments
                                       </Link>
                                     </>
@@ -284,54 +325,83 @@ export const HeaderOne = () => {
                                     <>
                                       <Link
                                         to="/profile"
-                                        className="btn btn-outline-danger btn-sm w-100"
-                                        style={{ whiteSpace: "nowrap" }}
+                                        className="dropdown-item d-flex align-items-center p-3"
+                                        style={{
+                                          color: "#333",
+                                          textDecoration: "none",
+                                          fontSize: "14px",
+                                        }}
                                       >
-                                        <i className="flaticon-user me-1"></i>{" "}
                                         Profile
                                       </Link>
                                       <Link
                                         to="/list-adoptable"
-                                        className="btn btn-outline-danger btn-sm w-100"
-                                        style={{ whiteSpace: "nowrap" }}
+                                        className="dropdown-item d-flex align-items-center p-3"
+                                        style={{
+                                          color: "#333",
+                                          textDecoration: "none",
+                                          fontSize: "14px",
+                                        }}
                                       >
-                                        <i className="icon-adopt"></i> List
-                                        Adoptable
+                                        List Adoptable
                                       </Link>
                                       <Link
                                         to="/pet-care-status"
-                                        className="btn btn-outline-danger btn-sm w-100"
-                                        style={{ whiteSpace: "nowrap" }}
+                                        className="dropdown-item d-flex align-items-center p-3"
+                                        style={{
+                                          color: "#333",
+                                          textDecoration: "none",
+                                          fontSize: "14px",
+                                        }}
                                       >
-                                        <i className="icon-care"></i> Pet Care
-                                        Status
+                                        Pet Care Status
                                       </Link>
                                       <Link
                                         to="/notifications"
-                                        className="btn btn-outline-danger btn-sm w-100"
-                                        style={{ whiteSpace: "nowrap" }}
+                                        className="dropdown-item d-flex align-items-center p-3"
+                                        style={{
+                                          color: "#333",
+                                          textDecoration: "none",
+                                          fontSize: "14px",
+                                        }}
                                       >
-                                        <i className="icon-notification"></i>{" "}
                                         Notification
                                       </Link>
                                     </>
                                   )}
 
                                   {/* Common options */}
-
                                   <button
-                                    className="btn btn-outline-danger btn-sm w-100"
+                                    className="dropdown-item d-flex align-items-center p-3"
                                     onClick={handleLogout}
-                                    style={{ whiteSpace: "nowrap" }}
+                                    style={{
+                                      color: "#dc3545",
+                                      textDecoration: "none",
+                                      fontSize: "14px",
+                                      background: "none",
+                                      border: "none",
+                                      textAlign: "left",
+                                      width: "100%",
+                                    }}
                                   >
-                                    <i className="fas fa-sign-out-alt me-1"></i>{" "}
+                                    <i
+                                      className="fas fa-sign-out-alt me-2"
+                                      style={{ fontSize: "16px" }}
+                                    ></i>{" "}
                                     Logout
                                   </button>
                                 </div>
                               )}
                             </div>
                           ) : (
-                            <Link to="/login" className="btn">
+                            <Link
+                              to="/login"
+                              className="btn"
+                              style={{
+                                backgroundColor: "#0056b3",
+                                color: "white",
+                              }}
+                            >
                               <i className="flaticon-user"></i> Sign In
                             </Link>
                           )}
@@ -351,7 +421,6 @@ export const HeaderOne = () => {
             </div>
           </div>
         </div>
-
 
         {/* off canvas */}
         <HeaderOffcanvas active={showCanvas} toggleCanvas={toggleCanvas} />

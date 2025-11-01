@@ -3,7 +3,6 @@ import { Layout } from "../../layouts/Layout";
 import { axiosInstance } from "../../services/BaseUrl";
 import { AppContext } from "../../Context/MainContext";
 import rightArrow from "../../assets/img/icon/right_arrow.svg";
-import { useNavigate } from "react-router-dom";
 
 export const Profile = () => {
   const { userdata, setuserdata } = useContext(AppContext);
@@ -16,7 +15,7 @@ export const Profile = () => {
     role: "",
     specialization: "",
     experience: "",
-    availableSlots: [{ day: "", time: "" }], // ✅ Array
+    availableSlots: [{ day: "", time: "" }],
     shelterName: "",
     contactPerson: "",
   });
@@ -29,27 +28,55 @@ export const Profile = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const res = await axiosInstance.get("/user/getuser");
+        // Step 1: Get user data from localStorage
+        const userDataStr = localStorage.getItem("userdata");
+        if (!userDataStr) {
+          setMessage("User not logged in.");
+          return;
+        }
 
-        if (res.data.user) {
-          setFormData({
-            name: res.data.user.name || "",
-            email: res.data.user.email || "",
-            contactNumber: res.data.user.contactNumber || "",
-            address: res.data.user.address || "",
-            role: res.data.user.role || "owner",
+        const userData = JSON.parse(userDataStr);
+        const userId = userData._id;
+        const userRole = userData.role;
 
-            // Vet fields (from vetProfile)
-            specialization: res.data.vetProfile?.specialization || "",
-            experience: res.data.vetProfile?.experience || "",
-            availableSlots: res.data.vetProfile?.availableSlots?.length
-              ? res.data.vetProfile.availableSlots
-              : [{ day: "", time: "" }],
+        // Set basic user data immediately
+        setFormData((prev) => ({
+          ...prev,
+          name: userData.name || "",
+          email: userData.email || "",
+          contactNumber: userData.contactNumber || "",
+          address: userData.address || "",
+          role: userRole || "owner",
+          shelterName: userData.shelterName || "",
+          contactPerson: userData.contactPerson || "",
+        }));
 
-            // Shelter fields
-            shelterName: res.data.user.shelterName || "",
-            contactPerson: res.data.user.contactPerson || "",
-          });
+        // Step 2: If user is a vet, fetch vet-specific data
+        if (userRole === "vet") {
+          const vetResponse = await axiosInstance.get("/vet/allvet");
+          const allVets = vetResponse.data;
+
+          // Step 3: Find vet profile matching this userId
+          const vetProfile = allVets.find(vet => vet.userId?._id === userId || vet._id === userId || vet.userId === userId);
+
+          if (vetProfile) {
+            setFormData((prev) => ({
+              ...prev,
+              specialization: vetProfile.specialization || "",
+              experience: vetProfile.experience || "",
+              availableSlots: Array.isArray(vetProfile.availableSlots) && vetProfile.availableSlots.length > 0
+                ? vetProfile.availableSlots
+                : [{ day: "", time: "" }],
+            }));
+          } else {
+            // No vet profile exists yet — keep defaults
+            setFormData((prev) => ({
+              ...prev,
+              specialization: "",
+              experience: "",
+              availableSlots: [{ day: "", time: "" }],
+            }));
+          }
         }
       } catch (error) {
         setMessage("Failed to load profile. Please try again.");
@@ -68,7 +95,6 @@ export const Profile = () => {
     }));
   };
 
-  // ✅ Handle change for slots
   const handleSlotChange = (index, field, value) => {
     const updatedSlots = [...formData.availableSlots];
     updatedSlots[index][field] = value;
@@ -98,7 +124,6 @@ export const Profile = () => {
         address: formData.address,
       };
 
-      // Vet specific
       if (formData.role === "vet") {
         payload = {
           ...payload,
@@ -108,7 +133,6 @@ export const Profile = () => {
         };
       }
 
-      // Shelter specific
       if (formData.role === "shelter") {
         payload = {
           ...payload,
@@ -117,22 +141,27 @@ export const Profile = () => {
         };
       }
 
-      // ✅ Send update to API
       const result = await axiosInstance.post("/vet/createvet", payload);
 
-      if (result.data.isUpdated) {
+      if (result.data.isUpdated || result.status === 200 || result.status === 201) {
         setIsSuccess(true);
         setMessage("Profile updated successfully!");
 
-        setuserdata({
-          ...userdata,
-          user: {
-            ...userdata.user,
-            ...payload,
-            email: formData.email,
-            role: formData.role,
-          },
-        });
+        // Update localStorage and context
+        const updatedUser = {
+          ...JSON.parse(localStorage.getItem("userdata")),
+          name: formData.name,
+          contactNumber: formData.contactNumber,
+          address: formData.address,
+          role: formData.role,
+          ...(formData.role === "shelter" && {
+            shelterName: formData.shelterName,
+            contactPerson: formData.contactPerson,
+          })
+        };
+
+        localStorage.setItem("userdata", JSON.stringify(updatedUser));
+        setuserdata({ user: updatedUser });
 
         setTimeout(() => {
           window.location.reload();
@@ -258,7 +287,6 @@ export const Profile = () => {
                                 marginBottom: "10px",
                               }}
                             >
-                              {/* Day input with styling */}
                               <div className="form-grp" style={{ flex: 1 }}>
                                 <input
                                   type="text"
@@ -273,7 +301,6 @@ export const Profile = () => {
                                   }
                                 />
                               </div>
-                              {/* Time input with styling */}
                               <div className="form-grp" style={{ flex: 1 }}>
                                 <input
                                   type="text"
