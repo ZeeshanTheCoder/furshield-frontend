@@ -34,7 +34,7 @@ const ShelterDashboard = () => {
   return (
     <Layout>
       <div className="container mt-5">
-        <h2 className="text-center mb-4">📝 Shelter Dashboard</h2>
+        <h2 className="text-center mb-4">📝 Adopter Requests</h2>
         {loading ? <p className="text-center">Loading...</p> :
           requests.length === 0 ? <p className="text-center">No requests 🐾</p> :
           <div className="row">

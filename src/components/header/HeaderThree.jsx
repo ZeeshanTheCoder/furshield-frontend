@@ -177,7 +177,7 @@ export const HeaderThree = () => {
                                       <>
                                         <Link
                                           to="/profile"
-                                          className="dropdown-item d-flex align-items-center p-3"
+                                          className="dropdown-item d-flex align-items-center py-2 px-3"
                                           style={{
                                             color: "#333",
                                             textDecoration: "none",
@@ -188,7 +188,7 @@ export const HeaderThree = () => {
                                         </Link>
                                         <Link
                                           to="/pet-profiles"
-                                          className="dropdown-item d-flex align-items-center p-3"
+                                          className="dropdown-item d-flex align-items-center py-2 px-3"
                                           style={{
                                             color: "#333",
                                             textDecoration: "none",
@@ -198,8 +198,19 @@ export const HeaderThree = () => {
                                           Pet Profiles
                                         </Link>
                                         <Link
+                                          to="/adoptable"
+                                          className="dropdown-item d-flex align-items-center px-3 py-2"
+                                          style={{
+                                            color: "#333",
+                                            textDecoration: "none",
+                                            fontSize: "14px",
+                                          }}
+                                        >
+                                          Adopt Pets
+                                        </Link>
+                                        <Link
                                           to="/pet-care"
-                                          className="dropdown-item d-flex align-items-center p-3"
+                                          className="dropdown-item d-flex align-items-center py-2 px-3"
                                           style={{
                                             color: "#333",
                                             textDecoration: "none",
@@ -210,7 +221,7 @@ export const HeaderThree = () => {
                                         </Link>
                                         <Link
                                           to="/appointment-booking"
-                                          className="dropdown-item d-flex align-items-center p-3"
+                                          className="dropdown-item d-flex align-items-center py-2 px-3"
                                           style={{
                                             color: "#333",
                                             textDecoration: "none",
@@ -225,7 +236,7 @@ export const HeaderThree = () => {
                                       <>
                                         <Link
                                           to="/profile"
-                                          className="dropdown-item d-flex align-items-center p-3"
+                                          className="dropdown-item d-flex align-items-center py-2 px-3"
                                           style={{
                                             color: "#333",
                                             textDecoration: "none",
@@ -236,7 +247,7 @@ export const HeaderThree = () => {
                                         </Link>
                                         <Link
                                           to="/pet-medical-history"
-                                          className="dropdown-item d-flex align-items-center p-3"
+                                          className="dropdown-item d-flex align-items-center py-2 px-3"
                                           style={{
                                             color: "#333",
                                             textDecoration: "none",
@@ -247,7 +258,7 @@ export const HeaderThree = () => {
                                         </Link>
                                         <Link
                                           to="/manage-appointments"
-                                          className="dropdown-item d-flex align-items-center p-3"
+                                          className="dropdown-item d-flex align-items-center py-2 px-3"
                                           style={{
                                             color: "#333",
                                             textDecoration: "none",
@@ -262,7 +273,7 @@ export const HeaderThree = () => {
                                       <>
                                         <Link
                                           to="/profile"
-                                          className="dropdown-item d-flex align-items-center p-3"
+                                          className="dropdown-item d-flex align-items-center py-2 px-3"
                                           style={{
                                             color: "#333",
                                             textDecoration: "none",
@@ -272,8 +283,8 @@ export const HeaderThree = () => {
                                           Profile
                                         </Link>
                                         <Link
-                                          to="/list-adoptable"
-                                          className="dropdown-item d-flex align-items-center p-3"
+                                          to="/adoptable"
+                                          className="dropdown-item d-flex align-items-center py-2 px-3"
                                           style={{
                                             color: "#333",
                                             textDecoration: "none",
@@ -284,7 +295,7 @@ export const HeaderThree = () => {
                                         </Link>
                                         <Link
                                           to="/pet-care-status"
-                                          className="dropdown-item d-flex align-items-center p-3"
+                                          className="dropdown-item d-flex align-items-center py-2 px-3"
                                           style={{
                                             color: "#333",
                                             textDecoration: "none",
@@ -294,22 +305,22 @@ export const HeaderThree = () => {
                                           Pet Care Status
                                         </Link>
                                         <Link
-                                          to="/notifications"
-                                          className="dropdown-item d-flex align-items-center p-3"
+                                          to="/adopter-requests"
+                                          className="dropdown-item d-flex align-items-center py-2 px-3"
                                           style={{
                                             color: "#333",
                                             textDecoration: "none",
                                             fontSize: "14px",
                                           }}
                                         >
-                                          Notification
+                                          Adopter Requests
                                         </Link>
                                       </>
                                     )}
 
                                     {/* Common options */}
                                     <button
-                                      className="dropdown-item d-flex align-items-center p-3"
+                                      className="dropdown-item d-flex align-items-center px-3 py-2"
                                       onClick={handleLogout}
                                       style={{
                                         color: "#dc3545",

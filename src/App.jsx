@@ -49,6 +49,7 @@ import ShelterDashboard from "./pages/adoptablepages/ShelterDashboard";
 import AdminApp from "./pages/adminPages/AdminApp";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import AdoptablePetsList from "./pages/adoptablepages/Alladoptablepets";
 
 // ProtectedRoute
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -271,7 +272,7 @@ function App() {
           }
         />
         <Route
-          path="/adoptable"
+          path="/create-adoptable-pets"
           element={
             <ProtectedRoute allowedRoles={["shelter"]}>
               <CreateAdoptablePet />
@@ -279,7 +280,15 @@ function App() {
           }
         />
         <Route
-          path="/shelterDashboard"
+          path="/adoptable"
+          element={
+            <ProtectedRoute allowedRoles={["owner", "shelter"]}>
+              <AdoptablePetsList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/adopter-requests"
           element={
             <ProtectedRoute allowedRoles={["shelter"]}>
               <ShelterDashboard />

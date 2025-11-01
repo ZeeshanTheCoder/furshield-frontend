@@ -23,7 +23,7 @@ const UsersManagementPage = () => {
       const response = await axios.get(`${URL}/user/`);
       setUsers(Array.isArray(response.data.users) ? response.data.users : []);
       setError("");
-      console.log("user data",response.data)
+      console.log("user data", response.data);
     } catch (err) {
       console.error("Error fetching users:", err);
       setError("Failed to fetch users");
@@ -40,7 +40,18 @@ const UsersManagementPage = () => {
 
   const confirmDeleteUser = async () => {
     try {
-      await axios.delete(`${URL}/user/${deleteUserId}`);
+      // Find the user object to get their email
+      const userToDelete = users.find((user) => user._id === deleteUserId);
+      if (!userToDelete) {
+        toast.error("User not found");
+        return;
+      }
+
+      // Send email in request body as expected by backend
+      await axios.delete(`${URL}/user/userdelete`, {
+        data: { email: userToDelete.email }, // axios uses 'data' for request body in DELETE
+      });
+
       setUsers(users.filter((user) => user._id !== deleteUserId));
       toast.success("User deleted successfully");
     } catch (err) {
@@ -65,9 +76,7 @@ const UsersManagementPage = () => {
   return (
     <div className="min-vh-100 bg-light p-3 p-md-4 p-lg-5">
       <div className="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-4">
-        <h1 className="h2 fw-bold text-dark mb-3 mb-sm-0">
-          User Management
-        </h1>
+        <h1 className="h2 fw-bold text-dark mb-3 mb-sm-0">User Management</h1>
       </div>
 
       {/* Search + Filter */}
@@ -95,7 +104,6 @@ const UsersManagementPage = () => {
           </select>
         </div>
       </div>
-
 
       {/* Table */}
       {loading ? (
@@ -132,26 +140,23 @@ const UsersManagementPage = () => {
                 {filteredUsers.length > 0 ? (
                   filteredUsers.map((user, index) => (
                     <tr key={user._id || index}>
-                      <td className="ps-4 py-3 text-dark">
-                        {index + 1}
-                      </td>
+                      <td className="ps-4 py-3 text-dark">{index + 1}</td>
                       <td className="px-3 py-3 fw-medium text-dark">
                         {user.name}
                       </td>
-                      <td className="px-3 py-3 text-muted">
-                        {user.email}
-                      </td>
+                      <td className="px-3 py-3 text-muted">{user.email}</td>
                       <td className="px-3 py-3">
                         <span
                           className={`badge 
-                          ${user.role === "owner"
+                          ${
+                            user.role === "owner"
                               ? "bg-success-subtle text-success"
                               : user.role === "vet"
-                                ? "bg-primary-subtle text-primary"
-                                : user.role === "shelter"
-                                  ? "bg-info-subtle text-info"
-                                  : "bg-secondary-subtle text-secondary"
-                            }`}
+                              ? "bg-primary-subtle text-primary"
+                              : user.role === "shelter"
+                              ? "bg-info-subtle text-info"
+                              : "bg-secondary-subtle text-secondary"
+                          }`}
                         >
                           {user.role}
                         </span>
@@ -165,7 +170,8 @@ const UsersManagementPage = () => {
                             setDeleteUserId(user._id);
                             setShowModal(true);
                           }}
-                          className="btn btn-link text-danger text-decoration-none"
+                          className="btn btn-link   text-danger text-decoration-none"
+                          disabled={user.role === "admin"}
                         >
                           Delete
                         </button>
