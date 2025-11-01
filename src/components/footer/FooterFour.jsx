@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import rightArrow from "../../assets/img/icon/right_arrow04.svg";
-import wLogo from "../../assets/img/logo/logo.png";
+import wLogo from "../../assets/img/logo/logo3.png";
 import footerShape1 from "../../assets/img/images/footer_shape01.png";
 import footerShape2 from "../../assets/img/images/footer_shape02.png";
 

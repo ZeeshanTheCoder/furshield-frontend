@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import wLogo from "../../assets/img/logo/logo.png";
+import wLogo from "../../assets/img/logo/logo3.png";
 import newsletterShape from "../../assets/img/images/footer_newsletter_shape.svg";
 import footerShape01 from "../../assets/img/images/footer_shape01.png";
 import footerShape02 from "../../assets/img/images/footer_shape02.png";
