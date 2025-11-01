@@ -5,7 +5,7 @@ import { HeaderSearch } from "./HeaderSearch";
 import { HeaderMobileMenu } from "./HeaderMobileMenu";
 import { HeaderNav } from "./HeaderNav";
 
-import wLogo from "../../assets/img/logo/logo.png";
+import wLogo from "../../assets/img/logo/logo3.png";
 import { axiosInstance } from "../../services/BaseUrl";
 import { AppContext } from "../../Context/MainContext";
 import { toast } from "react-toastify";
