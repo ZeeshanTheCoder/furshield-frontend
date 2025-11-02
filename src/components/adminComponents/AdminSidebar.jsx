@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { MdDashboard } from "react-icons/md";
 import { LuUsersRound } from "react-icons/lu";
 import { TbBrandProducthunt } from "react-icons/tb";
 import { axiosInstance } from "../../services/BaseUrl";
+import { toast } from "react-toastify";
+import { AppContext } from "../../Context/MainContext";
 
 const AdminSidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -21,22 +23,22 @@ const AdminSidebar = () => {
     },
   ];
 
+  const { setuserdata } = useContext(AppContext); // 👈 add this
+
   const handleLogout = async () => {
     try {
       const response = await axiosInstance.delete("/auth/logout", {
         withCredentials: true,
       });
       if (response.data.isLogout) {
-        localStorage.removeItem("userdata"); // or clear context/state
+        localStorage.removeItem("userdata");
+        setuserdata(null); // 👈 clear global context
         navigate("/", { replace: true });
       } else {
         toast("Logout failed: " + response.data.message);
       }
     } catch (error) {
-      console.error(
-        "Logout error:",
-        error.response ? error.response.data : error.message
-      );
+      console.error("Logout error:", error.response?.data || error.message);
       toast("Something went wrong during logout.");
     }
   };

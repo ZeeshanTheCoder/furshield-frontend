@@ -22,6 +22,8 @@ export const HeaderOne = () => {
   const [showLogout, setShowLogout] = useState(false);
   const navigate = useNavigate();
 
+  
+
   const handleLogout = async () => {
     try {
       const response = await axiosInstance.delete("/auth/logout", {
@@ -209,23 +211,8 @@ export const HeaderOne = () => {
                                   {userdatastate.role === "admin" && (
                                     <>
                                       <Link
-                                        to="/profile"
-                                        className="dropdown-item d-flex align-items-center p-3"
-                                        style={{
-                                          color: "#333",
-                                          textDecoration: "none",
-                                          fontSize: "14px",
-                                        }}
-                                      >
-                                        <i
-                                          className="flaticon-user me-2"
-                                          style={{ fontSize: "16px" }}
-                                        ></i>{" "}
-                                        Profile
-                                      </Link>
-                                      <Link
                                         to="/admin"
-                                        className="dropdown-item d-flex align-items-center p-3"
+                                        className="dropdown-item d-flex align-items-center px-3 py-2"
                                         style={{
                                           color: "#333",
                                           textDecoration: "none",

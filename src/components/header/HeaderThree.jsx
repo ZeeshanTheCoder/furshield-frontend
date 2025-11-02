@@ -146,23 +146,8 @@ export const HeaderThree = () => {
                                     {userdatastate.role === "admin" && (
                                       <>
                                         <Link
-                                          to="/profile"
-                                          className="dropdown-item d-flex align-items-center p-3"
-                                          style={{
-                                            color: "#333",
-                                            textDecoration: "none",
-                                            fontSize: "14px",
-                                          }}
-                                        >
-                                          <i
-                                            className="flaticon-user me-2"
-                                            style={{ fontSize: "16px" }}
-                                          ></i>{" "}
-                                          Profile
-                                        </Link>
-                                        <Link
                                           to="/admin"
-                                          className="dropdown-item d-flex align-items-center p-3"
+                                          className="dropdown-item d-flex align-items-center px-3 py-2"
                                           style={{
                                             color: "#333",
                                             textDecoration: "none",
