@@ -9,22 +9,26 @@ import wLogo from "../../assets/img/logo/logo3.png";
 import { axiosInstance } from "../../services/BaseUrl";
 import { AppContext } from "../../Context/MainContext";
 import { toast } from "react-toastify";
+import { useCart } from "../../Context/CartContext";
 
 export const HeaderThree = () => {
   const { showSearch, toggleSearch } = useSearch();
-  const [userdatastate, setuserdatastate] = useState("");
+  const [userdatastate, setuserdatastate] = useState(null); // ✅ Initialize as null for safety
   const [showLogout, setShowLogout] = useState(false);
   const { setuserdata } = useContext(AppContext);
+  const { cart, fetchCart } = useCart();
+
   const navigate = useNavigate();
+
+  const cartItemCount = cart?.items?.length > 0 ? cart.items.length : 0;
 
   const handleLogout = async () => {
     try {
       const response = await axiosInstance.delete("/auth/logout");
       if (response.data.isLogout) {
         localStorage.removeItem("userdata");
-
         setuserdata(null);
-
+        setuserdatastate(null); // ✅ Clear local state on logout
         navigate("/login", { replace: true });
       } else {
         toast("Logout failed: " + response.data.message);
@@ -40,15 +44,24 @@ export const HeaderThree = () => {
       try {
         const res = await axiosInstance.get("/user/getuser");
         if (res.status === 200) {
-          console.log(res.data.user);
-          setuserdatastate(res.data.user);
+          const user = res.data.user;
+          setuserdatastate(user);
+          setuserdata(user);
+
+          // ✅ Fetch cart if logged in
+          if (user?._id) {
+            await fetchCart(user._id);
+          }
         }
       } catch (error) {
         console.log(error);
+        // Optionally clear state on auth error
+        setuserdatastate(null);
+        setuserdata(null);
       }
     };
     userget();
-  }, []);
+  }, [setuserdata]);
 
   useMobileMenu();
 
@@ -95,10 +108,19 @@ export const HeaderThree = () => {
                             </a>
                           </li>
                           <li className="header-cart">
-                            <a href="#">
+                            {/* ✅ Updated logic: icon always visible, count only if logged in */}
+                            <Link
+                              to={
+                                userdatastate?._id
+                                  ? `/cart/${userdatastate._id}`
+                                  : "/login"
+                              }
+                            >
                               <i className="flaticon-shopping-bag"></i>
-                              <span>0</span>
-                            </a>
+                              {userdatastate?._id && (
+                                <span>{cartItemCount}</span>
+                              )}
+                            </Link>
                           </li>
                           <li
                             className="header-btn"
@@ -111,7 +133,6 @@ export const HeaderThree = () => {
                                 onMouseLeave={() => setShowLogout(false)}
                                 style={{ position: "relative" }}
                               >
-                                {/* Original Profile Button */}
                                 <div
                                   className="btn d-flex align-items-center"
                                   style={{
@@ -123,7 +144,6 @@ export const HeaderThree = () => {
                                   {userdatastate.name}
                                 </div>
 
-                                {/* Floating Logout & Menu Items (appears on hover) */}
                                 {showLogout && (
                                   <div
                                     style={{
@@ -142,21 +162,18 @@ export const HeaderThree = () => {
                                       minWidth: "200px",
                                     }}
                                   >
-                                    {/* Role-based menu options */}
                                     {userdatastate.role === "admin" && (
-                                      <>
-                                        <Link
-                                          to="/admin"
-                                          className="dropdown-item d-flex align-items-center px-3 py-2"
-                                          style={{
-                                            color: "#333",
-                                            textDecoration: "none",
-                                            fontSize: "14px",
-                                          }}
-                                        >
-                                          Dashboard
-                                        </Link>
-                                      </>
+                                      <Link
+                                        to="/admin"
+                                        className="dropdown-item d-flex align-items-center px-3 py-2"
+                                        style={{
+                                          color: "#333",
+                                          textDecoration: "none",
+                                          fontSize: "14px",
+                                        }}
+                                      >
+                                        Dashboard
+                                      </Link>
                                     )}
                                     {userdatastate.role === "owner" && (
                                       <>
@@ -205,7 +222,7 @@ export const HeaderThree = () => {
                                           Care Options
                                         </Link>
                                         <Link
-                                          to="/appointment-booking"
+                                          to="/appointments"
                                           className="dropdown-item d-flex align-items-center py-2 px-3"
                                           style={{
                                             color: "#333",
@@ -303,7 +320,6 @@ export const HeaderThree = () => {
                                       </>
                                     )}
 
-                                    {/* Common options */}
                                     <button
                                       className="dropdown-item d-flex align-items-center px-3 py-2"
                                       onClick={handleLogout}
@@ -348,14 +364,12 @@ export const HeaderThree = () => {
                   </div>
                 </div>
 
-                {/*  Mobile Menu   */}
                 <HeaderMobileMenu />
               </div>
             </div>
           </div>
         </div>
 
-        {/*  header-search  */}
         <HeaderSearch active={showSearch} toggleSearch={toggleSearch} />
       </header>
     </>

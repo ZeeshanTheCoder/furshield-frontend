@@ -3,6 +3,7 @@ import { Layout } from "../../layouts/Layout";
 
 import rightArrow from "../../assets/img/icon/right_arrow.svg";
 import registrationImg from "../../assets/img/images/registration_img.png";
+import { getTodayDate } from "../../utils/helperFunction";
 
 export const Reservation = () => {
   return (
@@ -37,7 +38,7 @@ export const Reservation = () => {
                       </div>
                       <div className="col-md-6">
                         <div className="form-grp">
-                          <input type="date" />
+                          <input type="date" min={getTodayDate()} />
                         </div>
                       </div>
                       <div className="col-md-6">

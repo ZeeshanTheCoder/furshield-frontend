@@ -164,7 +164,7 @@ function App() {
         <Route
           path="/cart/:id"
           element={
-            <ProtectedRoute allowedRoles={["owner"]}>
+            <ProtectedRoute allowedRoles={["owner", "vet", "shelter"]}>
               <CartPage />
             </ProtectedRoute>
           }
@@ -240,7 +240,7 @@ function App() {
         <Route
           path="/appointment/:appointmentId"
           element={
-            <ProtectedRoute allowedRoles={["vet"]}>
+            <ProtectedRoute allowedRoles={["owner", "vet"]}>
               <UpdateAppointment />
             </ProtectedRoute>
           }

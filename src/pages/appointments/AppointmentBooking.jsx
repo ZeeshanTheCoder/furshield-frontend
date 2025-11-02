@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { axiosInstance } from "../../services/BaseUrl";
 import { AppContext } from "../../Context/MainContext";
 import rightArrow from "../../assets/img/icon/right_arrow.svg";
+import { getCurrentTime, getTodayDate } from "../../utils/helperFunction";
 
 export const AppointmentBooking = () => {
   const navigate = useNavigate();
@@ -31,25 +32,28 @@ export const AppointmentBooking = () => {
 
   // Fetch pets when component mounts or userdata changes
   useEffect(() => {
-  const fetchPetsByOwner = async () => {
-    if (!userdata?._id) return; // ✅ context ka correct key use karo
-    setLoadingPets(true);
-    try {
-      const res = await axiosInstance.get("/pets/fetchpetsbyowner", {
-        withCredentials: true, // ✅ token bhejne ke liye zaroori
-      });
-      setPets(res.data.pets);
-      console.log("Fetched Pets in AppointmentBooking:", res.data.pets);
-    } catch (err) {
-      console.error("Error fetching pets:", err.response?.data || err.message);
-      setPets([]);
-    } finally {
-      setLoadingPets(false);
-    }
-  };
+    const fetchPetsByOwner = async () => {
+      if (!userdata?._id) return; // ✅ context ka correct key use karo
+      setLoadingPets(true);
+      try {
+        const res = await axiosInstance.get("/pets/fetchpetsbyowner", {
+          withCredentials: true, // ✅ token bhejne ke liye zaroori
+        });
+        setPets(res.data.pets);
+        console.log("Fetched Pets in AppointmentBooking:", res.data.pets);
+      } catch (err) {
+        console.error(
+          "Error fetching pets:",
+          err.response?.data || err.message
+        );
+        setPets([]);
+      } finally {
+        setLoadingPets(false);
+      }
+    };
 
-  fetchPetsByOwner();
-}, [userdata]);
+    fetchPetsByOwner();
+  }, [userdata]);
 
   // Fetch all Vets
   useEffect(() => {
@@ -206,7 +210,9 @@ export const AppointmentBooking = () => {
                     </div>
 
                     {/* Date */}
+
                     <div className="col-md-6">
+                      <label className="form-label">Select Date</label>
                       <div className="form-grp">
                         <input
                           name="date"
@@ -214,12 +220,14 @@ export const AppointmentBooking = () => {
                           required
                           value={formData.date}
                           onChange={handleChange}
+                          min={getTodayDate()}
                         />
                       </div>
                     </div>
 
                     {/* Time */}
                     <div className="col-md-6">
+                      <label className="form-label">Select Time</label>
                       <div className="form-grp">
                         <input
                           name="time"
@@ -227,12 +235,18 @@ export const AppointmentBooking = () => {
                           required
                           value={formData.time}
                           onChange={handleChange}
+                          min={
+                            formData.date === getTodayDate()
+                              ? getCurrentTime()
+                              : ""
+                          }
                         />
                       </div>
                     </div>
 
                     {/* Reason */}
                     <div className="col-md-12">
+                      <label className="form-label">Reason</label>
                       <div className="form-grp">
                         <input
                           name="reason"
@@ -247,6 +261,7 @@ export const AppointmentBooking = () => {
 
                     {/* Notes */}
                     <div className="col-md-12">
+                      <label className="form-label">Additional Notes</label>
                       <div className="form-grp">
                         <textarea
                           name="notes"

@@ -1,6 +1,21 @@
-import React from "react";
+// src/components/header/HeaderSearch.jsx
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const HeaderSearch = ({ active, toggleSearch }) => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      navigate(`/product?q=${encodeURIComponent(searchTerm.trim())}`);
+    } else {
+      navigate("/product");
+    }
+    toggleSearch(); // Close search popup after navigation
+  };
+
   return (
     <>
       <div className={`search__popup ${active ? "search-opened" : ""}`}>
@@ -39,15 +54,17 @@ export const HeaderSearch = ({ active, toggleSearch }) => {
                   </button>
                 </div>
                 <div className="search__form">
-                  <form action="#">
+                  <form onSubmit={handleSubmit}>
                     <div className="search__input">
                       <input
                         className="search-input-field"
                         type="text"
-                        placeholder="Type keywords here"
+                        placeholder="Search Products Here"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
                       />
                       <span className="search-focus-border"></span>
-                      <button>
+                      <button type="submit">
                         <svg
                           width="20"
                           height="20"

@@ -6,7 +6,6 @@ import { toast } from "react-toastify";
 
 export const ProductDetailsTop = ({ product }) => {
   const [quantity, setQuantity] = useState(1);
-  const [isOpen, setIsOpen] = useState(false);
 
   const navigate = useNavigate();
   const { addToCart } = useCart();
@@ -50,15 +49,7 @@ export const ProductDetailsTop = ({ product }) => {
                 role="tabpanel"
                 tabIndex="0"
               >
-                <a
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setIsOpen(true);
-                  }}
-                >
-                  <img src={product.image} alt={product.title} />
-                </a>
+                <img src={product.image} alt={product.title} />
               </div>
             </div>
           </div>
@@ -110,13 +101,6 @@ export const ProductDetailsTop = ({ product }) => {
           </div>
         </div>
       </div>
-
-      {isOpen && (
-        <div className="lightbox">
-          <img src={product.image} alt={product.title} />
-          <button onClick={() => setIsOpen(false)}>Close</button>
-        </div>
-      )}
     </>
   );
 };

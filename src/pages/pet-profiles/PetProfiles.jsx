@@ -38,7 +38,6 @@ const PetProfiles = () => {
       console.log(res.data.pets);
     } catch (error) {
       console.error("Error fetching pets:", error.message);
-      toast("Failed to load pets. Please login again.");
     } finally {
       setLoading(false);
     }
@@ -128,7 +127,7 @@ const PetProfiles = () => {
     <Layout>
       <div className="container mt-4">
         <div className="d-flex justify-content-between align-items-center mb-4">
-          <h2 className="mb-0">🐾 Your Pets</h2>
+          <h2 className="mb-0">My Pets</h2>
           <button className="btn btn-success" onClick={handleCreatePet}>
             + Add New Pet
           </button>

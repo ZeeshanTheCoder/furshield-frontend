@@ -181,7 +181,7 @@ export const FooterTwo = () => {
             <div className="row align-items-center">
               <div className="col-md-6">
                 <div className="copyright-text copyright-text-two">
-                  <p>Copyright © 2024. All Rights Reserved.</p>
+                  <p>Copyright © 2025. All Rights Reserved.</p>
                 </div>
               </div>
               <div className="col-md-6">

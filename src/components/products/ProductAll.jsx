@@ -1,161 +1,164 @@
-import React, { useContext } from "react";
+// src/components/products/ProductAll.jsx
+import React, { useContext, useState, useMemo, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ProductOneItem } from "./ProductOneItem";
-
-import products_img01 from "../../assets/img/products/products_img01.jpg";
-import products_img02 from "../../assets/img/products/products_img02.jpg";
-import products_img03 from "../../assets/img/products/products_img03.jpg";
-import products_img04 from "../../assets/img/products/products_img04.jpg";
-import products_img05 from "../../assets/img/products/products_img05.jpg";
-import products_img06 from "../../assets/img/products/products_img06.jpg";
-import products_img07 from "../../assets/img/products/products_img07.jpg";
-import products_img08 from "../../assets/img/products/products_img08.jpg";
-import products_img09 from "../../assets/img/products/products_img09.jpg";
-import products_img10 from "../../assets/img/products/products_img10.jpg";
-import products_img11 from "../../assets/img/products/products_img11.jpg";
-import products_img12 from "../../assets/img/products/products_img12.jpg";
-import products_img13 from "../../assets/img/products/products_img13.jpg";
-import products_img14 from "../../assets/img/products/products_img14.jpg";
-import products_img15 from "../../assets/img/products/products_img15.jpg";
 import { ProductContext } from "../../Context/ProductProvider";
+import { axiosInstance } from "../../services/BaseUrl";
 
 export const ProductAll = () => {
   const { products } = useContext(ProductContext);
-  console.log(products, "context pro");
-  // const product = [
-  //   {
-  //     image: products_img01,
-  //     badge: { type: "new", text: "New" },
-  //     reviews: 2,
-  //     title: "Dog Harness-Neoprene Comfort Liner-Orange and ...",
-  //     price: 12.0,
-  //     oldPrice: 25.0,
-  //   },
-  //   {
-  //     image: products_img02,
-  //     badge: { type: "sale", text: "Sale!" },
-  //     reviews: 2,
-  //     title: "Arm & Hammer Super Deodori zing Dog Shampoo, Pet Wash",
-  //     price: 20.0,
-  //     oldPrice: 30.0,
-  //   },
-  //   {
-  //     image: products_img03,
-  //     reviews: 2,
-  //     title: "Milk-Bone Brushing Chews Daily Dental Dog Treats ...",
-  //     price: 36.0,
-  //     oldPrice: 56.0,
-  //   },
-  //   {
-  //     image: products_img04,
-  //     badge: { type: "sale", text: "Sale!" },
-  //     reviews: 2,
-  //     title: 'Two Door Top Load Plastic Kennel & Pet Carrier, Blue 19"',
-  //     price: 18.0,
-  //     oldPrice: 33.0,
-  //   },
-  //   {
-  //     image: products_img05,
-  //     badge: { type: "new", text: "New" },
-  //     reviews: 2,
-  //     title: "The Kitten House with Mat Sleeping Bed House",
-  //     price: 19.0,
-  //     oldPrice: 28.0,
-  //   },
-  //   {
-  //     image: products_img06,
-  //     badge: { type: "sale", text: "Sale!" },
-  //     reviews: 2,
-  //     title: "Dog Puzzle Toys, Squeaky Treat Dispensing Dog",
-  //     price: 18.0,
-  //     oldPrice: 33.0,
-  //   },
-  //   {
-  //     image: products_img07,
-  //     badge: { type: "new", text: "New" },
-  //     reviews: 2,
-  //     title: "Zesty Paws Calming Puppy Bites Stress Relief for Dogs, 60 Count",
-  //     price: 16.0,
-  //     oldPrice: 50.0,
-  //   },
-  //   {
-  //     image: products_img08,
-  //     reviews: 2,
-  //     title: "Hartz Groomer's Best Extra Gentle Puppy Shampoo, 18oz.",
-  //     price: 30.0,
-  //     oldPrice: 88.0,
-  //   },
-  //   {
-  //     image: products_img09,
-  //     badge: { type: "new", text: "New" },
-  //     reviews: 2,
-  //     title: "The Kitten House with Mat Sleeping Bed House",
-  //     price: 22.0,
-  //     oldPrice: 59.0,
-  //   },
-  //   {
-  //     image: products_img10,
-  //     badge: { type: "sale", text: "Sale!" },
-  //     reviews: 2,
-  //     title: "Dog Harness-Neoprene Comfort Liner-Orange and Comfort",
-  //     price: 11.0,
-  //     oldPrice: 48.0,
-  //   },
-  //   {
-  //     image: products_img11,
-  //     badge: { type: "new", text: "New" },
-  //     reviews: 7,
-  //     title: "Dog Puzzle Toys, Squeaky Treat Dispensing Dog",
-  //     price: 19.0,
-  //     oldPrice: 28.0,
-  //   },
-  //   {
-  //     image: products_img12,
-  //     badge: { type: "new", text: "New" },
-  //     reviews: 2,
-  //     title: "Zesty Paws Calming Puppy Bites Stress Relief for Dogs, 60 Count",
-  //     price: 16.0,
-  //     oldPrice: null,
-  //   },
-  //   {
-  //     image: products_img13,
-  //     badge: { type: "sale", text: "Sale!" },
-  //     reviews: 20,
-  //     title: "Hartz Groomer's Best Extra Gentle Puppy Shampoo, 18oz Shampoo",
-  //     price: 30.0,
-  //     oldPrice: 88.0,
-  //   },
-  //   {
-  //     image: products_img14,
-  //     badge: { type: "new", text: "New" },
-  //     reviews: 10,
-  //     title: "The Kitten House with Mat Sleeping Bed House",
-  //     price: 22.0,
-  //     oldPrice: 59.0,
-  //   },
-  //   {
-  //     image: products_img15,
-  //     badge: { type: "sale", text: "Sale!" },
-  //     reviews: 2,
-  //     title: "Dog Harness-Neoprene Comfort Liner-Orange and ...",
-  //     price: 11.0,
-  //     oldPrice: 48.0,
-  //   },
-  // ];
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Extract initial search query from URL
+  const urlParams = new URLSearchParams(location.search);
+  const initialQuery = urlParams.get("q") || "";
+
+  const [nameFilter, setNameFilter] = useState(initialQuery);
+  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [sortOrder, setSortOrder] = useState("default");
+
+  const [productRatings, setProductRatings] = useState({});
+
+  const categories = useMemo(() => {
+    const cats = products.map(p => p.category).filter(Boolean);
+    return Array.from(new Set(cats));
+  }, [products]);
+
+  useEffect(() => {
+    const fetchAllRatings = async () => {
+      const ratingsMap = {};
+      for (const product of products) {
+        try {
+          const res = await axiosInstance.get(
+            `/reviews-rating/allProductReview?productId=${product._id}`
+          );
+          const reviews = res.data.reviews || [];
+          if (reviews.length > 0) {
+            const total = reviews.reduce((sum, r) => sum + (r.rating || 0), 0);
+            ratingsMap[product._id] = total / reviews.length;
+          } else {
+            ratingsMap[product._id] = 0;
+          }
+        } catch (err) {
+          ratingsMap[product._id] = 0;
+        }
+      }
+      setProductRatings(ratingsMap);
+    };
+
+    if (products.length > 0) {
+      fetchAllRatings();
+    }
+  }, [products]);
+
+  // Sync nameFilter with URL when it changes (optional but clean)
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (nameFilter) params.set("q", nameFilter);
+    if (categoryFilter !== "all") params.set("category", categoryFilter);
+    if (sortOrder !== "default") params.set("sort", sortOrder);
+
+    navigate(`/product?${params.toString()}`, { replace: true });
+  }, [nameFilter, categoryFilter, sortOrder, navigate]);
+
+  const filteredProducts = useMemo(() => {
+    let result = [...products];
+
+    if (categoryFilter !== "all") {
+      result = result.filter(p => p.category === categoryFilter);
+    }
+
+    if (nameFilter) {
+      const term = nameFilter.toLowerCase();
+      result = result.filter(p => p.name.toLowerCase().includes(term));
+    }
+
+    if (sortOrder === "popular") {
+      result.sort((a, b) => (productRatings[b._id] || 0) - (productRatings[a._id] || 0));
+    } else if (sortOrder === "priceHighLow") {
+      result.sort((a, b) => (b.price || 0) - (a.price || 0));
+    } else if (sortOrder === "priceLowHigh") {
+      result.sort((a, b) => (a.price || 0) - (b.price || 0));
+    } else if (sortOrder === "nameAsc") {
+      result.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sortOrder === "nameDesc") {
+      result.sort((a, b) => b.name.localeCompare(a.name));
+    }
+
+    return result;
+  }, [products, nameFilter, categoryFilter, sortOrder, productRatings]);
 
   return (
-    <div className="row gutter-20 row-cols-1 row-cols-xl-5 row-cols-lg-4 row-cols-md-3 row-cols-sm-2 justify-content-center">
-      {products.map((product, index) => (
-        <div className="col" key={index}>
-          <ProductOneItem
-            _id={product._id}
-            image={product.image}
-            title={product.name}
-            price={product.price}
-            reviews={product.reviews || 0}
-            badge={product.badge || null}
+    <>
+      <div className="mb-4 d-flex flex-wrap gap-3 align-items-center">
+        <div className="w-50">
+          <input
+            type="text"
+            className="form-control p-3 border rounded-pill bg-white"
+            style={{ backgroundImage: "none", color: "#8793AB" }}
+            placeholder="Search by product name..."
+            value={nameFilter}
+            onChange={(e) => setNameFilter(e.target.value)}
           />
         </div>
-      ))}
-    </div>
+
+        {categories.length > 0 && (
+          <div className="d-flex align-items-center" style={{ width: "17%" }}>
+            <label className="me-2">Category:</label>
+            <select
+              className="form-control p-3 border rounded-pill bg-white"
+              style={{ backgroundImage: "none", color: "#8793AB" }}
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+            >
+              <option value="all">All</option>
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        <div className="d-flex align-items-center" style={{ width: "22%" }}>
+          <label className="me-2">Sort:</label>
+          <select
+            className="form-control p-3 border rounded-pill bg-white"
+            style={{ backgroundImage: "none", color: "#8793AB" }}
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+          >
+            <option value="default">Default</option>
+            <option value="popular">Popular</option>
+            <option value="priceHighLow">Price: High to Low</option>
+            <option value="priceLowHigh">Price: Low to High</option>
+            <option value="nameAsc">Product: A → Z</option>
+            <option value="nameDesc">Product: Z → A</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="row gutter-20 row-cols-1 row-cols-xl-5 row-cols-lg-4 row-cols-md-3 row-cols-sm-2 justify-content-center">
+        {filteredProducts.length > 0 ? (
+          filteredProducts.map((product) => (
+            <div className="col" key={product._id}>
+              <ProductOneItem
+                _id={product._id}
+                image={product.image}
+                title={product.name}
+                price={product.price}
+                badge={product.badge || null}
+              />
+            </div>
+          ))
+        ) : (
+          <div className="col-12 text-center py-5">
+            <p className="text-muted">No products found.</p>
+          </div>
+        )}
+      </div>
+    </>
   );
 };

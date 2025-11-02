@@ -13,26 +13,28 @@ import {
 import { AppContext } from "../../Context/MainContext";
 import { axiosInstance } from "../../services/BaseUrl";
 import { toast } from "react-toastify";
+import { useCart } from "../../Context/CartContext"; // ✅ Added
+import { HeaderSearch } from "./HeaderSearch"; // ✅ NEW IMPORT
 
 export const HeaderOne = () => {
   const { showSearch, toggleSearch } = useSearch();
   const { showCanvas, toggleCanvas } = useOffCanvas();
   const { setuserdata } = useContext(AppContext);
-  const [userdatastate, setuserdatastate] = useState("");
+  const { cart, fetchCart } = useCart();
+  const [userdatastate, setuserdatastate] = useState(null);
   const [showLogout, setShowLogout] = useState(false);
   const navigate = useNavigate();
-
-  
 
   const handleLogout = async () => {
     try {
       const response = await axiosInstance.delete("/auth/logout", {
-        withCredentials: true, // Important: ensure cookie delete request works
+        withCredentials: true,
       });
 
       if (response.data.isLogout) {
         localStorage.removeItem("userdata");
         setuserdata(null);
+        setuserdatastate(null);
         navigate("/login", { replace: true });
       } else {
         toast("Logout failed: " + response.data.message);
@@ -53,8 +55,13 @@ export const HeaderOne = () => {
       try {
         const res = await axiosInstance.get("/user/getuser");
         if (res.status === 200) {
-          setuserdatastate(res.data.user);
-          setuserdata(res.data.user);
+          const user = res.data.user;
+          setuserdatastate(user);
+          setuserdata(user);
+
+          if (user?._id) {
+            await fetchCart(user._id);
+          }
         }
       } catch (error) {
         console.log(error);
@@ -62,6 +69,8 @@ export const HeaderOne = () => {
     };
     userget();
   }, []);
+
+  const cartItemCount = cart?.items?.length > 0 ? cart.items.length : 0;
 
   return (
     <>
@@ -84,7 +93,6 @@ export const HeaderOne = () => {
                       </Link>
                     </div>
 
-                    {/* nav */}
                     <div className="tgmenu__navbar-wrap tgmenu__main-menu d-none d-lg-flex">
                       <HeaderNav />
                     </div>
@@ -104,9 +112,17 @@ export const HeaderOne = () => {
                           </a>
                         </li>
                         <li className="header-cart">
-                          <Link to={`/cart/${userdatastate._id}`}>
+                          <Link
+                            to={
+                              userdatastate?._id
+                                ? `/cart/${userdatastate._id}`
+                                : "/login"
+                            }
+                          >
                             <i className="flaticon-shopping-bag"></i>
-                            <span>0</span>
+                            {userdatastate?._id && (
+                              <span>{cartItemCount}</span>
+                            )}
                           </Link>
                         </li>
 
@@ -126,49 +142,16 @@ export const HeaderOne = () => {
                               viewBox="0 0 26 16"
                               fill="none"
                             >
-                              <rect
-                                width="9"
-                                height="2"
-                                rx="1"
-                                fill="currentcolor"
-                              />
-                              <rect
-                                x="11"
-                                width="15"
-                                height="2"
-                                rx="1"
-                                fill="currentcolor"
-                              />
-                              <rect
-                                y="14"
-                                width="26"
-                                height="2"
-                                rx="1"
-                                fill="currentcolor"
-                              />
-                              <rect
-                                y="7"
-                                width="16"
-                                height="2"
-                                rx="1"
-                                fill="currentcolor"
-                              />
-                              <rect
-                                x="17"
-                                y="7"
-                                width="9"
-                                height="2"
-                                rx="1"
-                                fill="currentcolor"
-                              />
+                              <rect width="9" height="2" rx="1" fill="currentcolor" />
+                              <rect x="11" width="15" height="2" rx="1" fill="currentcolor" />
+                              <rect y="14" width="26" height="2" rx="1" fill="currentcolor" />
+                              <rect y="7" width="16" height="2" rx="1" fill="currentcolor" />
+                              <rect x="17" y="7" width="9" height="2" rx="1" fill="currentcolor" />
                             </svg>
                           </a>
                         </li>
 
-                        <li
-                          className="header-btn"
-                          style={{ position: "relative" }}
-                        >
+                        <li className="header-btn" style={{ position: "relative" }}>
                           {userdatastate?.name ? (
                             <div
                               className="d-inline-block"
@@ -176,7 +159,6 @@ export const HeaderOne = () => {
                               onMouseLeave={() => setShowLogout(false)}
                               style={{ position: "relative" }}
                             >
-                              {/* Original Profile Button */}
                               <div
                                 className="btn d-flex align-items-center"
                                 style={{
@@ -188,7 +170,6 @@ export const HeaderOne = () => {
                                 {userdatastate.name}
                               </div>
 
-                              {/* Floating Logout & Menu Items (appears on hover) */}
                               {showLogout && (
                                 <div
                                   style={{
@@ -207,21 +188,18 @@ export const HeaderOne = () => {
                                     minWidth: "200px",
                                   }}
                                 >
-                                  {/* Role-based menu options */}
                                   {userdatastate.role === "admin" && (
-                                    <>
-                                      <Link
-                                        to="/admin"
-                                        className="dropdown-item d-flex align-items-center px-3 py-2"
-                                        style={{
-                                          color: "#333",
-                                          textDecoration: "none",
-                                          fontSize: "14px",
-                                        }}
-                                      >
-                                        Dashboard
-                                      </Link>
-                                    </>
+                                    <Link
+                                      to="/admin"
+                                      className="dropdown-item d-flex align-items-center px-3 py-2"
+                                      style={{
+                                        color: "#333",
+                                        textDecoration: "none",
+                                        fontSize: "14px",
+                                      }}
+                                    >
+                                      Dashboard
+                                    </Link>
                                   )}
                                   {userdatastate.role === "owner" && (
                                     <>
@@ -270,7 +248,7 @@ export const HeaderOne = () => {
                                         Care Options
                                       </Link>
                                       <Link
-                                        to="/appointment-booking"
+                                        to="/appointments"
                                         className="dropdown-item d-flex align-items-center px-3 py-2"
                                         style={{
                                           color: "#333",
@@ -368,7 +346,6 @@ export const HeaderOne = () => {
                                     </>
                                   )}
 
-                                  {/* Common options */}
                                   <button
                                     className="dropdown-item d-flex align-items-center px-3 py-2"
                                     onClick={handleLogout}
@@ -413,12 +390,14 @@ export const HeaderOne = () => {
                   </nav>
                 </div>
 
-                {/*  Mobile Menu   */}
                 <HeaderMobileMenu />
               </div>
             </div>
           </div>
         </div>
+
+        {/* ✅ ADDED: Search overlay — exactly like HeaderThree */}
+        <HeaderSearch active={showSearch} toggleSearch={toggleSearch} />
 
         {/* off canvas */}
         <HeaderOffcanvas active={showCanvas} toggleCanvas={toggleCanvas} />

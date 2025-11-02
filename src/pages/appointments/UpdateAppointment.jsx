@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { axiosInstance } from "../../services/BaseUrl";
 import { Layout } from "../../layouts/Layout";
 import { toast } from "react-toastify";
+import { getTodayDate } from "../../utils/helperFunction";
 
 const UpdateAppointment = () => {
   const { appointmentId } = useParams();
@@ -13,6 +14,17 @@ const UpdateAppointment = () => {
   const [time, setTime] = useState("");
   const [status, setStatus] = useState("");
 
+  // Get user role from localStorage
+  const user = JSON.parse(localStorage.getItem("userdata"));
+  const userRole = user?.role; // e.g., 'owner' or 'vet'
+
+  // Compute min date conditionally
+  const minDate =
+    userRole === "vet" &&
+    ["approved", "cancelled", "completed"].includes(status)
+      ? "" // no restriction
+      : getTodayDate(); // restrict to today or future
+
   useEffect(() => {
     const fetchAppointment = async () => {
       try {
@@ -21,7 +33,6 @@ const UpdateAppointment = () => {
         );
         setAppointment(res.data);
 
-        // pre-fill values
         setDate(
           res.data.date
             ? new Date(res.data.date).toISOString().split("T")[0]
@@ -31,24 +42,29 @@ const UpdateAppointment = () => {
         setStatus(res.data.status || "pending");
       } catch (err) {
         console.error("Error fetching appointment:", err);
+        toast("Failed to load appointment.");
+        navigate(-1); // go back if error
       }
     };
     fetchAppointment();
-  }, [appointmentId]);
+  }, [appointmentId, navigate]);
 
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      await axiosInstance.put(`/appointment/vet/${appointmentId}`, {
-        date,
-        time,
-        status,
-      });
+      const payload = { date, time };
+
+      // Only include status if user is vet
+      if (userRole === "vet") {
+        payload.status = status;
+      }
+
+      await axiosInstance.put(`/appointment/vet/${appointmentId}`, payload);
       toast("Appointment updated successfully!");
       navigate("/manage-appointments");
     } catch (err) {
       console.error("Update failed:", err);
-      toast("Failed to update appointment");
+      toast("Failed to update appointment.");
     }
   };
 
@@ -71,6 +87,8 @@ const UpdateAppointment = () => {
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
                 className="w-full rounded-pill border rounded-md p-2"
+                min={minDate}
+                required
               />
             </div>
 
@@ -82,29 +100,29 @@ const UpdateAppointment = () => {
                 value={time}
                 onChange={(e) => setTime(e.target.value)}
                 className="w-full rounded-pill border rounded-md p-2"
+                required
               />
             </div>
 
-            {/* Status Dropdown */}
-            <div className="mb-2">
-              <label className="block mb-1 font-medium">Status:</label>
-              <select
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-                className="w-full rounded-pill border rounded-md p-2"
-              >
-                <option value="pending">Pending</option>
-                <option value="approved">Approved</option>
-                <option value="rescheduled">Rescheduled</option>
-                <option value="completed">Completed</option>
-                <option value="cancelled">Cancelled</option>
-              </select>
-            </div>
+            {/* Status Dropdown — only for vet */}
+            {userRole === "vet" && (
+              <div className="mb-2">
+                <label className="block mb-1 font-medium">Status:</label>
+                <select
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                  className="w-full rounded-pill border rounded-md p-2"
+                >
+                  <option value="pending">Pending</option>
+                  <option value="approved">Approved</option>
+                  <option value="rescheduled">Rescheduled</option>
+                  <option value="completed">Completed</option>
+                  <option value="cancelled">Cancelled</option>
+                </select>
+              </div>
+            )}
 
-            <button
-              type="submit"
-              className="btn mt-2 rounded-md w-auto"
-            >
+            <button type="submit" className="btn mt-2 rounded-md w-auto">
               Update Appointment
             </button>
           </form>

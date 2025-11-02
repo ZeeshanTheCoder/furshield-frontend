@@ -190,7 +190,7 @@ export const FooterThree = ({ hideNewsLetter }) => {
             <div className="row align-items-center">
               <div className="col-lg-5">
                 <div className="copyright-text copyright-text-three">
-                  <p>Copyright © 2024. All Rights Reserved.</p>
+                  <p>Copyright © 2025. All Rights Reserved.</p>
                 </div>
               </div>
               <div className="col-lg-7">
