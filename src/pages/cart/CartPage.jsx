@@ -7,7 +7,14 @@ import { toast } from "react-toastify";
 import { confirmToast } from "../../utils/confrimToast";
 
 export const CartPage = () => {
-  const { cart, loading, fetchCart, updateCartItem, removeCartItem, clearCart } = useCart();
+  const {
+    cart,
+    loading,
+    fetchCart,
+    updateCartItem,
+    removeCartItem,
+    clearCart,
+  } = useCart();
   const { userdata } = useContext(AppContext);
   const navigate = useNavigate();
 
@@ -20,9 +27,14 @@ export const CartPage = () => {
   }, [userdata]);
 
   const handleQuantityChange = async (productId, type, currentQuantity) => {
-    const newQuantity = type === "inc" ? currentQuantity + 1 : currentQuantity - 1;
+    const newQuantity =
+      type === "inc" ? currentQuantity + 1 : currentQuantity - 1;
     if (newQuantity < 1) return;
-    await updateCartItem({ userId: userdata._id, productId, quantity: newQuantity });
+    await updateCartItem({
+      userId: userdata._id,
+      productId,
+      quantity: newQuantity,
+    });
     fetchCart(userdata._id);
   };
 
@@ -54,9 +66,10 @@ export const CartPage = () => {
     });
   };
 
-  if (loading || !cart) return <p className="text-center my-5">Loading...</p>;
-
-  if (!cart.items.length) {
+  if (loading || !cart || !Array.isArray(cart.items)) {
+    return <p className="text-center my-5">Loading...</p>;
+  }
+  if (!cart.items.length)
     return (
       <Layout breadcrumbTitle="Cart" breadcrumbSubtitle="Your Shopping Cart">
         <div className="container my-5">
@@ -64,11 +77,20 @@ export const CartPage = () => {
             <div className="col-md-6 col-lg-5">
               <div className="text-center p-4 py-5 rounded-3 bg-light">
                 <div className="mb-4">
-                  <i className="flaticon-shopping-cart" style={{ fontSize: "60px", color: "#8793AB" }}></i>
+                  <i
+                    className="flaticon-shopping-cart"
+                    style={{ fontSize: "60px", color: "#8793AB" }}
+                  ></i>
                 </div>
                 <h3 className="mb-3">Your cart is empty</h3>
-                <p className="text-muted mb-4">Looks like you haven't added any items yet. Start shopping now!</p>
-                <button className="btn btn-primary rounded-pill px-4" onClick={() => navigate("/product")}>
+                <p className="text-muted mb-4">
+                  Looks like you haven't added any items yet. Start shopping
+                  now!
+                </p>
+                <button
+                  className="btn btn-primary rounded-pill px-4"
+                  onClick={() => navigate("/product")}
+                >
                   Browse Products
                 </button>
               </div>
@@ -77,10 +99,9 @@ export const CartPage = () => {
         </div>
       </Layout>
     );
-  }
 
   return (
-    <Layout breadcrumbTitle="Cart Page" breadcrumbSubtitle="Cart">
+    <Layout breadcrumbTitle="Cart Page" breadcrumbSubtitle={"Cart"}>
       <div className="container my-5">
         <h2 className="mb-4">Shopping Cart</h2>
 
@@ -93,32 +114,51 @@ export const CartPage = () => {
                     <img
                       src={item.productId.image}
                       alt={item.productId.name}
-                      style={{ width: "120px", height: "120px", objectFit: "cover" }}
+                      style={{
+                        width: "120px",
+                        height: "120px",
+                        objectFit: "cover",
+                      }}
                     />
                   </div>
                   <div className="product__content flex-grow-1">
                     <h4 className="title">{item.productId.name}</h4>
                     <h3 className="price mb-2">${item.productId.price}</h3>
+
+                    {/* Quantity show */}
                     <p className="mb-2">Quantity: {item.quantity}</p>
+
                     <div className="d-flex align-items-center flex-wrap">
-                      <button className="btn btn-danger btn-sm" onClick={() => handleRemove(item.productId._id)}>
+                      <button
+                        className="btn btn-danger btn-sm"
+                        onClick={() => handleRemove(item.productId._id)}
+                      >
                         Remove
                       </button>
                     </div>
                   </div>
+
                   <div className="text-end mt-3 mt-md-0">
-                    <h5>Subtotal: ${(item.productId.price * item.quantity).toFixed(2)}</h5>
+                    <h5>
+                      Subtotal: $
+                      {(item.productId.price * item.quantity).toFixed(2)}
+                    </h5>
                   </div>
                 </div>
               ) : (
-                <p className="text-danger">⚠️ This product is no longer available</p>
+                <p className="text-danger">
+                  ⚠️ This product is no longer available
+                </p>
               )}
             </div>
           ))}
         </div>
 
         <div className="d-flex justify-content-between align-items-center mt-4 flex-column flex-md-row">
-          <button className="btn btn-outline-danger mb-3 mb-md-0" onClick={handleClearCart}>
+          <button
+            className="btn btn-outline-danger mb-3 mb-md-0"
+            onClick={handleClearCart}
+          >
             Clear Cart
           </button>
           <div className="text-end">
