@@ -54,14 +54,18 @@ const UpdateAppointment = () => {
     try {
       const payload = { date, time };
 
-      // Only include status if user is vet
-      if (userRole === "vet") {
+      // Include status if user is vet or owner (both can update status within limits)
+      if (userRole === "vet" || userRole === "owner") {
         payload.status = status;
       }
 
       await axiosInstance.put(`/appointment/vet/${appointmentId}`, payload);
       toast("Appointment updated successfully!");
-      navigate("/manage-appointments");
+      if (userRole === "owner") {
+        navigate("/appointments");
+      } else {
+        navigate("/manage-appointments");
+      }
     } catch (err) {
       console.error("Update failed:", err);
       toast("Failed to update appointment.");
@@ -69,6 +73,27 @@ const UpdateAppointment = () => {
   };
 
   if (!appointment) return <p>Loading...</p>;
+
+  // Determine status options based on role
+  const getStatusOptions = () => {
+    if (userRole === "vet") {
+      return [
+        { value: "pending", label: "Pending" },
+        { value: "approved", label: "Approved" },
+        { value: "rescheduled", label: "Rescheduled" },
+        { value: "completed", label: "Completed" },
+        { value: "cancelled", label: "Cancelled" },
+      ];
+    } else if (userRole === "owner") {
+      return [
+        { value: "pending", label: "Pending" },
+        { value: "cancelled", label: "Cancelled" },
+      ];
+    }
+    return [];
+  };
+
+  const statusOptions = getStatusOptions();
 
   return (
     <Layout
@@ -104,8 +129,8 @@ const UpdateAppointment = () => {
               />
             </div>
 
-            {/* Status Dropdown — only for vet */}
-            {userRole === "vet" && (
+            {/* Status Dropdown — for vet or owner (with limited options for owner) */}
+            {(userRole === "vet" || userRole === "owner") && (
               <div className="mb-2">
                 <label className="block mb-1 font-medium">Status:</label>
                 <select
@@ -113,11 +138,11 @@ const UpdateAppointment = () => {
                   onChange={(e) => setStatus(e.target.value)}
                   className="w-full rounded-pill border rounded-md p-2"
                 >
-                  <option value="pending">Pending</option>
-                  <option value="approved">Approved</option>
-                  <option value="rescheduled">Rescheduled</option>
-                  <option value="completed">Completed</option>
-                  <option value="cancelled">Cancelled</option>
+                  {statusOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
                 </select>
               </div>
             )}
