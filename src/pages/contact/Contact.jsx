@@ -1,5 +1,4 @@
-
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Layout } from "../../layouts/Layout";
 import { Link } from "react-router-dom";
 import rightArrow from "../../assets/img/icon/right_arrow.svg";
@@ -15,6 +14,7 @@ export const Contact = () => {
   const [errors, setErrors] = useState({});
   const [submitMessage, setSubmitMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
+  const formRef = useRef();
 
   // ✅ Regex patterns
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -30,7 +30,6 @@ export const Contact = () => {
 
   const validateForm = () => {
     const newErrors = {};
-
     if (!formData.name.trim()) newErrors.name = "Name is required.";
     if (!formData.email.trim()) {
       newErrors.email = "Email is required.";
@@ -42,11 +41,10 @@ export const Contact = () => {
     }
     if (!formData.message.trim())
       newErrors.message = "Message cannot be empty.";
-
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitMessage("");
     setIsSuccess(false);
@@ -58,16 +56,26 @@ export const Contact = () => {
     }
 
     setErrors({});
-    setIsSuccess(true);
-    setSubmitMessage("Message sent successfully ✅");
+    const data = new FormData(formRef.current);
 
-    // Reset form
-    setFormData({
-      name: "",
-      email: "",
-      website: "",
-      message: "",
-    });
+    // ✅ Send form data using FormSubmit
+    try {
+      await fetch("https://formsubmit.co/dadb08d81d3500497e2d421829421d4c", {
+        method: "POST",
+        body: data,
+      });
+      setIsSuccess(true);
+      setSubmitMessage("✅ Message sent successfully!");
+      setFormData({
+        name: "",
+        email: "",
+        website: "",
+        message: "",
+      });
+    } catch (error) {
+      setIsSuccess(false);
+      setSubmitMessage("❌ Failed to send message. Please try again.");
+    }
   };
 
   return (
@@ -84,7 +92,7 @@ export const Contact = () => {
                   </h2>
                   <p>
                     Maecenas quis viverra metus, et efficitur ligula. Nam
-                    coueaugue congue sed luctus lectus conIn onondimentum .
+                    coueaugue congue sed luctus lectus conIn onondimentum.
                   </p>
                 </div>
                 <div className="contact__info-wrap">
@@ -129,10 +137,7 @@ export const Contact = () => {
                           </Link>
                         </li>
                         <li>
-                          <Link
-                            to="https://www.instagram.com/"
-                            target="_blank"
-                          >
+                          <Link to="https://www.instagram.com/" target="_blank">
                             <i className="fab fa-instagram"></i>
                           </Link>
                         </li>
@@ -152,6 +157,7 @@ export const Contact = () => {
             <div className="col-lg-7">
               <div className="contact__form-wrap">
                 <form
+                  ref={formRef}
                   onSubmit={handleSubmit}
                   id="contact-form"
                   className="contact__form"
@@ -170,6 +176,7 @@ export const Contact = () => {
                           placeholder="Name"
                           value={formData.name}
                           onChange={handleChange}
+                          required
                         />
                         {errors.name && (
                           <small className="text-danger">{errors.name}</small>
@@ -184,6 +191,7 @@ export const Contact = () => {
                           placeholder="E-mail"
                           value={formData.email}
                           onChange={handleChange}
+                          required
                         />
                         {errors.email && (
                           <small className="text-danger">{errors.email}</small>
@@ -213,6 +221,7 @@ export const Contact = () => {
                           placeholder="Message"
                           value={formData.message}
                           onChange={handleChange}
+                          required
                         ></textarea>
                         {errors.message && (
                           <small className="text-danger">{errors.message}</small>
@@ -220,6 +229,11 @@ export const Contact = () => {
                       </div>
                     </div>
                   </div>
+
+                  {/* hidden fields for FormSubmit */}
+                  <input type="hidden" name="_captcha" value="false" />
+                  <input type="hidden" name="_template" value="table" />
+
                   <button type="submit" className="btn">
                     Send Us Message
                     <img src={rightArrow} alt="" className="injectable" />
