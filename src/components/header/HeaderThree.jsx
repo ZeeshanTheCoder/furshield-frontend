@@ -77,9 +77,9 @@ export const HeaderThree = () => {
                     </div>
 
                     <div className="col-xl-2 col-md-4">
-                      <div className="logo text-center">
+                      <div className="logo">
                         <Link to="/">
-                          <img src={wLogo} alt="Logo" />
+                          <img src={wLogo} alt="Logo" width={208} height={60} />
                         </Link>
                       </div>
                     </div>

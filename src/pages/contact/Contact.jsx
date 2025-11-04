@@ -7,7 +7,7 @@ export const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    website: "",
+    subject: "", // ✅ Renamed from "website" to "subject"
     message: "",
   });
 
@@ -18,7 +18,7 @@ export const Contact = () => {
 
   // ✅ Regex patterns
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const urlRegex = /^(https?:\/\/)?([\w\d-]+\.)+\w{2,}(\/.+)?$/;
+  // ❌ Removed urlRegex – no longer needed
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,9 +36,7 @@ export const Contact = () => {
     } else if (!emailRegex.test(formData.email)) {
       newErrors.email = "Enter a valid email address.";
     }
-    if (formData.website && !urlRegex.test(formData.website)) {
-      newErrors.website = "Enter a valid website URL (http/https).";
-    }
+    // ✅ Removed website/subject URL validation
     if (!formData.message.trim())
       newErrors.message = "Message cannot be empty.";
     return newErrors;
@@ -69,7 +67,7 @@ export const Contact = () => {
       setFormData({
         name: "",
         email: "",
-        website: "",
+        subject: "", // ✅ Reset subject
         message: "",
       });
     } catch (error) {
@@ -108,13 +106,13 @@ export const Contact = () => {
                       <div className="icon">
                         <i className="flaticon-placeholder"></i>
                       </div>
-                      256 Avenue, Newyork City
+                      Aptech Metro Star Gate Center, Karachi
                     </li>
                     <li>
                       <div className="icon">
                         <i className="flaticon-mail"></i>
                       </div>
-                      <a href="mailto:info@gmail.com">info@gmail.com</a>
+                      <a href="mailto:furshield@gmail.com">furshield@gmail.com</a>
                     </li>
                     <li>
                       <div className="icon">
@@ -201,17 +199,13 @@ export const Contact = () => {
                     <div className="col-md-12">
                       <div className="form-grp">
                         <input
-                          name="website"
-                          type="url"
-                          placeholder="Website"
-                          value={formData.website}
+                          name="subject" // ✅ Changed from "website" to "subject"
+                          type="text" // ✅ Changed from "url" to "text"
+                          placeholder="Subject"
+                          value={formData.subject}
                           onChange={handleChange}
                         />
-                        {errors.website && (
-                          <small className="text-danger">
-                            {errors.website}
-                          </small>
-                        )}
+                        {/* ✅ No error display for subject (was for website) */}
                       </div>
                     </div>
                     <div className="col-md-12">
@@ -240,7 +234,6 @@ export const Contact = () => {
                   </button>
                 </form>
 
-                {/* ✅ Show response message */}
                 <p
                   className={`ajax-response mb-0 mt-3 ${
                     isSuccess ? "text-success" : "text-danger"
@@ -255,7 +248,7 @@ export const Contact = () => {
           {/* map */}
           <div className="contact-map">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d48409.69813174607!2d-74.05163325136718!3d40.68264649999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25bae694479a3%3A0xb9949385da52e69e!2sBarclays%20Center!5e0!3m2!1sen!2sbd!4v1684309529719!5m2!1sen!2sbd"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d36383.65903394613!2d67.11581214720266!3d24.87987194066536!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3eb339999415e0c3%3A0x36742eee0fd9c291!2sAptech%20Metro%20Star%20Gate!5e0!3m2!1sen!2s!4v1762241190372!5m2!1sen!2s"
               style={{ border: 0 }}
               allowFullScreen=""
               loading="lazy"
