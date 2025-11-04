@@ -133,7 +133,7 @@ export const ProductDetailsReview = ({ product }) => {
               id="description-tab-pane"
               role="tabpanel"
             >
-              <p>{product.description || "No description available."}</p>
+              <p>{product.description || "Designed with a perfect balance of quality, comfort, and practicality, this product ensures a satisfying experience for both pets and their owners. Made from safe, durable, and pet-friendly materials, it supports daily use without compromising on performance or hygiene. Whether used for feeding, playtime, grooming, or style, it provides maximum comfort and convenience in every situation. The thoughtful design helps maintain pets’ health and happiness, encouraging activity, relaxation, and good habits. Easy to clean, long-lasting, and suitable for all breeds and sizes, this product blends function with modern aesthetics, making it a reliable choice for everyday pet care."}</p>
             </div>
 
             {/* Reviews */}
