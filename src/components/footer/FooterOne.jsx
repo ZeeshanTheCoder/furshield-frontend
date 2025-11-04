@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import wLogo from "../../assets/img/logo/logo3.png";
 import newsletterShape from "../../assets/img/images/footer_newsletter_shape.svg";
@@ -6,6 +6,39 @@ import footerShape01 from "../../assets/img/images/footer_shape01.png";
 import footerShape02 from "../../assets/img/images/footer_shape02.png";
 
 export const FooterOne = () => {
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
+  const formRef = useRef();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setMessage("");
+
+    if (!email.trim()) {
+      setMessage("Please enter your email.");
+      setIsSuccess(false);
+      return;
+    }
+
+    try {
+      // ✅ send via FormSubmit
+      const data = new FormData(formRef.current);
+      await fetch("https://formsubmit.co/dadb08d81d3500497e2d421829421d4c", {
+        method: "POST",
+        body: data,
+      });
+
+      // ✅ success
+      setIsSuccess(true);
+      setMessage("🎉 Newsletter subscribed successfully!");
+      setEmail("");
+    } catch (error) {
+      setIsSuccess(false);
+      setMessage("❌ Subscription failed. Please try again.");
+    }
+  };
+
   return (
     <>
       <footer>
@@ -13,6 +46,7 @@ export const FooterOne = () => {
           <div className="footer__top fix">
             <div className="container">
               <div className="row">
+                {/* --- Column 1 --- */}
                 <div className="col-xl-3 col-lg-4 col-md-6">
                   <div className="footer__widget">
                     <div className="footer__logo">
@@ -61,60 +95,42 @@ export const FooterOne = () => {
                     </div>
                   </div>
                 </div>
+
+                {/* --- Column 2 --- */}
                 <div className="col-xl-2 col-lg-4 col-md-6 col-sm-6">
                   <div className="footer__widget">
                     <h4 className="footer__widget-title">Support</h4>
                     <div className="footer__link">
                       <ul className="list-wrap">
-                        <li>
-                          <Link to="/about">About Us</Link>
-                        </li>
-                        <li>
-                          <Link to="/contact">Contact Us</Link>
-                        </li>
-                        <li>
-                          <Link to="/appointment-booking">Book Appointement</Link>
-                        </li>
-                        <li>
-                          <Link to="/faq">FAQ</Link>
-                        </li>
-                        <li>
-                          <Link to="/contact">Locations</Link>
-                        </li>
-                        <li>
-                          <Link to="/product">Shop</Link>
-                        </li>
+                        <li><Link to="/about">About Us</Link></li>
+                        <li><Link to="/contact">Contact Us</Link></li>
+                        <li><Link to="/appointment-booking">Book Appointment</Link></li>
+                        <li><Link to="/faq">FAQ</Link></li>
+                        <li><Link to="/contact">Locations</Link></li>
+                        <li><Link to="/product">Shop</Link></li>
                       </ul>
                     </div>
                   </div>
                 </div>
+
+                {/* --- Column 3 --- */}
                 <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6">
                   <div className="footer__widget">
                     <h4 className="footer__widget-title">Opening Hours</h4>
                     <div className="footer__link">
                       <ul className="list-wrap">
-                        <li>
-                          Monday <span>9:00AM - 5:00PM</span>
-                        </li>
-                        <li>
-                          Tuesday <span>9:00AM - 5:00PM</span>
-                        </li>
-                        <li>
-                          Thursday <span>9:00AM - 5:00PM</span>
-                        </li>
-                        <li>
-                          Friday <span>9:00AM - 5:00PM</span>
-                        </li>
-                        <li>
-                          Saturday <span>9:00AM - 5:00PM</span>
-                        </li>
-                        <li>
-                          Sunday <span>9:00AM - 5:00PM</span>
-                        </li>
+                        <li>Monday <span>9:00AM - 5:00PM</span></li>
+                        <li>Tuesday <span>9:00AM - 5:00PM</span></li>
+                        <li>Thursday <span>9:00AM - 5:00PM</span></li>
+                        <li>Friday <span>9:00AM - 5:00PM</span></li>
+                        <li>Saturday <span>9:00AM - 5:00PM</span></li>
+                        <li>Sunday <span>9:00AM - 5:00PM</span></li>
                       </ul>
                     </div>
                   </div>
                 </div>
+
+                {/* --- Newsletter Column --- */}
                 <div className="col-xl-4 col-lg-4 col-md-6">
                   <div className="footer__widget">
                     <div className="footer__newsletter">
@@ -126,21 +142,48 @@ export const FooterOne = () => {
                           className="injectable"
                         />
                       </div>
-                      <form action="#">
+
+                      {/* ✅ Newsletter form */}
+                      <form ref={formRef} onSubmit={handleSubmit}>
                         <input
-                          id="email"
                           type="email"
+                          name="email"
                           placeholder="Type Your E-mail"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          required
                         />
+                        <input type="hidden" name="_captcha" value="false" />
+                        <input type="hidden" name="_template" value="table" />
+
+                        {/* ✅ Auto-response message */}
+                        <input
+                          type="hidden"
+                          name="_autoresponse"
+                          value="🎉 You have successfully subscribed to our newsletter! Thank you for joining us."
+                        />
+
                         <button className="btn" type="submit">
                           Subscribe Now
                         </button>
                       </form>
+
+                      {message && (
+                        <p
+                          className={`mt-2 ${
+                            isSuccess ? "text-success" : "text-danger"
+                          }`}
+                        >
+                          {message}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+
+            {/* Shapes */}
             <div className="footer__shape-wrap">
               <img
                 src={footerShape01}
@@ -156,24 +199,18 @@ export const FooterOne = () => {
               />
             </div>
           </div>
+
+          {/* Footer Bottom */}
           <div className="footer__bottom">
             <div className="container">
               <div className="row align-items-center">
                 <div className="col-lg-7">
                   <div className="footer__bottom-menu">
                     <ul className="list-wrap">
-                      <li>
-                        <Link to="/contact">Support</Link>
-                      </li>
-                      <li>
-                        <Link to="/contact">Terms & Conditions</Link>
-                      </li>
-                      <li>
-                        <Link to="/contact">Privacy Policy</Link>
-                      </li>
-                      <li>
-                        <Link to="/contact">Career</Link>
-                      </li>
+                      <li><Link to="/contact">Support</Link></li>
+                      <li><Link to="/contact">Terms & Conditions</Link></li>
+                      <li><Link to="/contact">Privacy Policy</Link></li>
+                      <li><Link to="/contact">Career</Link></li>
                     </ul>
                   </div>
                 </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import rightArrow from "../../assets/img/icon/right_arrow04.svg";
 import wLogo from "../../assets/img/logo/logo3.png";
@@ -6,10 +6,42 @@ import footerShape1 from "../../assets/img/images/footer_shape01.png";
 import footerShape2 from "../../assets/img/images/footer_shape02.png";
 
 export const FooterThree = ({ hideNewsLetter }) => {
+  // ✅ Newsletter state logic copied from FooterOne
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
+  const formRef = useRef();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setMessage("");
+
+    if (!email.trim()) {
+      setMessage("Please enter your email.");
+      setIsSuccess(false);
+      return;
+    }
+
+    try {
+      const data = new FormData(formRef.current);
+      await fetch("https://formsubmit.co/dadb08d81d3500497e2d421829421d4c", {
+        method: "POST",
+        body: data,
+      });
+
+      setIsSuccess(true);
+      setMessage("🎉 Newsletter subscribed successfully!");
+      setEmail("");
+    } catch (error) {
+      setIsSuccess(false);
+      setMessage("❌ Subscription failed. Please try again.");
+    }
+  };
+
   return (
     <footer>
       <div className="footer__area">
-        {hideNewsLetter ? null : (
+        {!hideNewsLetter && (
           <div className="footer__newsletter-three">
             <div className="container">
               <div className="row align-items-center">
@@ -19,13 +51,43 @@ export const FooterThree = ({ hideNewsLetter }) => {
                   </div>
                 </div>
                 <div className="col-lg-7">
-                  <form action="#" className="footer__newsletter-form-two">
-                    <input type="email" placeholder="Type Your E-mail" />
+                  {/* ✅ Working newsletter form */}
+                  <form
+                    ref={formRef}
+                    onSubmit={handleSubmit}
+                    className="footer__newsletter-form-two"
+                  >
+                    <input
+                      type="email"
+                      name="email"
+                      placeholder="Type Your E-mail"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                    <input type="hidden" name="_captcha" value="false" />
+                    <input type="hidden" name="_template" value="table" />
+                    <input
+                      type="hidden"
+                      name="_autoresponse"
+                      value="🎉 You have successfully subscribed to our newsletter! Thank you for joining us."
+                    />
+
                     <button type="submit">
                       Subscribe
                       <img src={rightArrow} alt="" className="injectable" />
                     </button>
                   </form>
+
+                  {message && (
+                    <p
+                      className={`mt-2 ${
+                        isSuccess ? "text-success" : "text-danger"
+                      }`}
+                    >
+                      {message}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -35,6 +97,7 @@ export const FooterThree = ({ hideNewsLetter }) => {
         <div className="footer__top footer__top-three fix">
           <div className="container">
             <div className="row">
+              {/* --- Column 1 --- */}
               <div className="col-xl-3 col-lg-4 col-md-6">
                 <div className="footer__widget">
                   <div className="footer__logo">
@@ -100,6 +163,8 @@ export const FooterThree = ({ hideNewsLetter }) => {
                   </div>
                 </div>
               </div>
+
+              {/* --- Column 2 --- */}
               <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6">
                 <div className="footer__widget">
                   <h4 className="footer__widget-title">Discover</h4>
@@ -124,6 +189,8 @@ export const FooterThree = ({ hideNewsLetter }) => {
                   </div>
                 </div>
               </div>
+
+              {/* --- Column 3 --- */}
               <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6">
                 <div className="footer__widget">
                   <h4 className="footer__widget-title">Support</h4>
@@ -148,6 +215,8 @@ export const FooterThree = ({ hideNewsLetter }) => {
                   </div>
                 </div>
               </div>
+
+              {/* --- Column 4 --- */}
               <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6">
                 <div className="footer__widget">
                   <h4 className="footer__widget-title">Contact</h4>
@@ -170,6 +239,7 @@ export const FooterThree = ({ hideNewsLetter }) => {
               </div>
             </div>
           </div>
+
           <div className="footer__shape-wrap">
             <img
               src={footerShape1}
@@ -185,6 +255,7 @@ export const FooterThree = ({ hideNewsLetter }) => {
             />
           </div>
         </div>
+
         <div className="footer__bottom footer__bottom-two">
           <div className="container">
             <div className="row align-items-center">

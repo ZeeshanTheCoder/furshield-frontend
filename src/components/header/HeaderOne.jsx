@@ -333,15 +333,15 @@ export const HeaderOne = () => {
                                         Pet Care Status
                                       </Link>
                                       <Link
-                                        to="/notifications"
+                                        to="/adopter-requests"
                                         className="dropdown-item d-flex align-items-center px-3 py-2"
                                         style={{
                                           color: "#333",
                                           textDecoration: "none",
                                           fontSize: "14px",
-                                        }}
+                                        }}  
                                       >
-                                        Notification
+                                        Adopter Requests
                                       </Link>
                                     </>
                                   )}

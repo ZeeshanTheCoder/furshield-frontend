@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { axiosInstance } from "../../services/BaseUrl";
 import { Layout } from "../../layouts/Layout";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const CreateAdoptablePet = () => {
   const [formData, setFormData] = useState({
@@ -69,6 +70,7 @@ const CreateAdoptablePet = () => {
       });
 
       toast("Adoptable Pet Created Successfully ✅");
+      useNavigate('/adoptable');
       setFormData({
         name: "",
         breed: "",
