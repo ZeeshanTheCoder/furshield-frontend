@@ -54,18 +54,7 @@ export const BlogSidebar = () => {
 
   return (
     <aside className="blog-sidebar">
-      {/* search */}
-      <div className="blog-widget">
-        <h4 className="widget-title">Search</h4>
-        <div className="sidebar-search-form">
-          <form action="#">
-            <input type="text" placeholder="Type Keywords. . ." />
-            <button type="submit">
-              <i className="flaticon-loupe"></i>
-            </button>
-          </form>
-        </div>
-      </div>
+  
 
       {/* categories */}
       <div className="blog-widget">
