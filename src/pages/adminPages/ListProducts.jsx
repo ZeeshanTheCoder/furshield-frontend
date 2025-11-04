@@ -147,13 +147,13 @@ const ListProducts = () => {
                     <td className="pe-0 py-3 text-end">
                       <button
                         onClick={() => handleEditProduct(product)}
-                        className="btn btn-link text-primary  me-3 text-decoration-none"
+                        className="btn btn-link text-white  me-3 text-decoration-none"
                       >
                         Edit
                       </button>
                       <button
                         onClick={() => handleAskDeleteProduct(product)}
-                        className="btn btn-link text-danger  text-decoration-none"
+                        className="btn btn-link text-white  text-decoration-none"
                       >
                         Delete
                       </button>

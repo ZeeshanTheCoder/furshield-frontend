@@ -148,15 +148,14 @@ const UsersManagementPage = () => {
                       <td className="px-3 py-3">
                         <span
                           className={`badge 
-                          ${
-                            user.role === "owner"
+                          ${user.role === "owner"
                               ? "bg-success-subtle text-success"
                               : user.role === "vet"
-                              ? "bg-primary-subtle text-primary"
-                              : user.role === "shelter"
-                              ? "bg-info-subtle text-info"
-                              : "bg-secondary-subtle text-secondary"
-                          }`}
+                                ? "bg-primary-subtle text-primary"
+                                : user.role === "shelter"
+                                  ? "bg-info-subtle text-info"
+                                  : "bg-secondary-subtle text-secondary"
+                            }`}
                         >
                           {user.role}
                         </span>
@@ -170,7 +169,7 @@ const UsersManagementPage = () => {
                             setDeleteUserId(user._id);
                             setShowModal(true);
                           }}
-                          className="btn btn-link   text-danger text-decoration-none"
+                          className={`${user.role === "admin" ? "text-black border-1" : "text-white"} btn btn-link  text-decoration-none`}
                           disabled={user.role === "admin"}
                         >
                           Delete
