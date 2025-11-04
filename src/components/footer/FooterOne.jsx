@@ -22,16 +22,16 @@ export const FooterOne = () => {
     }
 
     try {
-      // ✅ send via FormSubmit
+      //   send via FormSubmit
       const data = new FormData(formRef.current);
       await fetch("https://formsubmit.co/dadb08d81d3500497e2d421829421d4c", {
         method: "POST",
         body: data,
       });
 
-      // ✅ success
+      //   success
       setIsSuccess(true);
-      setMessage("🎉 Newsletter subscribed successfully!");
+      setMessage("  Newsletter subscribed successfully!");
       setEmail("");
     } catch (error) {
       setIsSuccess(false);
@@ -143,7 +143,7 @@ export const FooterOne = () => {
                         />
                       </div>
 
-                      {/* ✅ Newsletter form */}
+                      {/*   Newsletter form */}
                       <form ref={formRef} onSubmit={handleSubmit}>
                         <input
                           type="email"
@@ -156,11 +156,11 @@ export const FooterOne = () => {
                         <input type="hidden" name="_captcha" value="false" />
                         <input type="hidden" name="_template" value="table" />
 
-                        {/* ✅ Auto-response message */}
+                        {/*   Auto-response message */}
                         <input
                           type="hidden"
                           name="_autoresponse"
-                          value="🎉 You have successfully subscribed to our newsletter! Thank you for joining us."
+                          value="  You have successfully subscribed to our newsletter! Thank you for joining us."
                         />
 
                         <button className="btn" type="submit">

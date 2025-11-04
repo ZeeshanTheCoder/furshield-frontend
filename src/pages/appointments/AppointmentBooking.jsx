@@ -33,11 +33,11 @@ export const AppointmentBooking = () => {
   // Fetch pets when component mounts or userdata changes
   useEffect(() => {
     const fetchPetsByOwner = async () => {
-      if (!userdata?._id) return; // ✅ context ka correct key use karo
+      if (!userdata?._id) return; //   context ka correct key use karo
       setLoadingPets(true);
       try {
         const res = await axiosInstance.get("/pets/fetchpetsbyowner", {
-          withCredentials: true, // ✅ token bhejne ke liye zaroori
+          withCredentials: true, //   token bhejne ke liye zaroori
         });
         setPets(res.data.pets);
         console.log("Fetched Pets in AppointmentBooking:", res.data.pets);

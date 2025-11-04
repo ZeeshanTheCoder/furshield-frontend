@@ -6,7 +6,7 @@ import footerShape1 from "../../assets/img/images/footer_shape01.png";
 import footerShape2 from "../../assets/img/images/footer_shape02.png";
 
 export const FooterThree = ({ hideNewsLetter }) => {
-  // ✅ Newsletter state logic copied from FooterOne
+  //   Newsletter state logic copied from FooterOne
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
@@ -30,7 +30,7 @@ export const FooterThree = ({ hideNewsLetter }) => {
       });
 
       setIsSuccess(true);
-      setMessage("🎉 Newsletter subscribed successfully!");
+      setMessage("  Newsletter subscribed successfully!");
       setEmail("");
     } catch (error) {
       setIsSuccess(false);
@@ -51,7 +51,7 @@ export const FooterThree = ({ hideNewsLetter }) => {
                   </div>
                 </div>
                 <div className="col-lg-7">
-                  {/* ✅ Working newsletter form */}
+                  {/*   Working newsletter form */}
                   <form
                     ref={formRef}
                     onSubmit={handleSubmit}
@@ -70,7 +70,7 @@ export const FooterThree = ({ hideNewsLetter }) => {
                     <input
                       type="hidden"
                       name="_autoresponse"
-                      value="🎉 You have successfully subscribed to our newsletter! Thank you for joining us."
+                      value="  You have successfully subscribed to our newsletter! Thank you for joining us."
                     />
 
                     <button type="submit">

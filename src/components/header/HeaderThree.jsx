@@ -4,7 +4,7 @@ import { useMobileMenu, useSearch } from "../../lib/hooks/useHeader";
 import { HeaderSearch } from "./HeaderSearch";
 import { HeaderMobileMenu } from "./HeaderMobileMenu";
 import { HeaderNav } from "./HeaderNav";
-import { useCart } from "../../Context/CartContext"; // ✅ Added
+import { useCart } from "../../Context/CartContext"; //   Added
 
 import wLogo from "../../assets/img/logo/logo3.png";
 import { axiosInstance } from "../../services/BaseUrl";

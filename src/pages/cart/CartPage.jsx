@@ -58,7 +58,7 @@ export const CartPage = () => {
     confirmToast({
       message: "Are you sure you want to proceed with payment?",
       onConfirm: async () => {
-        toast.success("Payment Done ✅");
+        toast.success("Payment Done");
         await clearCart(userdata._id);
         fetchCart(userdata._id);
         navigate("/");

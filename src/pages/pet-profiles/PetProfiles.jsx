@@ -15,7 +15,7 @@ const PetProfiles = () => {
 
   console.log(userdata);
 
-  // ✅ Wait for context
+  //   Wait for context
   useEffect(() => {
     const timer = setTimeout(() => {
       setContextReady(true);
@@ -67,12 +67,12 @@ const PetProfiles = () => {
     }
   };
 
-  // ✅ Redirect to create mode
+  //   Redirect to create mode
   const handleCreatePet = () => {
     navigate("/petmanagement");
   };
 
-  // ✅ Redirect to edit mode with pet ID
+  //   Redirect to edit mode with pet ID
   const handleEditPet = (petId) => {
     navigate(`/petmanagement?id=${petId}`);
   };
@@ -106,7 +106,7 @@ const PetProfiles = () => {
     );
   }
 
-  // ✅ Agar login hai but role owner nahi hai
+  //   Agar login hai but role owner nahi hai
   if (isLoggedIn && !isOwner) {
     return (
       <Layout>
@@ -178,7 +178,7 @@ const PetProfiles = () => {
                     <div className="d-flex col-lg-12 gap-2 mt-3">
                       <button
                         className="btn btn-sm btn-outline-primary px-4"
-                        onClick={() => handleEditPet(pet._id)} // ✅ Redirect to edit
+                        onClick={() => handleEditPet(pet._id)} //   Redirect to edit
                       >
                         Edit
                       </button>

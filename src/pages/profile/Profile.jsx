@@ -275,7 +275,7 @@ export const Profile = () => {
                           </div>
                         </div>
 
-                        {/* ✅ Dynamic Slots */}
+                        {/*   Dynamic Slots */}
                         <div className="col-md-12">
                           <label>Available Time Slots</label>
                           {formData.availableSlots.map((slot, index) => (

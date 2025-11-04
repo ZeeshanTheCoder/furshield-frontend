@@ -102,13 +102,13 @@ const ManagePets = () => {
     try {
       let res;
       if (isEditMode) {
-        // ✅ Update existing pet
+        //   Update existing pet
         res = await axiosInstance.put(`/pets/petsupdate/${petId}`, data, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         toast("Pet updated successfully!");
       } else {
-        // ✅ Create new pet
+        //   Create new pet
         res = await axiosInstance.post("/pets/petscreate", data, {
           headers: { "Content-Type": "multipart/form-data" },
         });

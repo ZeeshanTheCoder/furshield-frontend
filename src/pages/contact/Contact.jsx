@@ -7,7 +7,7 @@ export const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    subject: "", // ✅ Renamed from "website" to "subject"
+    subject: "", //   Renamed from "website" to "subject"
     message: "",
   });
 
@@ -16,7 +16,7 @@ export const Contact = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const formRef = useRef();
 
-  // ✅ Regex patterns
+  //   Regex patterns
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   // ❌ Removed urlRegex – no longer needed
 
@@ -36,7 +36,7 @@ export const Contact = () => {
     } else if (!emailRegex.test(formData.email)) {
       newErrors.email = "Enter a valid email address.";
     }
-    // ✅ Removed website/subject URL validation
+    //   Removed website/subject URL validation
     if (!formData.message.trim())
       newErrors.message = "Message cannot be empty.";
     return newErrors;
@@ -56,18 +56,18 @@ export const Contact = () => {
     setErrors({});
     const data = new FormData(formRef.current);
 
-    // ✅ Send form data using FormSubmit
+    //   Send form data using FormSubmit
     try {
       await fetch("https://formsubmit.co/dadb08d81d3500497e2d421829421d4c", {
         method: "POST",
         body: data,
       });
       setIsSuccess(true);
-      setSubmitMessage("✅ Message sent successfully!");
+      setSubmitMessage("  Message sent successfully!");
       setFormData({
         name: "",
         email: "",
-        subject: "", // ✅ Reset subject
+        subject: "", //   Reset subject
         message: "",
       });
     } catch (error) {
@@ -199,13 +199,13 @@ export const Contact = () => {
                     <div className="col-md-12">
                       <div className="form-grp">
                         <input
-                          name="subject" // ✅ Changed from "website" to "subject"
-                          type="text" // ✅ Changed from "url" to "text"
+                          name="subject" //   Changed from "website" to "subject"
+                          type="text" //   Changed from "url" to "text"
                           placeholder="Subject"
                           value={formData.subject}
                           onChange={handleChange}
                         />
-                        {/* ✅ No error display for subject (was for website) */}
+                        {/*   No error display for subject (was for website) */}
                       </div>
                     </div>
                     <div className="col-md-12">

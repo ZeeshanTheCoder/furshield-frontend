@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Layout } from "../../layouts/Layout";
 import { Link, useNavigate } from "react-router-dom";
 import rightArrow from "../../assets/img/icon/right_arrow.svg";
-import { axiosInstance } from "../../services/BaseUrl"; // ✅ Import axiosInstance
+import { axiosInstance } from "../../services/BaseUrl"; //   Import axiosInstance
 
 export const Signup = () => {
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ export const Signup = () => {
   const [message, setMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
 
-  // ✅ Regex for email
+  //   Regex for email
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   const handleChange = (e) => {
@@ -52,7 +52,7 @@ export const Signup = () => {
     setMessage("");
     setIsSuccess(false);
 
-    // ✅ Client-side validation
+    //   Client-side validation
     const validationError = validateForm();
     if (validationError) {
       setMessage(validationError);

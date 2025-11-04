@@ -13,7 +13,7 @@ export const ProductOneItem = ({
   const [reviewsCount, setReviewsCount] = useState(0);
   const [avgRating, setAvgRating] = useState(0);
 
-  // ✅ Fetch reviews dynamically
+  //   Fetch reviews dynamically
   useEffect(() => {
     const fetchReviews = async () => {
       try {
@@ -60,7 +60,7 @@ export const ProductOneItem = ({
       </div>
 
       <div className="product__content">
-        {/* ✅ Dynamic Reviews with Stars */}
+        {/*   Dynamic Reviews with Stars */}
         <div className="product__reviews">
           <div className="rating">
             {[...Array(5)].map((_, index) => {

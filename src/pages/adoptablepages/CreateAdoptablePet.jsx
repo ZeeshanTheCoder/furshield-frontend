@@ -69,7 +69,7 @@ const CreateAdoptablePet = () => {
         },
       });
 
-      toast("Adoptable Pet Created Successfully ✅");
+      toast("Adoptable Pet Created Successfully  ");
       useNavigate('/adoptable');
       setFormData({
         name: "",

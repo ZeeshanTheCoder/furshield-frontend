@@ -13,8 +13,8 @@ import {
 import { AppContext } from "../../Context/MainContext";
 import { axiosInstance } from "../../services/BaseUrl";
 import { toast } from "react-toastify";
-import { useCart } from "../../Context/CartContext"; // ✅ Added
-import { HeaderSearch } from "./HeaderSearch"; // ✅ NEW IMPORT
+import { useCart } from "../../Context/CartContext"; //   Added
+import { HeaderSearch } from "./HeaderSearch"; //   NEW IMPORT
 
 export const HeaderOne = () => {
   const { showSearch, toggleSearch } = useSearch();
@@ -396,7 +396,7 @@ export const HeaderOne = () => {
           </div>
         </div>
 
-        {/* ✅ ADDED: Search overlay — exactly like HeaderThree */}
+        {/*   ADDED: Search overlay — exactly like HeaderThree */}
         <HeaderSearch active={showSearch} toggleSearch={toggleSearch} />
 
         {/* off canvas */}
